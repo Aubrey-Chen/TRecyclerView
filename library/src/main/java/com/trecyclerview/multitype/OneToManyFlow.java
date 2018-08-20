@@ -19,8 +19,6 @@ package com.trecyclerview.multitype;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
-import com.trecyclerview.holder.AbsItemView;
-
 /**
  * Process and flow operators for one-to-many.
  *

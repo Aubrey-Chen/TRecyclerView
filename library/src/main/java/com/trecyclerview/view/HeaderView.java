@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.trecyclerview.ArrowRefreshHeader;
 import com.trecyclerview.entity.HeaderInfo;
 import com.trecyclerview.holder.BaseHolder;
-import com.trecyclerview.holder.AbsItemView;
+import com.trecyclerview.multitype.AbsItemView;
 
 /**
  * @author：zhangtianqiu on 18/7/13 16:47

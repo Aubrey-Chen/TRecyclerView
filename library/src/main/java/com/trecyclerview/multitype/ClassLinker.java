@@ -18,8 +18,6 @@ package com.trecyclerview.multitype;
 
 import android.support.annotation.NonNull;
 
-import com.trecyclerview.holder.AbsItemView;
-
 /**
  * An interface to link the items and binders by the classes of binders.
  *
@@ -35,5 +33,5 @@ public interface ClassLinker<T> {
    * @return The index of your registered binders
    * @see OneToManyEndpoint#withClassLinker(ClassLinker)
    */
-  @NonNull Class<? extends AbsItemView<T, ?>> index(int position, @NonNull T t);
+   @NonNull Class<? extends AbsItemView<T, ?>> index(int position, @NonNull T t);
 }

@@ -3,7 +3,7 @@ package com.trecyclerview.view;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
-import com.trecyclerview.holder.AbsItemView;
+import com.trecyclerview.multitype.AbsItemView;
 
 /**
  * @author：zhangtianqiu on 18/7/13 16:47

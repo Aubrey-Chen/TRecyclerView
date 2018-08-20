@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.trecyclerview.multitype.AbsItemView;
+
 /**
  * @author：tqzhang on 18/8/15 15:04
  */

@@ -18,8 +18,6 @@ package com.trecyclerview.multitype;
 
 import android.support.annotation.NonNull;
 
-import com.trecyclerview.holder.AbsItemView;
-
 /**
  * An ordered collection to hold the types, binders and linkers.
  *

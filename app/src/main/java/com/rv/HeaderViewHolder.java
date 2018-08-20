@@ -10,6 +10,7 @@ import com.trecyclerview.view.HeaderView;
  * @author：tqzhang on 18/8/20 17:18
  */
 public class HeaderViewHolder extends HeaderView {
+
     public HeaderViewHolder(Context context) {
         super(context);
     }
