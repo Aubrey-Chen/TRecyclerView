@@ -8,7 +8,7 @@ import com.trecyclerview.multitype.AbsItemView;
 /**
  * @author：zhangtianqiu on 18/7/13 16:47
  */
-public abstract class FootIView<T, VH extends RecyclerView.ViewHolder> extends AbsItemView {
+public abstract class FootItemView<T, VH extends RecyclerView.ViewHolder> extends AbsItemView {
 
     @Override
     protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @NonNull Object item) {

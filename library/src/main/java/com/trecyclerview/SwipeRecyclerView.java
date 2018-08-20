@@ -17,16 +17,17 @@ import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
-import com.trecyclerview.view.FootIView;
+import com.trecyclerview.view.FootItemView;
 
 /**
- * @author：tqzhang on 18/6/22 16:03
+ * @author：zhangtianqiu on 18/6/22 16:03
  */
 public class SwipeRecyclerView extends RecyclerView {
     private MultiTypeAdapter mMultiTypeAdapter;
 
     private boolean loadingMoreEnabled = false;
 
+    //是否正在下拉刷新
     private boolean mRefreshing = false;
 
     private boolean isNoMore = false;
@@ -77,7 +78,7 @@ public class SwipeRecyclerView extends RecyclerView {
         super.setAdapter(adapter);
         TypePool mTypePool = mMultiTypeAdapter.getTypePool();
         for (int i = 0; i < mTypePool.size(); i++) {
-            if (mTypePool.getItemViewBinder(i) instanceof FootIView) {
+            if (mTypePool.getItemViewBinder(i) instanceof FootItemView) {
                 setLoadingMoreEnabled(true);
             }
         }

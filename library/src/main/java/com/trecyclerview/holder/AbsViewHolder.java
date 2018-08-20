@@ -11,7 +11,7 @@ import com.trecyclerview.multitype.AbsItemView;
 /**
  * @author：tqzhang on 18/8/15 15:04
  */
-public abstract class AbsViewHolder<T, VH extends BaseHolder> extends AbsItemView<T, VH> {
+public abstract class AbsViewHolder<T, VH extends BaseViewHolder> extends AbsItemView<T, VH> {
 
     protected Context mContext;
 

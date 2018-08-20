@@ -9,27 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.trecyclerview.ArrowRefreshHeader;
+import com.trecyclerview.ProgressStyle;
 import com.trecyclerview.entity.HeaderInfo;
+<<<<<<< HEAD:library/src/main/java/com/trecyclerview/view/HeaderView.java
 import com.trecyclerview.holder.BaseHolder;
+=======
+>>>>>>> parent of 022c969... code review:library/src/main/java/com/trecyclerview/view/HeaderItemView.java
 import com.trecyclerview.multitype.AbsItemView;
 
 /**
  * @author：zhangtianqiu on 18/7/13 16:47
  */
-public abstract class HeaderView extends AbsItemView<HeaderInfo, HeaderView.ViewHolder> {
+public class HeaderItemView extends AbsItemView<HeaderInfo, HeaderItemView.ViewHolder> {
 
     private ArrowRefreshHeader mRefreshHeader;
 
-    protected Context mContext;
+    private Context mContext;
 
-    public HeaderView(Context context) {
+    public HeaderItemView(Context context) {
         this.mContext = context;
-//        mRefreshHeader = new ArrowRefreshHeader(mContext);
-//        mRefreshHeader.setProgressStyle(ProgressStyle.Pacman);
-        mRefreshHeader=createRefreshHeader();
+        mRefreshHeader = new ArrowRefreshHeader(mContext);
+        mRefreshHeader.setProgressStyle(ProgressStyle.Pacman);
     }
-
-    protected abstract ArrowRefreshHeader createRefreshHeader();
 
     @NonNull
     @Override
@@ -45,10 +46,12 @@ public abstract class HeaderView extends AbsItemView<HeaderInfo, HeaderView.View
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull HeaderInfo item) {
     }
 
-    static class ViewHolder extends BaseHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+
         }
     }
 
