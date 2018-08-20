@@ -18,6 +18,8 @@ package com.trecyclerview.multitype;
 
 import android.support.annotation.NonNull;
 
+import com.trecyclerview.holder.AbsItemView;
+
 import java.util.ArrayList;
 import java.util.List;
 

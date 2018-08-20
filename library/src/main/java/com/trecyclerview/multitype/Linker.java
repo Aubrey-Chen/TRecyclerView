@@ -19,6 +19,8 @@ package com.trecyclerview.multitype;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
+import com.trecyclerview.holder.AbsItemView;
+
 /**
  * An interface to link the items and binders by array integer index.
  *

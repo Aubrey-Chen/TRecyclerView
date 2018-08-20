@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.trecyclerview.multitype;
+package com.trecyclerview.holder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +22,8 @@ import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import com.trecyclerview.multitype.MultiTypeAdapter;
 
 import java.util.List;
 

@@ -19,6 +19,8 @@ package com.trecyclerview.multitype;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
+import com.trecyclerview.holder.AbsItemView;
+
 import static com.trecyclerview.multitype.Preconditions.checkNotNull;
 
 /**
