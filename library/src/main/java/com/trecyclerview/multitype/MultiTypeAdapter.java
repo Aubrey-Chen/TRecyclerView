@@ -102,7 +102,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-   public  <T> void register(
+    <T> void register(
             @NonNull Class<? extends T> clazz,
             @NonNull AbsItemView<T, ?> binder,
             @NonNull Linker<T> linker) {
@@ -131,7 +131,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     <T> OneToManyFlow<T> register(@NonNull Class<? extends T> clazz) {
         checkNotNull(clazz);
         checkAndRemoveAllTypesIfNeeded(clazz);
-        return new OneToManyBuilder<>(this, clazz);
+        return new com.trecyclerview.multitype.OneToManyBuilder<>(this, clazz);
     }
 
 

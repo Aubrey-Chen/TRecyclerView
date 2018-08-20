@@ -33,5 +33,5 @@ public interface ClassLinker<T> {
    * @return The index of your registered binders
    * @see OneToManyEndpoint#withClassLinker(ClassLinker)
    */
-   @NonNull Class<? extends AbsItemView<T, ?>> index(int position, @NonNull T t);
+  @NonNull Class<? extends AbsItemView<T, ?>> index(int position, @NonNull T t);
 }

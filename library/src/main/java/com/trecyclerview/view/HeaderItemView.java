@@ -11,10 +11,6 @@ import android.view.ViewGroup;
 import com.trecyclerview.ArrowRefreshHeader;
 import com.trecyclerview.ProgressStyle;
 import com.trecyclerview.entity.HeaderInfo;
-<<<<<<< HEAD:library/src/main/java/com/trecyclerview/view/HeaderView.java
-import com.trecyclerview.holder.BaseHolder;
-=======
->>>>>>> parent of 022c969... code review:library/src/main/java/com/trecyclerview/view/HeaderItemView.java
 import com.trecyclerview.multitype.AbsItemView;
 
 /**
