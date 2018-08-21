@@ -1,4 +1,4 @@
-package com.trecyclerview;
+package com.trecyclerview.view;
 
 interface BaseRefreshHeader {
 

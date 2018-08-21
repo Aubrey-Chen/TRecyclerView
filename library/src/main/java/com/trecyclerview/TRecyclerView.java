@@ -13,11 +13,12 @@ import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
-import com.trecyclerview.view.FootIView;
-import com.trecyclerview.view.HeaderView;
+import com.trecyclerview.view.AbsFootView;
+import com.trecyclerview.view.AbsHeaderView;
+import com.trecyclerview.view.ArrowRefreshHeader;
 
 /**
- * @author：zhangtianqiu on 18/6/22 16:03
+ * @author：tqzhang on 18/6/22 16:03
  */
 public class TRecyclerView extends RecyclerView {
     private MultiTypeAdapter mMultiTypeAdapter;
@@ -27,13 +28,8 @@ public class TRecyclerView extends RecyclerView {
     private boolean pullRefreshEnabled = false;
     //是否正在下拉刷新
     private boolean mRefreshing = false;
-    //是否滑动到底部
-    private boolean isBottom = false;
 
     private boolean isNoMore = false;
-
-
-    private int mAdapterCount;
 
 
     private float mLastY = -1;
@@ -42,8 +38,6 @@ public class TRecyclerView extends RecyclerView {
      * 最后一个可见的item的位置
      */
     private int lastVisibleItemPosition;
-
-    private TypePool mTypePool;
 
 
     private OnRefreshListener mOnRefreshListener;
@@ -91,12 +85,12 @@ public class TRecyclerView extends RecyclerView {
     public void setAdapter(Adapter adapter) {
         this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
         super.setAdapter(adapter);
-        mTypePool = mMultiTypeAdapter.getTypePool();
+        TypePool mTypePool = mMultiTypeAdapter.getTypePool();
         for (int i = 0; i < mTypePool.size(); i++) {
-            if (mTypePool.getItemViewBinder(i) instanceof FootIView) {
+            if (mTypePool.getItemViewBinder(i) instanceof AbsFootView) {
                 setLoadingMoreEnabled(true);
-            } else if (mTypePool.getItemViewBinder(i) instanceof HeaderView) {
-                HeaderView mHeaderItemView = (HeaderView) mTypePool.getItemViewBinder(i);
+            } else if (mTypePool.getItemViewBinder(i) instanceof AbsHeaderView) {
+                AbsHeaderView mHeaderItemView = (AbsHeaderView) mTypePool.getItemViewBinder(i);
                 mRefreshHeader = mHeaderItemView.getRefreshHeaderView();
                 pullRefreshEnabled = true;
             }
@@ -159,8 +153,7 @@ public class TRecyclerView extends RecyclerView {
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrolled(dx, dy);
         }
-        mAdapterCount = mMultiTypeAdapter.getItemCount();
-        int firstVisibleItemPosition = 0;
+        int mAdapterCount = mMultiTypeAdapter.getItemCount();
         RecyclerView.LayoutManager layoutManager = getLayoutManager();
         if (layoutManagerType == null) {
             if (layoutManager instanceof LinearLayoutManager) {
@@ -179,7 +172,6 @@ public class TRecyclerView extends RecyclerView {
                 lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition() + 1;
                 break;
             case GridLayout:
-                //最后一个类型是GridLayoutManager
                 lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
                 break;
             case StaggeredGridLayout:
@@ -191,7 +183,7 @@ public class TRecyclerView extends RecyclerView {
                 break;
         }
 
-        isBottom = mAdapterCount == lastVisibleItemPosition;
+        boolean isBottom = mAdapterCount == lastVisibleItemPosition;
         if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && !isNoMore) {
             refreshComplete();
             mOnRefreshListener.onLoadMore();

@@ -8,25 +8,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.trecyclerview.ArrowRefreshHeader;
-import com.trecyclerview.ProgressStyle;
 import com.trecyclerview.entity.HeaderInfo;
 import com.trecyclerview.multitype.AbsItemView;
 
 /**
- * @author：zhangtianqiu on 18/7/13 16:47
+ * @author：tqzhang on 18/7/13 16:47
  */
-public class HeaderView extends AbsItemView<HeaderInfo, HeaderView.ViewHolder> {
+public abstract class AbsHeaderView extends AbsItemView<HeaderInfo, AbsHeaderView.ViewHolder> {
 
     private ArrowRefreshHeader mRefreshHeader;
 
-    private Context mContext;
+    protected Context mContext;
 
-    public HeaderView(Context context) {
+    public AbsHeaderView(Context context) {
         this.mContext = context;
-        mRefreshHeader = new ArrowRefreshHeader(mContext);
-        mRefreshHeader.setProgressStyle(ProgressStyle.Pacman);
+        mRefreshHeader = createRefreshHeader();
     }
+
+
+    protected abstract ArrowRefreshHeader createRefreshHeader();
 
     @NonNull
     @Override

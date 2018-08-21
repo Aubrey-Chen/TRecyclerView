@@ -17,10 +17,10 @@ import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
-import com.trecyclerview.view.FootIView;
+import com.trecyclerview.view.AbsFootView;
 
 /**
- * @author：zhangtianqiu on 18/6/22 16:03
+ * @author：tqzhang on 18/6/22 16:03
  */
 public class SwipeRecyclerView extends RecyclerView {
     private MultiTypeAdapter mMultiTypeAdapter;
@@ -78,7 +78,7 @@ public class SwipeRecyclerView extends RecyclerView {
         super.setAdapter(adapter);
         TypePool mTypePool = mMultiTypeAdapter.getTypePool();
         for (int i = 0; i < mTypePool.size(); i++) {
-            if (mTypePool.getItemViewBinder(i) instanceof FootIView) {
+            if (mTypePool.getItemViewBinder(i) instanceof AbsFootView) {
                 setLoadingMoreEnabled(true);
             }
         }
@@ -114,7 +114,6 @@ public class SwipeRecyclerView extends RecyclerView {
                 lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition() + 1;
                 break;
             case GridLayout:
-                //最后一个类型是GridLayoutManager
                 lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
                 break;
             case StaggeredGridLayout:

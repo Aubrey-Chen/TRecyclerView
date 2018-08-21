@@ -1,4 +1,4 @@
-package com.trecyclerview;
+package com.trecyclerview.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -17,9 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.trecyclerview.ProgressStyle;
+import com.trecyclerview.progressindicator.ProgressStyle;
 import com.trecyclerview.R;
-import com.trecyclerview.SimpleViewSwitcher;
 import com.trecyclerview.progressindicator.AVLoadingIndicatorView;
 
 import java.util.Date;
