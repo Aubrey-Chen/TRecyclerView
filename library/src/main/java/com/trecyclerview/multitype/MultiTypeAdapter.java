@@ -70,16 +70,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-//    @Override
-//    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-//        super.unregisterAdapterDataObserver(observer);
-//    }
-//
-//    @Override
-//    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-//        super.registerAdapterDataObserver(observer);
-//    }
-
     /**
      * Registers a type class and its item view binder. If you have registered the class,
      * it will override the original binder(s). Note that the method is non-thread-safe

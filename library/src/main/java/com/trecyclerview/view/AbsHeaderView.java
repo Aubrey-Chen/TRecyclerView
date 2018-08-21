@@ -20,8 +20,11 @@ public abstract class AbsHeaderView extends AbsItemView<HeaderInfo, AbsHeaderVie
 
     protected Context mContext;
 
-    public AbsHeaderView(Context context) {
+    protected int mProgressStyle;
+
+    public AbsHeaderView(Context context,int progressStyle) {
         this.mContext = context;
+        this.mProgressStyle = progressStyle;
         mRefreshHeader = createRefreshHeader();
     }
 
