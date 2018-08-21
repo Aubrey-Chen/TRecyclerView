@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.trecyclerview.entity.HeaderInfo;
+import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.multitype.AbsItemView;
 
 /**
  * @author：tqzhang on 18/7/13 16:47
  */
-public abstract class AbsHeaderView extends AbsItemView<HeaderInfo, AbsHeaderView.ViewHolder> {
+public abstract class AbsHeaderView extends AbsItemView<HeaderVo, AbsHeaderView.ViewHolder> {
 
     private ArrowRefreshHeader mRefreshHeader;
 
@@ -42,7 +42,7 @@ public abstract class AbsHeaderView extends AbsItemView<HeaderInfo, AbsHeaderVie
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull HeaderInfo item) {
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull HeaderVo item) {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

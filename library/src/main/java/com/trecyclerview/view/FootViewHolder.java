@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.trecyclerview.R;
-import com.trecyclerview.entity.FootInfo;
+import com.trecyclerview.pojo.FootVo;
 
 import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
 import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
@@ -18,7 +18,7 @@ import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
 /**
  * @author：tqzhang on 18/6/20 13:41
  */
-public class FootViewHolder extends AbsFootView<FootInfo, FootViewHolder.ViewHolder> {
+public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolder> {
 
     private int mProgressStyle;
 
@@ -35,7 +35,7 @@ public class FootViewHolder extends AbsFootView<FootInfo, FootViewHolder.ViewHol
     }
 
     @Override
-    protected void onBindHolder(@NonNull ViewHolder holder, @NonNull FootInfo mFootData) {
+    protected void onBindHolder(@NonNull ViewHolder holder, @NonNull FootVo mFootData) {
 
         RecyclerView.LayoutParams clp = (RecyclerView.LayoutParams) holder.mRootView.getLayoutParams();
         if (clp instanceof StaggeredGridLayoutManager.LayoutParams) {
