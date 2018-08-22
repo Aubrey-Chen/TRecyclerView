@@ -1,6 +1,7 @@
 package com.trecyclerview;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -204,7 +205,7 @@ public class TRecyclerView extends RecyclerView {
 
         boolean isBottom = mAdapterCount == lastVisibleItemPosition;
         if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom) {
-            refreshComplete();
+            mRefreshing = false;
             isLoadMore = true;
             if (isLoading) {
                 isLoading = false;

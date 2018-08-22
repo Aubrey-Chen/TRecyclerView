@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.rv.itemView.ItemType1;
 import com.rv.itemView.banner;
@@ -40,15 +41,15 @@ public class MultiTypeActivity extends AppCompatActivity {
         adapter.register(BannerVo.class, new banner(MultiTypeActivity.this));
         adapter.register(ItemVo.class, new ItemType1(MultiTypeActivity.this));
         adapter.register(FootVo.class, new FootViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
-        GridLayoutManager layoutManager = new GridLayoutManager(MultiTypeActivity.this, 2);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return (items.get(position) instanceof BannerVo
-                        || items.get(position) instanceof HeaderVo
-                        || items.get(position) instanceof FootVo) ? 2 : 1;
-            }
-        });
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+//        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//            @Override
+//            public int getSpanSize(int position) {
+//                return (items.get(position) instanceof BannerVo
+//                        || items.get(position) instanceof HeaderVo
+//                        || items.get(position) instanceof FootVo) ? 2 : 1;
+//            }
+//        });
 
         tRecyclerView.setAdapter(adapter);
         tRecyclerView.setLayoutManager(layoutManager);
@@ -77,17 +78,17 @@ public class MultiTypeActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 20; i++) {
-                            items.add(new ItemVo());
-                        }
-                        tRecyclerView.loadMoreComplete(20);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+                for (int i = 0; i < 50; i++) {
+                    items.add(new ItemVo());
+                }
+                tRecyclerView.loadMoreComplete(50);
 //                        tRecyclerView.setNoMore(20);
-                    }
+//                    }
 
-                }, 2000);
+//                }, 2000);
             }
         });
     }
