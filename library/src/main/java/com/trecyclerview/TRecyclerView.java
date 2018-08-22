@@ -11,11 +11,18 @@ import android.view.MotionEvent;
 import com.trecyclerview.listener.OnScrollStateListener;
 import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
+import com.trecyclerview.multitype.Items;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
+import com.trecyclerview.pojo.FootVo;
+import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.view.AbsFootView;
 import com.trecyclerview.view.AbsHeaderView;
 import com.trecyclerview.view.ArrowRefreshHeader;
+
+import java.util.List;
+
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
 
 /**
  * @author：tqzhang on 18/6/22 16:03
@@ -26,6 +33,12 @@ public class TRecyclerView extends RecyclerView {
     private boolean loadingMoreEnabled = false;
 
     private boolean pullRefreshEnabled = false;
+
+
+    protected boolean isLoadMore = true;
+
+    protected boolean isLoading = true;
+
     //是否正在下拉刷新
     private boolean mRefreshing = false;
 
@@ -67,18 +80,22 @@ public class TRecyclerView extends RecyclerView {
             mRefreshHeader.refreshComplete();
         }
         mRefreshing = false;
+        mMultiTypeAdapter.notifyDataChanged();
     }
 
-    public void loadMoreComplete() {
+    public void loadMoreComplete(int size) {
         if (mRefreshing) {
             mRefreshing = false;
         }
-
+        isLoading = true;
+        isLoadMore = false;
+        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
+        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
     }
 
-    public void setNoMore() {
-        loadMoreComplete();
+    public void setNoMore(int size) {
         isNoMore = true;
+        loadMoreComplete(size);
     }
 
     @Override
@@ -128,6 +145,8 @@ public class TRecyclerView extends RecyclerView {
                     if (mRefreshHeader.releaseAction()) {
                         if (mOnRefreshListener != null) {
                             mRefreshing = true;
+//                            List items = mMultiTypeAdapter.getItems();
+//                            items.add(new HeaderVo());
                             mOnRefreshListener.onRefresh();
                         }
                     }
@@ -184,9 +203,14 @@ public class TRecyclerView extends RecyclerView {
         }
 
         boolean isBottom = mAdapterCount == lastVisibleItemPosition;
-        if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && !isNoMore) {
+        if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom) {
             refreshComplete();
-            mOnRefreshListener.onLoadMore();
+            isLoadMore = true;
+            if (isLoading) {
+                isLoading = false;
+                mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
+                mOnRefreshListener.onLoadMore();
+            }
         }
 
     }

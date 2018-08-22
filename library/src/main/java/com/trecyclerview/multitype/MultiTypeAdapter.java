@@ -9,11 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.trecyclerview.pojo.FootVo;
+import com.trecyclerview.pojo.HeaderVo;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.trecyclerview.multitype.Preconditions.checkNotNull;
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
 
 /**
  * @author drakeet
@@ -162,8 +167,9 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param items the new items list
      * @since v2.4.1
      */
-    public void setItems(@NonNull List<?> items) {
+    public void setItems(@NonNull List<Object> items) {
         checkNotNull(items);
+        items.add(0, new HeaderVo());
         this.items = items;
     }
 
@@ -173,6 +179,23 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         return items;
     }
 
+    public void notifyDataChanged() {
+        ((List<Object>) getItems()).add(0, new HeaderVo());
+        notifyDataSetChanged();
+    }
+
+    public void notifyFootViewChanged(boolean isNoMore) {
+        if (isNoMore) {
+            ((List<Object>) getItems()).add(new FootVo(STATE_NOMORE));
+        } else {
+            ((List<Object>) getItems()).add(new FootVo(STATE_LOADING));
+        }
+        notifyItemRangeChanged(items.size() - 1, items.size());
+    }
+
+    public void notifyMoreDataChanged(int positionStart, int itemCount) {
+        notifyItemRangeChanged(positionStart, itemCount);
+    }
 
     /**
      * Set the TypePool to hold the types and view binders.
