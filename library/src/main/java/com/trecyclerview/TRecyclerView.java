@@ -81,7 +81,7 @@ public class TRecyclerView extends RecyclerView {
             mRefreshHeader.refreshComplete();
         }
         mRefreshing = false;
-        mMultiTypeAdapter.notifyDataChanged();
+        mMultiTypeAdapter.notifyDataSetChanged();
     }
 
     public void loadMoreComplete(int size) {
