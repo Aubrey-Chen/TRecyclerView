@@ -3,7 +3,10 @@ package com.rv.itemView;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.rv.R;
 import com.rv.pojo.BannerVo;
@@ -30,13 +33,18 @@ public class banner extends AbsViewHolder<BannerVo, banner.ViewHolder> {
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull BannerVo item) {
-
+        RecyclerView.LayoutParams clp = (RecyclerView.LayoutParams) holder.mBannerView.getLayoutParams();
+        if (clp instanceof StaggeredGridLayoutManager.LayoutParams) {
+            ((StaggeredGridLayoutManager.LayoutParams) clp).setFullSpan(true);
+        }
     }
 
     static class ViewHolder extends BaseHolder {
 
+        private RelativeLayout mBannerView;
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            mBannerView=getViewById(R.id.rl_root_view);
         }
 
     }

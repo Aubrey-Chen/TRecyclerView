@@ -17,12 +17,27 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MultiTypeActivity.class));
+                startActivity(new Intent(MainActivity.this, LinearLayoutActivity.class));
             }
         });
         findViewById(R.id.tv_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, GridLayoutActivity.class));
+
+            }
+        });
+        findViewById(R.id.tv_3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, StaggeredGridLayoutActivity.class));
+
+            }
+        });
+        findViewById(R.id.tv_4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MultiTypeActivity.class));
 
             }
         });

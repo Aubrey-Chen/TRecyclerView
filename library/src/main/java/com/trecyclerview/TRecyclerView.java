@@ -1,7 +1,6 @@
 package com.trecyclerview;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,18 +11,11 @@ import android.view.MotionEvent;
 import com.trecyclerview.listener.OnScrollStateListener;
 import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
-import com.trecyclerview.multitype.Items;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
-import com.trecyclerview.pojo.FootVo;
-import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.view.AbsFootView;
 import com.trecyclerview.view.AbsHeaderView;
 import com.trecyclerview.view.ArrowRefreshHeader;
-
-import java.util.List;
-
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
 
 /**
  * @author：tqzhang on 18/6/22 16:03
@@ -150,8 +142,6 @@ public class TRecyclerView extends RecyclerView {
                     if (mRefreshHeader.releaseAction()) {
                         if (mOnRefreshListener != null) {
                             mRefreshing = true;
-//                            List items = mMultiTypeAdapter.getItems();
-//                            items.add(new HeaderVo());
                             mOnRefreshListener.onRefresh();
                         }
                     }
@@ -234,6 +224,21 @@ public class TRecyclerView extends RecyclerView {
         }
     }
 
+//    public void defaultRefresh() {
+//        if (mRefreshing) {
+//            return;
+//        }
+//        if (mRefreshHeader.getVisibleHeight() > 0 || mRefreshing) {// if RefreshHeader is Refreshing, return
+//            return;
+//        }
+//        if (pullRefreshEnabled && mOnRefreshListener != null) {
+//            mRefreshHeader.setState(2);
+//            int offSet = mRefreshHeader.getMeasuredHeight();
+//            mRefreshHeader.onMove(offSet);
+//            mRefreshing = true;
+//            mOnRefreshListener.onRefresh();
+//        }
+//    }
 
     private int findMax(int[] lastPositions) {
         int max = lastPositions[0];

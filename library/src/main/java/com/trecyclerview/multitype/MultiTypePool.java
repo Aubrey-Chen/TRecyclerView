@@ -78,7 +78,7 @@ public class MultiTypePool implements TypePool {
 
 
   @Override
-  public <T> void register(
+  public <T> void bind(
       @NonNull Class<? extends T> clazz,
       @NonNull AbsItemView<T, ?> binder,
       @NonNull Linker<T> linker) {
@@ -92,7 +92,7 @@ public class MultiTypePool implements TypePool {
 
 
   @Override
-  public boolean unregister(@NonNull Class<?> clazz) {
+  public boolean unbind(@NonNull Class<?> clazz) {
     checkNotNull(clazz);
     boolean removed = false;
     while (true) {

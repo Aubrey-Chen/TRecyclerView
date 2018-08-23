@@ -3,20 +3,21 @@ package com.rv.itemView;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.rv.R;
-import com.rv.pojo.BannerVo;
-import com.rv.pojo.Item1Vo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.holder.AbsViewHolder;
 import com.trecyclerview.holder.BaseHolder;
 
+import java.util.Random;
+
 /**
  * @author：tqzhang on 18/8/22 13:57
  */
-public class ItemType1 extends AbsViewHolder<Item1Vo, ItemType1.ViewHolder> {
-    public ItemType1(Context context) {
+public class StageredItemType extends AbsViewHolder<ItemVo, StageredItemType.ViewHolder> {
+    public StageredItemType(Context context) {
         super(context);
     }
 
@@ -31,17 +32,18 @@ public class ItemType1 extends AbsViewHolder<Item1Vo, ItemType1.ViewHolder> {
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull Item1Vo item) {
-        holder.tvType.setText(item.type);
+    protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ItemVo item) {
+        int h = new Random().nextInt(80)+180;
+        holder.rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,h));
     }
 
     static class ViewHolder extends BaseHolder {
 
-        TextView tvType;
+        RelativeLayout rootView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvType = getViewById(R.id.tv_type);
+            rootView = getViewById(R.id.rl_root_view);
         }
 
     }

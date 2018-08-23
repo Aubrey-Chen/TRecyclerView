@@ -7,12 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 
 import com.rv.itemView.ItemType;
-import com.rv.itemView.ItemType1;
-import com.rv.itemView.ItemType2;
 import com.rv.itemView.banner;
 import com.rv.pojo.BannerVo;
-import com.rv.pojo.Item1Vo;
-import com.rv.pojo.Item2Vo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.TRecyclerView;
 import com.trecyclerview.listener.OnRefreshListener;
@@ -28,7 +24,7 @@ import com.trecyclerview.view.HeaderViewHolder;
 /**
  * @author：tqzhang on 18/8/22 13:48
  */
-public class MultiTypeActivity extends AppCompatActivity {
+public class GridLayoutActivity extends AppCompatActivity {
     private TRecyclerView tRecyclerView;
     private Items items;
     private MultiTypeAdapter adapter;
@@ -40,27 +36,17 @@ public class MultiTypeActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
         adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
-        adapter.bind(BannerVo.class, new banner(MultiTypeActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(MultiTypeActivity.this));
-        adapter.bind(Item1Vo.class, new ItemType1(MultiTypeActivity.this));
-        adapter.bind(Item2Vo.class, new ItemType2(MultiTypeActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
-        GridLayoutManager layoutManager = new GridLayoutManager(MultiTypeActivity.this, 4);
+        adapter.bind(HeaderVo.class, new HeaderViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman));
+        adapter.bind(BannerVo.class, new banner(GridLayoutActivity.this));
+        adapter.bind(ItemVo.class, new ItemType(GridLayoutActivity.this));
+        adapter.bind(FootVo.class, new FootViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman));
+        GridLayoutManager layoutManager = new GridLayoutManager(GridLayoutActivity.this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (items.get(position) instanceof BannerVo
+                return (items.get(position) instanceof BannerVo
                         || items.get(position) instanceof HeaderVo
-                        || items.get(position) instanceof Item1Vo
-                        || items.get(position) instanceof FootVo) {
-                    return 4;
-                } else if (items.get(position) instanceof ItemVo) {
-                    return 2;
-                } else if (items.get(position) instanceof Item2Vo) {
-                    return 1;
-                }
-                return 4;
+                        || items.get(position) instanceof FootVo) ? 2 : 1;
             }
         });
 
@@ -77,7 +63,13 @@ public class MultiTypeActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        initData();
+                        items.clear();
+                        items.add(new BannerVo());
+                        for (int i = 0; i < 10; i++) {
+                            items.add(new ItemVo());
+                        }
+                        adapter.setItems(items);
+                        tRecyclerView.refreshComplete(false);
                     }
 
                 }, 2000);
@@ -89,16 +81,10 @@ public class MultiTypeActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
-                        items.add(new Item1Vo("Python"));
-                        for (int i = 0; i < 6; i++) {
+                        for (int i = 0; i < 10; i++) {
                             items.add(new ItemVo());
                         }
-                        items.add(new Item1Vo("Go"));
-                        for (int i = 0; i < 12; i++) {
-                            items.add(new ItemVo());
-                        }
-                        tRecyclerView.loadMoreComplete(20);
+                        tRecyclerView.loadMoreComplete(10);
 //                        tRecyclerView.setNoMore(20);
                     }
 
@@ -110,15 +96,7 @@ public class MultiTypeActivity extends AppCompatActivity {
     private void initData() {
         items.clear();
         items.add(new BannerVo());
-        for (int i = 0; i < 8; i++) {
-            items.add(new Item2Vo());
-        }
-        items.add(new Item1Vo("java"));
-        for (int i = 0; i < 6; i++) {
-            items.add(new ItemVo());
-        }
-        items.add(new Item1Vo("android"));
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
         adapter.setItems(items);

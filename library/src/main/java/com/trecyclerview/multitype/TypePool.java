@@ -33,7 +33,7 @@ public interface TypePool {
    * @param linker the linker to link the class and view binder
    * @param <T> the item data type
    */
-  <T> void register(
+  <T> void bind(
           @NonNull Class<? extends T> clazz,
           @NonNull AbsItemView<T, ?> binder,
           @NonNull Linker<T> linker);
@@ -44,7 +44,7 @@ public interface TypePool {
    * @param clazz the class of items
    * @return true if any items are unregistered from the pool
    */
-  boolean unregister(@NonNull Class<?> clazz);
+  boolean unbind(@NonNull Class<?> clazz);
 
   /**
    * Returns the number of items in this pool.

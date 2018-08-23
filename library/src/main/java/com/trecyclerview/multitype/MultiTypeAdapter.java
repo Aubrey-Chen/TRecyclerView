@@ -89,19 +89,19 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param binder the item view binder
      * @param <T>    the item data type
      */
-    public <T> void register(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder) {
+    public <T> void bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder) {
         checkNotNull(clazz);
         checkNotNull(binder);
         checkAndRemoveAllTypesIfNeeded(clazz);
-        register(clazz, binder, new DefaultLinker<T>());
+        bind(clazz, binder, new DefaultLinker<T>());
     }
 
 
-    <T> void register(
+    <T> void bind(
             @NonNull Class<? extends T> clazz,
             @NonNull AbsItemView<T, ?> binder,
             @NonNull Linker<T> linker) {
-        typePool.register(clazz, binder, linker);
+        typePool.bind(clazz, binder, linker);
         binder.adapter = this;
     }
 
@@ -119,11 +119,11 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param clazz the class of a item
      * @param <T>   the item data type
      * @return {@link OneToManyFlow} for setting the binders
-     * @see #register(Class, AbsItemView)
+     * @see #bind(Class, AbsItemView)
      */
     @CheckResult
     public @NonNull
-    <T> OneToManyFlow<T> register(@NonNull Class<? extends T> clazz) {
+    <T> OneToManyFlow<T> bind(@NonNull Class<? extends T> clazz) {
         checkNotNull(clazz);
         checkAndRemoveAllTypesIfNeeded(clazz);
         return new com.trecyclerview.multitype.OneToManyBuilder<>(this, clazz);
@@ -141,10 +141,10 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * </p>
      *
      * @param pool type pool containing contents to be added to this adapter inner pool
-     * @see #register(Class, AbsItemView)
-     * @see #register(Class)
+     * @see #bind(Class, AbsItemView)
+     * @see #bind(Class)
      */
-    public void registerAll(@NonNull final TypePool pool) {
+    public void bindAll(@NonNull final TypePool pool) {
         checkNotNull(pool);
         final int size = pool.size();
         for (int i = 0; i < size; i++) {
@@ -368,7 +368,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 
     private void checkAndRemoveAllTypesIfNeeded(@NonNull Class<?> clazz) {
-        if (typePool.unregister(clazz)) {
+        if (typePool.unbind(clazz)) {
             Log.w(TAG, "You have registered the " + clazz.getSimpleName() + " type. " +
                     "It will override the original binder(s).");
         }
@@ -376,12 +376,12 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 
     /**
-     * A safe register method base on the TypePool's safety for TypePool.
+     * A safe bind method base on the TypePool's safety for TypePool.
      */
     @SuppressWarnings("unchecked")
     private void registerWithoutChecking(@NonNull Class clazz, @NonNull AbsItemView binder, @NonNull Linker linker) {
         checkAndRemoveAllTypesIfNeeded(clazz);
-        register(clazz, binder, linker);
+        bind(clazz, binder, linker);
     }
 
 
