@@ -210,7 +210,9 @@ public class TRecyclerView extends RecyclerView {
             if (isLoading) {
                 isLoading = false;
                 mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
-                mOnRefreshListener.onLoadMore();
+                if (!isNoMore) {
+                    mOnRefreshListener.onLoadMore();
+                }
             }
         }
 
