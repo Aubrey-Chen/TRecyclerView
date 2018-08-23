@@ -12,6 +12,7 @@ import com.rv.pojo.BannerVo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.TRecyclerView;
 import com.trecyclerview.listener.OnRefreshListener;
+import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.Items;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.pojo.FootVo;
@@ -36,6 +37,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
         adapter = new MultiTypeAdapter();
+
         adapter.bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
         adapter.bind(BannerVo.class, new banner(LinearLayoutActivity.this));
         adapter.bind(ItemVo.class, new ItemType(LinearLayoutActivity.this));
@@ -48,6 +50,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
     }
 
     private void setListener() {
+
         tRecyclerView.addOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {

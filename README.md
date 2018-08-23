@@ -1,9 +1,80 @@
-# TRecyclerView
-TRecyclerView是支持HeaderView、 FooterView、下拉刷新、分页加载数据。<br/>
+#TRecyclerView
+由于项目需求,很多地方使用了大量的多类型item,看了一些市面上的刷新库，感觉支持多类型复用性相对弱，于是诞生了TRecyclerView，让开发者只关心ViewHolder的开发，高复用，多处使用copy ViewHolder即可
+TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
 
 ### 主要功能<br/>
    * 下拉刷新、加载更多；<br/>
    * 高复用,支持多类型；<br/>
-   * 头部下拉样式可以自定义；<br/>
+   * ...<br/>
    项目github地址:<https://github.com/SelfZhangTQ/TRecyclerView> <br/>
+
+#### 效果图 <br/>
+
+#### 使用步骤 <br/>
+  Gradle<br/>
+ Step 1. 在你的根build.gradle文件中增加JitPack仓库依赖。
+
+     allprojects {
+         repositories {
+          jcenter()
+          maven { url "https://jitpack.io" }
+        }
+     }
+
+ Step 2. 在你的model的build.gradle文件中增加TRecyclerView依赖<br/>
+
+     com.github.SelfZhangTQ:TRecyclerView:2.2.4
+
+ Step 3.数据填充<br/>
+
+    adapter = new MultiTypeAdapter();
+    //设置刷新头，加载更多foot以及itemView
+    adapter.bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
+    adapter.bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
+
+    items = new Items();
+
+
+    layoutManager = new LinearLayoutManager(LinearLayoutActivity.this);
+    mRecyclerView.setAdapter(adapter);
+    mRecyclerView.setLayoutManager(layoutManager);
+
+ Step 4.下拉刷新,加载更多,滚动监听回调<br/>
+
+    mRecyclerView.addOnRefreshListener(new OnRefreshListener(){
+            @Override
+            public void onRefresh() {
+
+             }
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
+    mRecyclerView.addOnTScrollListener(new OnTScrollListener() {
+            @Override
+            public void onScrolled(int dx, int dy) {
+
+            }
+
+            @Override
+            public void onScrollStateChanged(int state) {
+
+            }
+        });
+
+
+
+ TRecyclerView使用步骤介绍完了，对了adapter好像忘了介绍，No,NO,No,你不需要关心adapter,只需要写对应UI以及数据设置就行，尽情的编写ViewHolder吧
+
+
+ 项目github地址:<https://github.com/SelfZhangTQ/TRecyclerView> <br/>
+项目实战地址github地址:<https://github.com/SelfZhangTQ/T-MVVM> <br/>
+
+效果图：
+
+#### 第三方库 <br/>
+* multitype <br/>
+* AVLoadingIndicatorView <br/>
+
 
