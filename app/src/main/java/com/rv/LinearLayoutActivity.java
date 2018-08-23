@@ -37,7 +37,6 @@ public class LinearLayoutActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
         adapter = new MultiTypeAdapter();
-
         adapter.bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
         adapter.bind(BannerVo.class, new banner(LinearLayoutActivity.this));
         adapter.bind(ItemVo.class, new ItemType(LinearLayoutActivity.this));
@@ -62,8 +61,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 10; i++) {
                             items.add(new ItemVo());
                         }
-                        adapter.setItems(items);
-                        tRecyclerView.refreshComplete(false);
+                        tRecyclerView.refreshComplete(items,false);
                     }
 
                 }, 2000);
@@ -79,7 +77,6 @@ public class LinearLayoutActivity extends AppCompatActivity {
                             items.add(new ItemVo());
                         }
                         tRecyclerView.loadMoreComplete(10);
-//                        tRecyclerView.setNoMore(20);
                     }
 
                 }, 2000);
@@ -93,7 +90,6 @@ public class LinearLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
-        adapter.setItems(items);
-        tRecyclerView.refreshComplete(false);
+        tRecyclerView.refreshComplete(items,false);
     }
 }

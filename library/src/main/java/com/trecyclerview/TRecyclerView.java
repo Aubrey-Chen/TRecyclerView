@@ -1,6 +1,8 @@
 package com.trecyclerview;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,9 @@ import com.trecyclerview.multitype.TypePool;
 import com.trecyclerview.view.AbsFootView;
 import com.trecyclerview.view.AbsHeaderView;
 import com.trecyclerview.view.ArrowRefreshHeader;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author：tqzhang on 18/6/22 16:03
@@ -71,11 +76,12 @@ public class TRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void refreshComplete(boolean noMore) {
+    public void refreshComplete(List<Object> list, boolean noMore) {
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
         mRefreshing = false;
+        mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
     }

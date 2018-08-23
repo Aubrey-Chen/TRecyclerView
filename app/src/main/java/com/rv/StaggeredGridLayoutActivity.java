@@ -59,8 +59,8 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 20; i++) {
                             items.add(new ItemVo());
                         }
-                        adapter.setItems(items);
-                        tRecyclerView.refreshComplete(false);
+                        tRecyclerView.refreshComplete(items, false);
+
                     }
 
                 }, 2000);
@@ -90,7 +90,6 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 20; i++) {
             items.add(new ItemVo());
         }
-        adapter.setItems(items);
-        tRecyclerView.refreshComplete(false);
+        tRecyclerView.refreshComplete(items, false);
     }
 }

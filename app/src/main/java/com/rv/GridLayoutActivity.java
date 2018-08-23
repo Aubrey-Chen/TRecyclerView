@@ -60,6 +60,7 @@ public class GridLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -68,8 +69,7 @@ public class GridLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 10; i++) {
                             items.add(new ItemVo());
                         }
-                        adapter.setItems(items);
-                        tRecyclerView.refreshComplete(false);
+                        tRecyclerView.refreshComplete(items,false);
                     }
 
                 }, 2000);
@@ -99,7 +99,6 @@ public class GridLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
-        adapter.setItems(items);
-        tRecyclerView.refreshComplete(false);
+        tRecyclerView.refreshComplete(items,false);
     }
 }
