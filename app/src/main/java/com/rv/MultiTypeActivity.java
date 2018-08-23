@@ -69,7 +69,7 @@ public class MultiTypeActivity extends AppCompatActivity {
                         for (int i = 0; i < 20; i++) {
                             items.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete();
+                        tRecyclerView.refreshComplete(false);
                     }
 
                 }, 2000);

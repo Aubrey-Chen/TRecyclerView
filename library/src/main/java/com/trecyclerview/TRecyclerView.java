@@ -43,6 +43,9 @@ public class TRecyclerView extends RecyclerView {
     //是否正在下拉刷新
     private boolean mRefreshing = false;
 
+    /**
+     * true 没有更多
+     */
     private boolean isNoMore = false;
 
 
@@ -76,12 +79,13 @@ public class TRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void refreshComplete() {
+    public void refreshComplete(boolean noMore) {
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
         mRefreshing = false;
         mMultiTypeAdapter.notifyDataSetChanged();
+        isNoMore = noMore;
     }
 
     public void loadMoreComplete(int size) {
