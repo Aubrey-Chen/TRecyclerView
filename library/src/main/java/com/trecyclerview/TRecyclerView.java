@@ -98,7 +98,12 @@ public class TRecyclerView extends RecyclerView {
             mRefreshHeader.refreshComplete();
         }
         mRefreshing = false;
-        mMultiTypeAdapter.setItems(list);
+        if (!pullRefreshEnabled) {
+            mMultiTypeAdapter.setItems(list, false);
+        } else {
+            mMultiTypeAdapter.setItems(list);
+        }
+
         mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
     }
@@ -186,7 +191,6 @@ public class TRecyclerView extends RecyclerView {
         }
         return super.onTouchEvent(ev);
     }
-
 
 
     @Override

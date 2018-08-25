@@ -37,7 +37,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
         adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
+//        adapter.bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
         adapter.bind(BannerVo.class, new banner(LinearLayoutActivity.this));
         adapter.bind(ItemVo.class, new ItemType(LinearLayoutActivity.this));
         adapter.bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
