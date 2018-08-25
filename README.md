@@ -1,8 +1,6 @@
-#TRecyclerView<br/>
+# TRecyclerView<br/>
 
-由于项目需求,很多地方使用了大量的多类型item,看了一些市面上的刷新库，感觉支持多类型复用性相对弱，于是诞生了TRecyclerView，让开发者只关心ViewHolder的开发，高复用，多处使用copy ViewHolder即可
-TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
-
+由于项目需求,很多地方使用了大量的多类型item，于是捣鼓捣鼓诞生了TRecyclerView，让开发者只关心ViewHolder的开发，高复用,TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
 ### 主要功能<br/>
    * 下拉刷新、加载更多；<br/>
    * 高复用,支持多类型；<br/>

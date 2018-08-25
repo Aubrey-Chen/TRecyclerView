@@ -27,17 +27,29 @@ import java.util.List;
  */
 public class TRecyclerView extends RecyclerView {
     private MultiTypeAdapter mMultiTypeAdapter;
-
+    /**
+     * 是否开启加载更多
+     */
     private boolean loadingMoreEnabled = false;
 
+    /**
+     * 是否开启刷新
+     */
     private boolean pullRefreshEnabled = false;
 
-
+    /**
+     * 加载更多
+     */
     protected boolean isLoadMore = true;
 
+    /**
+     * 加载更多中
+     */
     protected boolean isLoading = true;
 
-    //是否正在下拉刷新
+    /**
+     * 刷新中
+     */
     private boolean mRefreshing = false;
 
     /**
@@ -45,13 +57,12 @@ public class TRecyclerView extends RecyclerView {
      */
     private boolean isNoMore = false;
 
-
-    private float mLastY = -1;
-
     /**
      * 最后一个可见的item的位置
      */
     private int lastVisibleItemPosition;
+
+    private float mLastY = -1;
 
 
     private OnRefreshListener mOnRefreshListener;
@@ -76,6 +87,12 @@ public class TRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * 刷新完成
+     *
+     * @param list
+     * @param noMore
+     */
     public void refreshComplete(List<Object> list, boolean noMore) {
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
@@ -86,6 +103,11 @@ public class TRecyclerView extends RecyclerView {
         isNoMore = noMore;
     }
 
+    /**
+     * 加载更多完成
+     *
+     * @param size
+     */
     public void loadMoreComplete(int size) {
         if (mRefreshing) {
             mRefreshing = false;
@@ -96,11 +118,21 @@ public class TRecyclerView extends RecyclerView {
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
     }
 
+    /**
+     * 没有更多
+     *
+     * @param size
+     */
     public void setNoMore(int size) {
         isNoMore = true;
         loadMoreComplete(size);
     }
 
+    /**
+     * 设置适配器
+     *
+     * @param adapter
+     */
     @Override
     public void setAdapter(Adapter adapter) {
         this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
@@ -120,7 +152,6 @@ public class TRecyclerView extends RecyclerView {
     public void setLoadingMoreEnabled(boolean enabled) {
         loadingMoreEnabled = enabled;
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -142,7 +173,6 @@ public class TRecyclerView extends RecyclerView {
                 }
                 break;
             default:
-                // reset
                 mLastY = -1;
                 if (isOnTop() && pullRefreshEnabled && !mRefreshing) {
                     if (mRefreshHeader.releaseAction()) {
@@ -157,19 +187,11 @@ public class TRecyclerView extends RecyclerView {
         return super.onTouchEvent(ev);
     }
 
-    private boolean isOnTop() {
-        if (mRefreshHeader != null && mRefreshHeader.getParent() != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 
     @Override
     public void onScrolled(int dx, int dy) {
         super.onScrolled(dx, dy);
-
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrolled(dx, dy);
         }
@@ -230,22 +252,6 @@ public class TRecyclerView extends RecyclerView {
         }
     }
 
-//    public void defaultRefresh() {
-//        if (mRefreshing) {
-//            return;
-//        }
-//        if (mRefreshHeader.getVisibleHeight() > 0 || mRefreshing) {// if RefreshHeader is Refreshing, return
-//            return;
-//        }
-//        if (pullRefreshEnabled && mOnRefreshListener != null) {
-//            mRefreshHeader.setState(2);
-//            int offSet = mRefreshHeader.getMeasuredHeight();
-//            mRefreshHeader.onMove(offSet);
-//            mRefreshing = true;
-//            mOnRefreshListener.onRefresh();
-//        }
-//    }
-
     private int findMax(int[] lastPositions) {
         int max = lastPositions[0];
         for (int value : lastPositions) {
@@ -255,6 +261,15 @@ public class TRecyclerView extends RecyclerView {
         }
         return max;
     }
+
+    private boolean isOnTop() {
+        if (mRefreshHeader != null && mRefreshHeader.getParent() != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * 当前RecyclerView类型

@@ -107,9 +107,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     }
 
     public void setState(int state) {
-        if (state == mState) return;
+        if (state == mState) {
+            return;
+        }
 
-        if (state == STATE_REFRESHING) {    // 显示进度
+        if (state == STATE_REFRESHING) {
             mArrowImageView.clearAnimation();
             mArrowImageView.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
@@ -117,7 +119,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         } else if (state == STATE_DONE) {
             mArrowImageView.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
-        } else {    // 显示箭头图片
+        } else {
             mArrowImageView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
         }
@@ -160,6 +162,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         mHeaderTimeView.setText(friendlyTime(new Date()));
         setState(STATE_DONE);
         new Handler().postDelayed(new Runnable() {
+            @Override
             public void run() {
                 reset();
             }
@@ -167,7 +170,9 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     }
 
     public void setVisibleHeight(int height) {
-        if (height < 0) height = 0;
+        if (height < 0) {
+            height = 0;
+        }
         LayoutParams lp = (LayoutParams) mContainer.getLayoutParams();
         lp.height = height;
         mContainer.setLayoutParams(lp);
@@ -182,7 +187,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     public void onMove(float delta) {
         if (getVisibleHeight() > 0 || delta > 0) {
             setVisibleHeight((int) delta + getVisibleHeight());
-            if (mState <= STATE_RELEASE_TO_REFRESH) { // 未处于刷新状态，更新箭头
+            if (mState <= STATE_RELEASE_TO_REFRESH) {
                 if (getVisibleHeight() > mMeasuredHeight) {
                     setState(STATE_RELEASE_TO_REFRESH);
                 } else {
@@ -197,16 +202,13 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     public boolean releaseAction() {
         boolean isOnRefresh = false;
         int height = getVisibleHeight();
-        if (height == 0) // not visible.
+        if (height == 0) {
             isOnRefresh = false;
+        }
 
         if (getVisibleHeight() > mMeasuredHeight && mState < STATE_REFRESHING) {
             setState(STATE_REFRESHING);
             isOnRefresh = true;
-        }
-        // refreshing and header isn't shown fully. do nothing.
-        if (mState == STATE_REFRESHING && height <= mMeasuredHeight) {
-            //return;
         }
         if (mState != STATE_REFRESHING) {
             smoothScrollTo(0);

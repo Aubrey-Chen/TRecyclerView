@@ -29,7 +29,6 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private boolean loadingMoreEnabled = false;
 
-    //是否正在下拉刷新
     private boolean mRefreshing = false;
 
     private boolean isNoMore = false;
