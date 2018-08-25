@@ -1,4 +1,5 @@
-#TRecyclerView
+#TRecyclerView<br/>
+
 由于项目需求,很多地方使用了大量的多类型item,看了一些市面上的刷新库，感觉支持多类型复用性相对弱，于是诞生了TRecyclerView，让开发者只关心ViewHolder的开发，高复用，多处使用copy ViewHolder即可
 TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
 
@@ -17,7 +18,6 @@ TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不�
 ![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/666.png)<br/>
 ![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/777.png)
 ![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/888.png)<br/>
-
 
 
 #### 使用步骤 <br/>
@@ -75,13 +75,14 @@ TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不�
 
 
 
- TRecyclerView使用步骤介绍完了，对了adapter好像忘了介绍，No,NO,No,你不需要关心adapter,只需要写对应UI以及数据设置就行，尽情的编写ViewHolder吧
+ TRecyclerView使用步骤介绍完了，对了adapter好像忘了介绍，NO,NO,NO,你不需要关心adapter,只需要写对应UI以及数据设置就行，尽情的编写ViewHolder吧
 
 
  项目github地址:<https://github.com/SelfZhangTQ/TRecyclerView> <br/>
 项目实战地址github地址:<https://github.com/SelfZhangTQ/T-MVVM> <br/>
 
-效果图：
+效果图：<br/>
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/9_video.gif)<br/>
 
 #### 第三方库 <br/>
 * multitype <br/>
