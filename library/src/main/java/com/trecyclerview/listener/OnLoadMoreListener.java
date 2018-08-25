@@ -1,7 +1,7 @@
 package com.trecyclerview.listener;
 
 /**
- * @author：zhangtianqiu on 18/8/14 10:59
+ * @author：tqzhang on 18/8/14 10:59
  */
 public interface OnLoadMoreListener {
     /**
