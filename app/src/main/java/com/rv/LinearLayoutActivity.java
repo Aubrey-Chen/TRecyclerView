@@ -64,7 +64,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
                         tRecyclerView.refreshComplete(items,false);
                     }
 
-                }, 2000);
+                }, 5000);
 
             }
 

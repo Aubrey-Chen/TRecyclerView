@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.pojo.HeaderVo;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -105,7 +106,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         binder.adapter = this;
     }
 
-
     /**
      * Registers a type class to multiple item view binders. If you have registered the
      * class, it will override the original binder(s). Note that the method is non-thread-safe
@@ -170,6 +170,10 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void setItems(@NonNull List<Object> items) {
         checkNotNull(items);
         items.add(0, new HeaderVo());
+        this.items = items;
+    }
+    public void setItems(@NonNull List<Object> items,boolean isNoHeader) {
+        checkNotNull(items);
         this.items = items;
     }
 
@@ -383,6 +387,4 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         checkAndRemoveAllTypesIfNeeded(clazz);
         bind(clazz, binder, linker);
     }
-
-
 }

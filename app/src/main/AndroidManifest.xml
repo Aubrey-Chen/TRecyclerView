@@ -20,6 +20,11 @@
         <activity android:name=".GridLayoutActivity" />
         <activity android:name=".StaggeredGridLayoutActivity" />
         <activity android:name=".MultiTypeActivity" />
+        <activity android:name=".SwipeLinearLayoutActivity" />
+        <activity android:name=".SwipeGridLayoutActivity" />
+        <activity android:name=".SwipeStaggeredGridLayoutActivity" />
+        <activity android:name=".SwipeMultiTypeActivity" />
+        <activity android:name=".SwipeAppBarLayoutMultiTypeActivity" />
     </application>
 
 </manifest>

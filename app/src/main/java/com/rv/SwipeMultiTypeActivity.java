@@ -3,6 +3,7 @@ package com.rv;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 
@@ -14,7 +15,9 @@ import com.rv.pojo.BannerVo;
 import com.rv.pojo.Item1Vo;
 import com.rv.pojo.Item2Vo;
 import com.rv.pojo.ItemVo;
+import com.trecyclerview.SwipeRecyclerView;
 import com.trecyclerview.TRecyclerView;
+import com.trecyclerview.listener.OnLoadMoreListener;
 import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.multitype.Items;
 import com.trecyclerview.multitype.MultiTypeAdapter;
@@ -28,25 +31,27 @@ import com.trecyclerview.view.HeaderViewHolder;
 /**
  * @author：tqzhang on 18/8/22 13:48
  */
-public class MultiTypeActivity extends AppCompatActivity {
-    private TRecyclerView tRecyclerView;
+public class SwipeMultiTypeActivity extends AppCompatActivity {
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRecyclerView tRecyclerView;
     private Items items;
     private MultiTypeAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_multi_type);
+        setContentView(R.layout.activity_multi_type2);
         tRecyclerView = findViewById(R.id.recycler_view);
+        mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         items = new Items();
         adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
-        adapter.bind(BannerVo.class, new banner(MultiTypeActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(MultiTypeActivity.this));
-        adapter.bind(Item1Vo.class, new ItemType1(MultiTypeActivity.this));
-        adapter.bind(Item2Vo.class, new ItemType2(MultiTypeActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
-        GridLayoutManager layoutManager = new GridLayoutManager(MultiTypeActivity.this, 4);
+        adapter.bind(HeaderVo.class, new HeaderViewHolder(SwipeMultiTypeActivity.this, ProgressStyle.Pacman));
+        adapter.bind(BannerVo.class, new banner(SwipeMultiTypeActivity.this));
+        adapter.bind(ItemVo.class, new ItemType(SwipeMultiTypeActivity.this));
+        adapter.bind(Item1Vo.class, new ItemType1(SwipeMultiTypeActivity.this));
+        adapter.bind(Item2Vo.class, new ItemType2(SwipeMultiTypeActivity.this));
+        adapter.bind(FootVo.class, new FootViewHolder(SwipeMultiTypeActivity.this, ProgressStyle.Pacman));
+        GridLayoutManager layoutManager = new GridLayoutManager(SwipeMultiTypeActivity.this, 4);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -68,28 +73,38 @@ public class MultiTypeActivity extends AppCompatActivity {
         tRecyclerView.setLayoutManager(layoutManager);
         setListener();
         initData();
-    }
 
-    private void setListener() {
-        tRecyclerView.addOnRefreshListener(new OnRefreshListener() {
+
+        //设置刷新时动画的颜色，可以设置4个
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setProgressViewOffset(false, 0, 60);
+            mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_blue_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        }
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         initData();
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                 }, 5000);
-
             }
+        });
+
+    }
+
+    private void setListener() {
+        tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
 
             @Override
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
                         items.add(new Item1Vo("Python"));
                         for (int i = 0; i < 6; i++) {
                             items.add(new ItemVo());

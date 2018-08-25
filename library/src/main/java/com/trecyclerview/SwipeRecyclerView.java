@@ -19,6 +19,8 @@ import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
 import com.trecyclerview.view.AbsFootView;
 
+import java.util.List;
+
 /**
  * @author：tqzhang on 18/6/22 16:03
  */
@@ -39,6 +41,10 @@ public class SwipeRecyclerView extends RecyclerView {
     private int lastVisibleItemPosition;
 
 
+    protected boolean isLoadMore = true;
+
+    protected boolean isLoading = true;
+
     private OnRefreshListener mOnRefreshListener;
 
     private OnTScrollListener mOnScrollListener;
@@ -46,6 +52,8 @@ public class SwipeRecyclerView extends RecyclerView {
     private OnScrollStateListener mOnScrollStateListener;
 
     private OnLoadMoreListener mOnLoadMoreListener;
+
+    private State appbarState = State.EXPANDED;
 
 
     public SwipeRecyclerView(Context context) {
@@ -60,16 +68,26 @@ public class SwipeRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void loadMoreComplete() {
+    public void refreshComplete(List<Object> list, boolean noMore) {
+        mRefreshing = false;
+        mMultiTypeAdapter.setItems(list, true);
+        mMultiTypeAdapter.notifyDataSetChanged();
+        isNoMore = noMore;
+    }
+
+    public void loadMoreComplete(int size) {
         if (mRefreshing) {
             mRefreshing = false;
         }
-
+        isLoading = true;
+        isLoadMore = false;
+        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
+        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
     }
 
-    public void setNoMore() {
-        loadMoreComplete();
+    public void setNoMore(int size) {
         isNoMore = true;
+        loadMoreComplete(size);
     }
 
     @Override
@@ -125,8 +143,16 @@ public class SwipeRecyclerView extends RecyclerView {
                 break;
         }
         boolean isBottom = mAdapterCount == lastVisibleItemPosition;
-        if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && !isNoMore) {
-            mOnLoadMoreListener.onLoadMore();
+        if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom) {
+            mRefreshing = false;
+            isLoadMore = true;
+            if (isLoading) {
+                isLoading = false;
+                mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
+                if (!isNoMore) {
+                    mOnLoadMoreListener.onLoadMore();
+                }
+            }
         }
 
     }
@@ -203,9 +229,24 @@ public class SwipeRecyclerView extends RecyclerView {
                 appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        appbarState = state;
                     }
                 });
             }
+        }
+    }
+
+    @Override
+    public boolean canScrollVertically(int direction) {
+        final int offset = computeVerticalScrollOffset();
+        final int range = computeVerticalScrollRange() - computeVerticalScrollExtent();
+        if (range == 0) {
+            return false;
+        }
+        if (direction < 0) {
+            return offset > 0;
+        } else {
+            return offset < range - 1;
         }
     }
 
@@ -224,23 +265,41 @@ public class SwipeRecyclerView extends RecyclerView {
         public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
             if (i == 0) {
                 if (mCurrentState != State.EXPANDED) {
-                    onStateChanged(appBarLayout, State.EXPANDED);
+                    if (mAppBarStateListener != null) {
+                        mAppBarStateListener.onChanged(appBarLayout, State.EXPANDED);
+                    }
                 }
                 mCurrentState = State.EXPANDED;
             } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
                 if (mCurrentState != State.COLLAPSED) {
-                    onStateChanged(appBarLayout, State.COLLAPSED);
+                    if (mAppBarStateListener != null) {
+                        mAppBarStateListener.onChanged(appBarLayout, State.COLLAPSED);
+                    }
                 }
                 mCurrentState = State.COLLAPSED;
             } else {
                 if (mCurrentState != State.IDLE) {
-                    onStateChanged(appBarLayout, State.IDLE);
+                    if (mAppBarStateListener != null) {
+                        mAppBarStateListener.onChanged(appBarLayout, State.IDLE);
+                    }
+
                 }
                 mCurrentState = State.IDLE;
             }
         }
 
+
         public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
     }
 
+    public AppBarStateListener mAppBarStateListener;
+
+    public void setAppBarStateListener(AppBarStateListener Listener) {
+        mAppBarStateListener = Listener;
+
+    }
+
+    public interface AppBarStateListener {
+        void onChanged(AppBarLayout appBarLayout, State state);
+    }
 }

@@ -11,6 +11,7 @@
 
     <TextView
         android:id="@+id/tv_1"
+        android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LinearLayoutManager" />
@@ -19,42 +20,64 @@
         android:id="@+id/tv_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
         android:text="GridLayoutManager" />
 
     <TextView
         android:id="@+id/tv_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
         android:text="StaggeredGridLayoutManager" />
 
     <TextView
         android:id="@+id/tv_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
         android:text="MultiType" />
 
     <TextView
         android:id="@+id/tv_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:text="原生刷新控件" />
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
+        android:text="原生刷新控件LinearLayoutManager" />
 
     <TextView
         android:id="@+id/tv_6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:text="原生刷新控件" />
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
+        android:text="原生刷新控件GridLayoutManager" />
 
     <TextView
         android:id="@+id/tv_7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:text="原生刷新控件" />
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
+        android:text="原生刷新控件StaggeredGridLayoutManager" />
+
+    <TextView
+        android:id="@+id/tv_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="25dp"
+        android:text="原生刷新控件MultiType" />
+
+    <TextView
+        android:id="@+id/tv_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
+        android:text="SwipeAppBarLayoutMultiTypeActivity" />
 
 </LinearLayout>

@@ -63,7 +63,7 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
 
                     }
 
-                }, 2000);
+                }, 5000);
 
             }
 

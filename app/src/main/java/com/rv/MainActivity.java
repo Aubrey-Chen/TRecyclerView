@@ -41,5 +41,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        findViewById(R.id.tv_5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SwipeLinearLayoutActivity.class));
+
+            }
+        });
+        findViewById(R.id.tv_6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SwipeGridLayoutActivity.class));
+
+            }
+        });
+        findViewById(R.id.tv_7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SwipeStaggeredGridLayoutActivity.class));
+
+            }
+        });
+        findViewById(R.id.tv_8).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SwipeMultiTypeActivity.class));
+
+            }
+        });findViewById(R.id.tv_9).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SwipeAppBarLayoutMultiTypeActivity.class));
+
+            }
+        });
     }
 }

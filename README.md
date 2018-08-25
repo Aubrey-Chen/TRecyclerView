@@ -9,6 +9,16 @@ TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不�
    项目github地址:<https://github.com/SelfZhangTQ/TRecyclerView> <br/>
 
 #### 效果图 <br/>
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/111.png)
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/222.png)<br/>
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/333.png)
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/444.png)<br/>
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/555.png)
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/666.png)<br/>
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/777.png)
+![image](https://github.com/SelfZhangTQ/TRecyclerView/raw/master/screenshots/888.png)<br/>
+
+
 
 #### 使用步骤 <br/>
   Gradle<br/>
