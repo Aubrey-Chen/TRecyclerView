@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package com.trecyclerview.multitype;
+package com.trecyclerview.util;
 
 import android.support.annotation.NonNull;
 
+
 /**
- * @author drakeet
+ * @author tqzhang
  */
-@SuppressWarnings("WeakerAccess")
 public final class Preconditions {
 
-  @SuppressWarnings("ConstantConditions")
-  public static @NonNull <T> T checkNotNull(@NonNull final T object) {
-    if (object == null) {
+  public static @NonNull <T> T checkNotNull(final T reference) {
+    if (reference == null) {
       throw new NullPointerException();
     }
-    return object;
+    return reference;
   }
 
 

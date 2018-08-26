@@ -19,7 +19,7 @@ package com.trecyclerview.multitype;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
-import static com.trecyclerview.multitype.Preconditions.checkNotNull;
+import static com.trecyclerview.util.Preconditions.checkNotNull;
 
 /**
  * @author drakeet

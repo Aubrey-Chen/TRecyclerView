@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import java.util.List;
 
-import static com.trecyclerview.multitype.Preconditions.checkNotNull;
+import static com.trecyclerview.util.Preconditions.checkNotNull;
 
 /**
  * @author drakeet

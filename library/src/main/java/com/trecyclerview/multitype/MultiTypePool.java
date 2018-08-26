@@ -21,7 +21,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.trecyclerview.multitype.Preconditions.checkNotNull;
+import static com.trecyclerview.util.Preconditions.checkNotNull;
 
 /**
  * An List implementation of TypePool.

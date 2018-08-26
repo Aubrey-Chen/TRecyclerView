@@ -12,12 +12,11 @@ import android.view.ViewGroup;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.pojo.HeaderVo;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.trecyclerview.multitype.Preconditions.checkNotNull;
+import static com.trecyclerview.util.Preconditions.checkNotNull;
 import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
 import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
 

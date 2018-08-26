@@ -1,8 +1,6 @@
 package com.trecyclerview;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +17,10 @@ import com.trecyclerview.view.AbsFootView;
 import com.trecyclerview.view.AbsHeaderView;
 import com.trecyclerview.view.ArrowRefreshHeader;
 
-import java.util.Collection;
 import java.util.List;
+
+import static com.trecyclerview.util.Preconditions.checkNotNull;
+
 
 /**
  * @author：tqzhang on 18/6/22 16:03
@@ -94,6 +94,7 @@ public class TRecyclerView extends RecyclerView {
      * @param noMore
      */
     public void refreshComplete(List<Object> list, boolean noMore) {
+        checkNotNull(list);
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
@@ -114,6 +115,7 @@ public class TRecyclerView extends RecyclerView {
      * @param size
      */
     public void loadMoreComplete(int size) {
+        checkNotNull(size);
         if (mRefreshing) {
             mRefreshing = false;
         }
@@ -125,21 +127,19 @@ public class TRecyclerView extends RecyclerView {
 
     /**
      * 没有更多
-     *
-     * @param size
      */
     public void setNoMore(int size) {
+        checkNotNull(size);
         isNoMore = true;
         loadMoreComplete(size);
     }
 
     /**
      * 设置适配器
-     *
-     * @param adapter
      */
     @Override
     public void setAdapter(Adapter adapter) {
+        checkNotNull(adapter);
         this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
         super.setAdapter(adapter);
         TypePool mTypePool = mMultiTypeAdapter.getTypePool();
@@ -267,11 +267,7 @@ public class TRecyclerView extends RecyclerView {
     }
 
     private boolean isOnTop() {
-        if (mRefreshHeader != null && mRefreshHeader.getParent() != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return mRefreshHeader != null && mRefreshHeader.getParent() != null;
     }
 
 
