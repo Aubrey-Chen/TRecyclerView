@@ -82,6 +82,7 @@ public class SwipeRecyclerView extends RecyclerView {
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
+        setNestedScrollingEnabled(true);
     }
 
     public void setNoMore(int size) {
@@ -146,6 +147,7 @@ public class SwipeRecyclerView extends RecyclerView {
             mRefreshing = false;
             isLoadMore = true;
             if (isLoading) {
+                setNestedScrollingEnabled(false);
                 isLoading = false;
                 mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
                 if (!isNoMore) {
