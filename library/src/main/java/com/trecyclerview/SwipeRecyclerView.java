@@ -21,6 +21,8 @@ import com.trecyclerview.view.AbsFootView;
 
 import java.util.List;
 
+import static com.trecyclerview.util.Preconditions.checkNotNull;
+
 /**
  * @author：tqzhang on 18/6/22 16:03
  */
@@ -68,6 +70,7 @@ public class SwipeRecyclerView extends RecyclerView {
     }
 
     public void refreshComplete(List<Object> list, boolean noMore) {
+        checkNotNull(list);
         mRefreshing = false;
         mMultiTypeAdapter.setItems(list, true);
         mMultiTypeAdapter.notifyDataSetChanged();
@@ -75,6 +78,7 @@ public class SwipeRecyclerView extends RecyclerView {
     }
 
     public void loadMoreComplete(int size) {
+        checkNotNull(size);
         if (mRefreshing) {
             mRefreshing = false;
         }
@@ -85,9 +89,18 @@ public class SwipeRecyclerView extends RecyclerView {
         setNestedScrollingEnabled(true);
     }
 
-    public void setNoMore(int size) {
+    public void setNoMore(List<Object> list) {
+        checkNotNull(list);
         isNoMore = true;
-        loadMoreComplete(size);
+        if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
+            loadMoreComplete(list.size());
+        } else {
+            mMultiTypeAdapter.setItems(list, true);
+            isLoading = true;
+            isLoadMore = false;
+            setNestedScrollingEnabled(true);
+        }
+
     }
 
     @Override
@@ -288,7 +301,6 @@ public class SwipeRecyclerView extends RecyclerView {
                 mCurrentState = State.IDLE;
             }
         }
-
 
         public abstract void onStateChanged(AppBarLayout appBarLayout, State state);
     }

@@ -99,9 +99,10 @@ public class SwipeLinearLayoutActivity extends AppCompatActivity {
     private void initData() {
         items.clear();
         items.add(new BannerVo());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items,false);
+        tRecyclerView.setNoMore(items);
+//        tRecyclerView.refreshComplete(items,false);
     }
 }
