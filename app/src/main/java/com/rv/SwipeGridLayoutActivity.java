@@ -84,8 +84,6 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void setListener() {

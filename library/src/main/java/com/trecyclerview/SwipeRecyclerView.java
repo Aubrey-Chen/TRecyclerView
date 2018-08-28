@@ -78,10 +78,10 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mRefreshing) {
             mRefreshing = false;
         }
-        isLoading = true;
-        isLoadMore = false;
         mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
+        isLoading = true;
+        isLoadMore = false;
     }
 
     public void setNoMore(int size) {
