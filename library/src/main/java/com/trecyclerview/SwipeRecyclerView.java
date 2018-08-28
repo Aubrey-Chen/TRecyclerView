@@ -90,7 +90,7 @@ public class SwipeRecyclerView extends RecyclerView {
         setNestedScrollingEnabled(true);
     }
 
-    public void setNoMore(Collection list) {
+    public void setNoMore(List<Object> list) {
         checkNotNull(list);
         isNoMore = true;
         if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
