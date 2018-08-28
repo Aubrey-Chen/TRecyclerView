@@ -19,6 +19,7 @@ import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
 import com.trecyclerview.view.AbsFootView;
 
+import java.util.Collection;
 import java.util.List;
 
 import static com.trecyclerview.util.Preconditions.checkNotNull;
@@ -89,7 +90,7 @@ public class SwipeRecyclerView extends RecyclerView {
         setNestedScrollingEnabled(true);
     }
 
-    public void setNoMore(List<Object> list) {
+    public void setNoMore(Collection list) {
         checkNotNull(list);
         isNoMore = true;
         if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
