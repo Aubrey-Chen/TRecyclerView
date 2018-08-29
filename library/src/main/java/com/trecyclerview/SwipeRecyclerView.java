@@ -74,7 +74,7 @@ public class SwipeRecyclerView extends RecyclerView {
         checkNotNull(list);
         mRefreshing = false;
         mMultiTypeAdapter.setItems(list);
-        mMultiTypeAdapter.notifyItemRangeChanged(0,list.size());
+        mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
     }
 
