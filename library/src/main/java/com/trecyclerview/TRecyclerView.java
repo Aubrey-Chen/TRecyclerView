@@ -107,7 +107,7 @@ public class TRecyclerView extends RecyclerView {
             list.add(0, new HeaderVo());
         }
         mMultiTypeAdapter.setItems(list);
-        mMultiTypeAdapter.notifyDataSetChanged();
+        mMultiTypeAdapter.notifyItemRangeChanged(0,list.size());
         isNoMore = noMore;
     }
 
@@ -246,7 +246,6 @@ public class TRecyclerView extends RecyclerView {
             if (isLoading) {
                 isLoading = false;
                 mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
-
                 if (!isNoMore) {
                     mOnRefreshListener.onLoadMore();
                 }
