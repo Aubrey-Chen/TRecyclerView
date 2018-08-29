@@ -275,10 +275,11 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     @SuppressWarnings("unchecked")
     public final long getItemId(int position) {
-        Object item = items.get(position);
-        int itemViewType = getItemViewType(position);
-        AbsItemView binder = typePool.getItemViewBinder(itemViewType);
-        return binder.getItemId(item);
+//        Object item = items.get(position);
+//        int itemViewType = getItemViewType(position);
+//        AbsItemView binder = typePool.getItemViewBinder(itemViewType);
+//        return binder.getItemId(item);
+        return items.get(position).hashCode();
     }
 
 
