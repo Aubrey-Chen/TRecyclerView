@@ -107,7 +107,7 @@ public class TRecyclerView extends RecyclerView {
             list.add(0, new HeaderVo());
         }
         mMultiTypeAdapter.setItems(list);
-        mMultiTypeAdapter.notifyItemRangeChanged(0,list.size());
+        mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
     }
 
