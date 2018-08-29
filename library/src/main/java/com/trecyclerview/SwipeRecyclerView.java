@@ -70,10 +70,10 @@ public class SwipeRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
-    public void refreshComplete(List<Object> list, boolean noMore) {
+    public void refreshComplete(List<?> list, boolean noMore) {
         checkNotNull(list);
         mRefreshing = false;
-        mMultiTypeAdapter.setItems(list, true);
+        mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
     }
@@ -90,13 +90,17 @@ public class SwipeRecyclerView extends RecyclerView {
         setNestedScrollingEnabled(true);
     }
 
-    public void setNoMore(List<Object> list) {
+    /**
+     * no more
+     * @param list
+     */
+    public void setNoMore(List<?> list) {
         checkNotNull(list);
         isNoMore = true;
         if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
             loadMoreComplete(list.size());
         } else {
-            mMultiTypeAdapter.setItems(list, true);
+            mMultiTypeAdapter.setItems(list);
             isLoading = true;
             isLoadMore = false;
             setNestedScrollingEnabled(true);

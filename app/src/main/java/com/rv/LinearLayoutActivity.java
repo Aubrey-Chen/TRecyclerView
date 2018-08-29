@@ -61,7 +61,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 10; i++) {
                             items.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete(items,false);
+                        tRecyclerView.refreshComplete(items, false);
                     }
 
                 }, 5000);
@@ -70,13 +70,16 @@ public class LinearLayoutActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
+                final Items l = new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 10; i++) {
-                            items.add(new ItemVo());
+                            l.add(new ItemVo());
                         }
-                        tRecyclerView.loadMoreComplete(10);
+                        items.addAll(l);
+//                        tRecyclerView.loadMoreComplete(10);
+                        tRecyclerView.setNoMore(l);
                     }
 
                 }, 2000);
@@ -91,5 +94,6 @@ public class LinearLayoutActivity extends AppCompatActivity {
             items.add(new ItemVo());
         }
         tRecyclerView.refreshComplete(items,false);
+//        tRecyclerView.setNoMore(items);
     }
 }

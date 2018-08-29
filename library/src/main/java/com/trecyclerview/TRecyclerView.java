@@ -13,6 +13,8 @@ import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
+import com.trecyclerview.pojo.FootVo;
+import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.view.AbsFootView;
 import com.trecyclerview.view.AbsHeaderView;
 import com.trecyclerview.view.ArrowRefreshHeader;
@@ -20,6 +22,8 @@ import com.trecyclerview.view.ArrowRefreshHeader;
 import java.util.List;
 
 import static com.trecyclerview.util.Preconditions.checkNotNull;
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
 
 
 /**
@@ -99,12 +103,10 @@ public class TRecyclerView extends RecyclerView {
             mRefreshHeader.refreshComplete();
         }
         mRefreshing = false;
-        if (!pullRefreshEnabled) {
-            mMultiTypeAdapter.setItems(list, false);
-        } else {
-            mMultiTypeAdapter.setItems(list);
+        if (pullRefreshEnabled) {
+            list.add(0, new HeaderVo());
         }
-
+        mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
     }
@@ -119,19 +121,27 @@ public class TRecyclerView extends RecyclerView {
         if (mRefreshing) {
             mRefreshing = false;
         }
-        isLoading = true;
-        isLoadMore = false;
         mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
+        isLoading = true;
+        isLoadMore = false;
+        setNestedScrollingEnabled(true);
     }
 
     /**
      * 没有更多
      */
-    public void setNoMore(int size) {
-        checkNotNull(size);
+    public void setNoMore(List<?> list) {
+        checkNotNull(list);
         isNoMore = true;
-        loadMoreComplete(size);
+        if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
+            loadMoreComplete(list.size());
+        } else {
+            mMultiTypeAdapter.setItems(list);
+            isLoading = true;
+            isLoadMore = false;
+            setNestedScrollingEnabled(true);
+        }
     }
 
     /**
@@ -236,6 +246,7 @@ public class TRecyclerView extends RecyclerView {
             if (isLoading) {
                 isLoading = false;
                 mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
+
                 if (!isNoMore) {
                     mOnRefreshListener.onLoadMore();
                 }
@@ -243,7 +254,6 @@ public class TRecyclerView extends RecyclerView {
         }
 
     }
-
 
     @Override
     public void onScrollStateChanged(int state) {

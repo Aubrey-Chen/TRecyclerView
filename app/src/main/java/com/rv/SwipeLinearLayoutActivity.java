@@ -23,6 +23,9 @@ import com.trecyclerview.progressindicator.ProgressStyle;
 import com.trecyclerview.view.FootViewHolder;
 import com.trecyclerview.view.HeaderViewHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * @author：tqzhang on 18/8/22 13:48
@@ -102,6 +105,7 @@ public class SwipeLinearLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 20; i++) {
             items.add(new ItemVo());
         }
+//        List<BannerVo> list=new ArrayList();
         tRecyclerView.setNoMore(items);
 //        tRecyclerView.refreshComplete(items,false);
     }

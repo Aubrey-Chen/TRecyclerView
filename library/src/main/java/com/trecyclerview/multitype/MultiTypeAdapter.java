@@ -29,7 +29,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final String TAG = "MultiTypeAdapter";
 
     private @NonNull
-    List<Object> items;
+    List<?> items;
     private @NonNull
     TypePool typePool;
 
@@ -46,7 +46,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      *
      * @param items the items list
      */
-    public MultiTypeAdapter(@NonNull List<Object> items) {
+    public MultiTypeAdapter(@NonNull List<?> items) {
         this(items, new MultiTypePool());
     }
 
@@ -57,7 +57,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param items           the items list
      * @param initialCapacity the initial capacity of TypePool
      */
-    public MultiTypeAdapter(@NonNull List<Object> items, int initialCapacity) {
+    public MultiTypeAdapter(@NonNull List<?> items, int initialCapacity) {
         this(items, new MultiTypePool(initialCapacity));
     }
 
@@ -68,7 +68,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param items the items list
      * @param pool  the type pool
      */
-    public MultiTypeAdapter(@NonNull List<Object> items, @NonNull TypePool pool) {
+    public MultiTypeAdapter(@NonNull List<?> items, @NonNull TypePool pool) {
         checkNotNull(items);
         checkNotNull(pool);
         this.items = items;
@@ -167,33 +167,26 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param items the new items list
      * @since v2.4.1
      */
-    public void setItems(@NonNull List<Object> items) {
-        checkNotNull(items);
-        items.add(0, new HeaderVo());
-        this.items = items;
-    }
-
-    public void setItems(@NonNull List<Object> items, boolean isNoHeader) {
+    public void setItems(@NonNull List<?> items) {
         checkNotNull(items);
         this.items = items;
     }
-
 
     public @NonNull
-    List<Object> getItems() {
+    List<?> getItems() {
         return items;
     }
 
     public void notifyDataChanged() {
-        getItems().add(0, new HeaderVo());
+        ((List )getItems()).add(0, new HeaderVo());
         notifyDataSetChanged();
     }
 
     public void notifyFootViewChanged(boolean isNoMore) {
         if (isNoMore) {
-            getItems().add(new FootVo(STATE_NOMORE));
+            ((List )getItems()).add(new FootVo(STATE_NOMORE));
         } else {
-            getItems().add(new FootVo(STATE_LOADING));
+            ((List )getItems()).add(new FootVo(STATE_LOADING));
         }
         notifyItemRangeChanged(items.size() - 1, items.size());
     }
