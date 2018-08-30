@@ -87,7 +87,7 @@ public class SwipeRecyclerView extends RecyclerView {
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
-        setNestedScrollingEnabled(true);
+
     }
 
     /**
@@ -163,15 +163,18 @@ public class SwipeRecyclerView extends RecyclerView {
         boolean isBottom = mAdapterCount == lastVisibleItemPosition;
         if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
-            isLoadMore = true;
             isLoading = false;
             mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
             if (!isNoMore) {
-                setNestedScrollingEnabled(false);
+                isLoadMore = true;
                 mOnLoadMoreListener.onLoadMore();
             }
-        } else {
+        }
+        if (!isBottom) {
             super.onScrolled(dx, dy);
+            setNestedScrollingEnabled(true);
+        } else {
+            setNestedScrollingEnabled(false);
         }
 
     }
