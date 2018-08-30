@@ -96,7 +96,12 @@ public class SwipeRecyclerView extends RecyclerView {
             mRefreshing = false;
         }
         mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
-        ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+        if (!isNoMore) {
+            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+        } else {
+            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+
+        }
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
@@ -120,7 +125,6 @@ public class SwipeRecyclerView extends RecyclerView {
             ((List) list).add(new FootVo(STATE_NOMORE));
             mMultiTypeAdapter.setItems(list);
             mMultiTypeAdapter.notifyDataSetChanged();
-            isNoMore = true;
         }
 
     }
