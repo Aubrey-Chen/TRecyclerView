@@ -92,6 +92,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
     /**
      * no more
+     *
      * @param list
      */
     public void setNoMore(List<?> list) {
@@ -160,19 +161,19 @@ public class SwipeRecyclerView extends RecyclerView {
                 break;
         }
         boolean isBottom = mAdapterCount == lastVisibleItemPosition;
-        if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom) {
+        if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoadMore = true;
-            if (isLoading) {
-                isLoading = false;
-                mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
-                if (!isNoMore) {
-                    setNestedScrollingEnabled(false);
-                    mOnLoadMoreListener.onLoadMore();
-                }
+            isLoading = false;
+            mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
+            if (!isNoMore) {
+                setNestedScrollingEnabled(false);
+                mOnLoadMoreListener.onLoadMore();
             }
+        } else {
+            super.onScrolled(dx, dy);
         }
-        super.onScrolled(dx, dy);
+
     }
 
 
