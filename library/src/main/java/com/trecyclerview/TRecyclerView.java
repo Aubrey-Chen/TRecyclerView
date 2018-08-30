@@ -256,6 +256,9 @@ public class TRecyclerView extends RecyclerView {
             if (!isNoMore) {
                 isLoadMore = true;
             }
+            setNestedScrollingEnabled(false);
+        } else {
+            setNestedScrollingEnabled(true);
         }
 
     }
