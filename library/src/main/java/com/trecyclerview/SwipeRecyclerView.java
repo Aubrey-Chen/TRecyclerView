@@ -17,12 +17,15 @@ import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.MultiTypeAdapter;
 import com.trecyclerview.multitype.TypePool;
+import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.view.AbsFootView;
 
 import java.util.Collection;
 import java.util.List;
 
 import static com.trecyclerview.util.Preconditions.checkNotNull;
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
+import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
 
 /**
  * @author：tqzhang on 18/6/22 16:03
@@ -70,9 +73,18 @@ public class SwipeRecyclerView extends RecyclerView {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * @param list
+     * @param noMore 是否有更多
+     */
     public void refreshComplete(List<?> list, boolean noMore) {
         checkNotNull(list);
         mRefreshing = false;
+        if (noMore) {
+            ((List) list).add(new FootVo(STATE_NOMORE));
+        } else {
+            ((List) list).add(new FootVo(STATE_LOADING));
+        }
         mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
         isNoMore = noMore;
@@ -84,6 +96,7 @@ public class SwipeRecyclerView extends RecyclerView {
             mRefreshing = false;
         }
         mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
+        ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
@@ -101,10 +114,13 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
             loadMoreComplete(list.size());
         } else {
-            mMultiTypeAdapter.setItems(list);
+            //首次加载没有更多
             isLoading = true;
             isLoadMore = false;
-            setNestedScrollingEnabled(true);
+            ((List) list).add(new FootVo(STATE_NOMORE));
+            mMultiTypeAdapter.setItems(list);
+            mMultiTypeAdapter.notifyDataSetChanged();
+            isNoMore = true;
         }
 
     }
@@ -127,6 +143,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
     @Override
     public void onScrolled(int dx, int dy) {
+        super.onScrolled(dx, dy);
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrolled(dx, dy);
         }
@@ -164,25 +181,21 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
-            mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
+//            mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
             if (!isNoMore) {
                 isLoadMore = true;
-                mOnLoadMoreListener.onLoadMore();
             }
         }
-        if (!isBottom) {
-            super.onScrolled(dx, dy);
-            setNestedScrollingEnabled(true);
-        } else {
-            setNestedScrollingEnabled(false);
-        }
-
     }
 
 
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
+        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE) {
+            mOnLoadMoreListener.onLoadMore();
+        }
+
         if (mOnScrollStateListener != null) {
             mOnScrollStateListener.onScrollStateChanged(state);
         }

@@ -90,6 +90,7 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+               Items item=new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

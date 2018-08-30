@@ -257,6 +257,10 @@ public class TRecyclerView extends RecyclerView {
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
+        if (state==RecyclerView.SCROLL_STATE_IDLE){
+
+        }
+
         if (mOnScrollStateListener != null) {
             mOnScrollStateListener.onScrollStateChanged(state);
         }
