@@ -185,7 +185,6 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
-//            mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
             if (!isNoMore) {
                 isLoadMore = true;
             }

@@ -106,9 +106,14 @@ public class TRecyclerView extends RecyclerView {
         if (pullRefreshEnabled) {
             list.add(0, new HeaderVo());
         }
+        isNoMore = noMore;
+        if (noMore) {
+            ((List) list).add(new FootVo(STATE_NOMORE));
+        } else {
+            ((List) list).add(new FootVo(STATE_LOADING));
+        }
         mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
-        isNoMore = noMore;
     }
 
     /**
@@ -122,10 +127,15 @@ public class TRecyclerView extends RecyclerView {
             mRefreshing = false;
         }
         mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
+        if (!isNoMore) {
+            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+        } else {
+            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+
+        }
         mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
-        setNestedScrollingEnabled(true);
     }
 
     /**
@@ -240,15 +250,11 @@ public class TRecyclerView extends RecyclerView {
         }
 
         boolean isBottom = mAdapterCount == lastVisibleItemPosition;
-        if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom) {
+        if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
-            isLoadMore = true;
-            if (isLoading) {
-                isLoading = false;
-                mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
-                if (!isNoMore) {
-                    mOnRefreshListener.onLoadMore();
-                }
+            isLoading = false;
+            if (!isNoMore) {
+                isLoadMore = true;
             }
         }
 
@@ -257,8 +263,8 @@ public class TRecyclerView extends RecyclerView {
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (state==RecyclerView.SCROLL_STATE_IDLE){
-
+        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE) {
+            mOnRefreshListener.onLoadMore();
         }
 
         if (mOnScrollStateListener != null) {
