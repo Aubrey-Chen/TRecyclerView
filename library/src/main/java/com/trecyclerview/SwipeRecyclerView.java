@@ -126,7 +126,6 @@ public class SwipeRecyclerView extends RecyclerView {
 
     @Override
     public void onScrolled(int dx, int dy) {
-        super.onScrolled(dx, dy);
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrolled(dx, dy);
         }
@@ -165,15 +164,15 @@ public class SwipeRecyclerView extends RecyclerView {
             mRefreshing = false;
             isLoadMore = true;
             if (isLoading) {
-                setNestedScrollingEnabled(false);
                 isLoading = false;
                 mMultiTypeAdapter.notifyFootViewChanged(isNoMore);
                 if (!isNoMore) {
+                    setNestedScrollingEnabled(false);
                     mOnLoadMoreListener.onLoadMore();
                 }
             }
         }
-
+        super.onScrolled(dx, dy);
     }
 
 
