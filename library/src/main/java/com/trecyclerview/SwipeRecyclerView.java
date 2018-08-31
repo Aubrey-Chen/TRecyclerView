@@ -39,6 +39,8 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private boolean isNoMore = false;
 
+    private boolean isBottom;
+
 
     /**
      * 最后一个可见的item的位置
@@ -181,7 +183,7 @@ public class SwipeRecyclerView extends RecyclerView {
             default:
                 break;
         }
-        boolean isBottom = mAdapterCount == lastVisibleItemPosition;
+        isBottom = mAdapterCount == lastVisibleItemPosition;
         if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
@@ -195,7 +197,7 @@ public class SwipeRecyclerView extends RecyclerView {
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE) {
+        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE && isBottom) {
             mOnLoadMoreListener.onLoadMore();
         }
 
