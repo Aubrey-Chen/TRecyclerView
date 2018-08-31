@@ -33,7 +33,7 @@ public class StageredItemType extends AbsViewHolder<ItemVo, StageredItemType.Vie
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ItemVo item) {
-        int h = new Random().nextInt(80)+180;
+        int h = new Random().nextInt(180)+260;
         holder.rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,h));
     }
 

@@ -68,6 +68,8 @@ public class TRecyclerView extends RecyclerView {
 
     private float mLastY = -1;
 
+    private boolean isBottom;
+
 
     private OnRefreshListener mOnRefreshListener;
 
@@ -102,6 +104,7 @@ public class TRecyclerView extends RecyclerView {
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
+        isLoadMore=false;
         mRefreshing = false;
         if (pullRefreshEnabled) {
             list.add(0, new HeaderVo());
@@ -251,7 +254,7 @@ public class TRecyclerView extends RecyclerView {
                 break;
         }
 
-        boolean isBottom = mAdapterCount == lastVisibleItemPosition;
+      isBottom = mAdapterCount == lastVisibleItemPosition;
         if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
@@ -268,8 +271,10 @@ public class TRecyclerView extends RecyclerView {
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE) {
-            mOnRefreshListener.onLoadMore();
+        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE&&isBottom) {
+            if (mOnRefreshListener!=null) {
+                mOnRefreshListener.onLoadMore();
+            }
         }
 
         if (mOnScrollStateListener != null) {
