@@ -97,24 +97,24 @@ public class TRecyclerView extends RecyclerView {
      * 刷新完成
      *
      * @param list
-     * @param noMore
+     * @param noMore 是否有更多
      */
     public void refreshComplete(List<Object> list, boolean noMore) {
         checkNotNull(list);
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
-        isLoadMore=false;
+        isLoadMore = false;
         mRefreshing = false;
+        isNoMore = noMore;
         if (pullRefreshEnabled) {
             list.add(0, new HeaderVo());
         }
-        isNoMore = noMore;
         if (loadingMoreEnabled) {
             if (noMore) {
-                ((List) list).add(new FootVo(STATE_NOMORE));
+                (list).add(new FootVo(STATE_NOMORE));
             } else {
-                ((List) list).add(new FootVo(STATE_LOADING));
+                (list).add(new FootVo(STATE_LOADING));
             }
         }
         mMultiTypeAdapter.setItems(list);
@@ -155,7 +155,7 @@ public class TRecyclerView extends RecyclerView {
             mMultiTypeAdapter.setItems(list);
             isLoading = true;
             isLoadMore = false;
-            setNestedScrollingEnabled(true);
+            mMultiTypeAdapter.notifyDataSetChanged();
         }
     }
 
@@ -254,16 +254,13 @@ public class TRecyclerView extends RecyclerView {
                 break;
         }
 
-      isBottom = mAdapterCount == lastVisibleItemPosition;
+        isBottom = mAdapterCount == lastVisibleItemPosition;
         if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
             if (!isNoMore) {
                 isLoadMore = true;
             }
-            setNestedScrollingEnabled(false);
-        } else {
-            setNestedScrollingEnabled(true);
         }
 
     }
@@ -271,8 +268,8 @@ public class TRecyclerView extends RecyclerView {
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE&&isBottom) {
-            if (mOnRefreshListener!=null) {
+        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE && isBottom) {
+            if (mOnRefreshListener != null) {
                 mOnRefreshListener.onLoadMore();
             }
         }
