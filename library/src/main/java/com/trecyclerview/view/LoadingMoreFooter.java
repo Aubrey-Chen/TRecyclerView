@@ -79,7 +79,9 @@ public class LoadingMoreFooter extends LinearLayout {
 
     public void setProgressStyle(int style) {
         if(style == ProgressStyle.SysProgress){
-            progressCon.setView(new ProgressBar(getContext(), null, android.R.attr.progressBarStyle));
+            ProgressBar progressBar= new ProgressBar(getContext(), null, android.R.attr.progressBarStyle);
+            progressBar.setLayoutParams(new ViewGroup.LayoutParams(55,55));
+            progressCon.setView(progressBar);
         }else{
             AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());
             progressView.setIndicatorColor(0xffB5B5B5);

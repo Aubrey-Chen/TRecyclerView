@@ -43,7 +43,7 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         adapter = new MultiTypeAdapter();
         adapter.bind(BannerVo.class, new banner(SwipeGridLayoutActivity.this));
         adapter.bind(ItemVo.class, new ItemType(SwipeGridLayoutActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.Pacman));
+        adapter.bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.SysProgress));
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeGridLayoutActivity.this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
