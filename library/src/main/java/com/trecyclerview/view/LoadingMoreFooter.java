@@ -29,11 +29,6 @@ public class LoadingMoreFooter extends LinearLayout {
 		super(context);
 		initView();
 	}
-
-	/**
-	 * @param context
-	 * @param attrs
-	 */
 	public LoadingMoreFooter(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initView();
