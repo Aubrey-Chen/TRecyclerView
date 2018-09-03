@@ -78,13 +78,15 @@ public class GridLayoutActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
+                final Items l = new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 10; i++) {
-                            items.add(new ItemVo());
+                            l.add(new ItemVo());
                         }
-                        tRecyclerView.loadMoreComplete(10);
+                        items.addAll(l);
+                        tRecyclerView.loadMoreComplete(l,false);
 //                        tRecyclerView.setNoMore(20);
                     }
 

@@ -94,7 +94,7 @@ public class TRecyclerView extends RecyclerView {
     }
 
     /**
-     * 刷新完成
+     * refresh complete
      *
      * @param list
      * @param noMore 是否有更多
@@ -124,43 +124,27 @@ public class TRecyclerView extends RecyclerView {
     /**
      * 加载更多完成
      *
-     * @param size
+     * @param list
+     * @param noMore
      */
-    public void loadMoreComplete(int size) {
-        checkNotNull(size);
+    public void loadMoreComplete(List<?> list, boolean noMore) {
+        checkNotNull(list);
         if (mRefreshing) {
             mRefreshing = false;
         }
-        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
-        if (!isNoMore) {
-            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
-        } else {
+        isNoMore = noMore;
+        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
+        if (isNoMore) {
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
-
+        } else {
+            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
         }
-        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
+        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
     }
-
     /**
-     * 没有更多
-     */
-    public void setNoMore(List<?> list) {
-        checkNotNull(list);
-        isNoMore = true;
-        if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
-            loadMoreComplete(list.size());
-        } else {
-            mMultiTypeAdapter.setItems(list);
-            isLoading = true;
-            isLoadMore = false;
-            mMultiTypeAdapter.notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * 设置适配器
+     * set adapter
      */
     @Override
     public void setAdapter(Adapter adapter) {
@@ -273,7 +257,6 @@ public class TRecyclerView extends RecyclerView {
                 mOnRefreshListener.onLoadMore();
             }
         }
-
         if (mOnScrollStateListener != null) {
             mOnScrollStateListener.onScrollStateChanged(state);
         }
@@ -298,7 +281,7 @@ public class TRecyclerView extends RecyclerView {
 
 
     /**
-     * 当前RecyclerView类型
+     * RecyclerView type
      */
     protected LayoutManagerType layoutManagerType;
 

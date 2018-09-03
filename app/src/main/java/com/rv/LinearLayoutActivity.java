@@ -78,8 +78,8 @@ public class LinearLayoutActivity extends AppCompatActivity {
                             l.add(new ItemVo());
                         }
                         items.addAll(l);
-//                        tRecyclerView.loadMoreComplete(10);
-                        tRecyclerView.setNoMore(l);
+                        tRecyclerView.loadMoreComplete(l,false);
+//                        tRecyclerView.setNoMore(l);
                     }
 
                 }, 2000);
