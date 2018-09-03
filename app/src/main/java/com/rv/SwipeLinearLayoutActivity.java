@@ -36,6 +36,8 @@ public class SwipeLinearLayoutActivity extends AppCompatActivity {
     private Items items;
     private MultiTypeAdapter adapter;
 
+    private int  indexPage=1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +87,21 @@ public class SwipeLinearLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                final Items item = new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        indexPage += 1;
                         for (int i = 0; i < 10; i++) {
-                            items.add(new ItemVo());
+                            item.add(new ItemVo());
                         }
-                        tRecyclerView.loadMoreComplete(10);
+                        items.addAll(item);
+                        if (indexPage==4){
+                            tRecyclerView.loadMoreComplete(item,true);
+                        }else {
+                            tRecyclerView.loadMoreComplete(item,false);
+                        }
+
                     }
 
                 }, 2000);
@@ -105,8 +115,6 @@ public class SwipeLinearLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 20; i++) {
             items.add(new ItemVo());
         }
-//        List<BannerVo> list=new ArrayList();
-        tRecyclerView.setNoMore(items);
-//        tRecyclerView.refreshComplete(items,false);
+        tRecyclerView.refreshComplete(items,true);
     }
 }

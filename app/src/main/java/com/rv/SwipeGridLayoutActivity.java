@@ -90,14 +90,15 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-               Items item=new Items();
+               final Items item=new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 10; i++) {
-                            items.add(new ItemVo());
+                            item.add(new ItemVo());
                         }
-                        tRecyclerView.loadMoreComplete(10);
+                        items.addAll(item);
+                        tRecyclerView.loadMoreComplete(item,false);
 //                        tRecyclerView.setNoMore(20);
                     }
 

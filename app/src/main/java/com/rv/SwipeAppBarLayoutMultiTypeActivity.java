@@ -122,18 +122,20 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
 
             @Override
             public void onLoadMore() {
+                final Items item = new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        items.add(new Item1Vo("Python"));
+                        item.add(new Item1Vo("Python"));
                         for (int i = 0; i < 6; i++) {
-                            items.add(new ItemVo());
+                            item.add(new ItemVo());
                         }
-                        items.add(new Item1Vo("Go"));
+                        item.add(new Item1Vo("Go"));
                         for (int i = 0; i < 12; i++) {
-                            items.add(new ItemVo());
+                            item.add(new ItemVo());
                         }
-                        tRecyclerView.loadMoreComplete(20);
+                        items.addAll(item);
+                        tRecyclerView.loadMoreComplete(item,false);
 //                        tRecyclerView.setNoMore(20);
                     }
 

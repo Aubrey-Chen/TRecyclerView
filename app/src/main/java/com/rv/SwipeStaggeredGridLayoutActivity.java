@@ -81,13 +81,15 @@ public class SwipeStaggeredGridLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                final Items item = new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 20; i++) {
-                            items.add(new ItemVo());
+                            item.add(new ItemVo());
                         }
-                        tRecyclerView.loadMoreComplete(20);
+                        items.addAll(item);
+                        tRecyclerView.loadMoreComplete(item,false);
                     }
 
                 }, 2000);

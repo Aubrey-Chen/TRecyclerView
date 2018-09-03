@@ -41,10 +41,6 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private boolean isBottom;
 
-
-    /**
-     * 最后一个可见的item的位置
-     */
     private int lastVisibleItemPosition;
 
 
@@ -82,6 +78,7 @@ public class SwipeRecyclerView extends RecyclerView {
     public void refreshComplete(List<?> list, boolean noMore) {
         checkNotNull(list);
         mRefreshing = false;
+        isNoMore = noMore;
         if (noMore) {
             ((List) list).add(new FootVo(STATE_NOMORE));
         } else {
@@ -89,48 +86,25 @@ public class SwipeRecyclerView extends RecyclerView {
         }
         mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
-        isNoMore = noMore;
     }
 
-    public void loadMoreComplete(int size) {
-        checkNotNull(size);
+    public void loadMoreComplete(List<?> list, boolean noMore) {
+        checkNotNull(list);
         if (mRefreshing) {
             mRefreshing = false;
         }
-        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - size);
+        isNoMore = noMore;
+        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
         if (!isNoMore) {
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
         } else {
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
-
         }
-        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - size - 1, mMultiTypeAdapter.getItems().size());
+        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
 
     }
-
-    /**
-     * no more
-     *
-     * @param list
-     */
-    public void setNoMore(List<?> list) {
-        checkNotNull(list);
-        isNoMore = true;
-        if (mMultiTypeAdapter.getItems() != null && mMultiTypeAdapter.getItems().size() > 0) {
-            loadMoreComplete(list.size());
-        } else {
-            //首次加载没有更多
-            isLoading = true;
-            isLoadMore = false;
-            ((List) list).add(new FootVo(STATE_NOMORE));
-            mMultiTypeAdapter.setItems(list);
-            mMultiTypeAdapter.notifyDataSetChanged();
-        }
-
-    }
-
     @Override
     public void setAdapter(Adapter adapter) {
         this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
@@ -335,7 +309,6 @@ public class SwipeRecyclerView extends RecyclerView {
 
     public void setAppBarStateListener(AppBarStateListener Listener) {
         mAppBarStateListener = Listener;
-
     }
 
     public interface AppBarStateListener {
