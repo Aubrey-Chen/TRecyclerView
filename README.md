@@ -85,13 +85,13 @@
     //刷新完成，有更多
     mRecyclerView.refreshComplete(items,false);
     
-    注：如果默认加载不够一页数,即没有跟多 mRecyclerView.refreshComplete(items,true);
+    注：如果默认加载不够一页数,即没有更多 mRecyclerView.refreshComplete(items,true);
    
     
     //加载更多完成，还有分页数据，
     mRecyclerView.loadMoreComplete(items,false);
     
-     注：如果默认加载不够一页数,即没有跟多mRecyclerView.refreshComplete(items,true);
+     注：如果默认加载不够一页数,即没有更多mRecyclerView.refreshComplete(items,true);
      
   Step 6.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>   
      
@@ -118,4 +118,19 @@
 * multitype <br/>
 * AVLoadingIndicatorView <br/>
 
+#### license <br/>
+     
+    Copyright 2018 jianghejie
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+#### 最后 <br/>
+技术有限，拒绝吐槽，欢迎建议，感谢支持。
