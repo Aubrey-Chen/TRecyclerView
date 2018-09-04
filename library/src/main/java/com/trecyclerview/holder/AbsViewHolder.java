@@ -16,7 +16,7 @@ public abstract class AbsViewHolder<T, VH extends BaseHolder> extends AbsItemVie
     protected Context mContext;
 
     public AbsViewHolder(Context context) {
-        this.mContext=context;
+        this.mContext = context;
     }
 
     @Override

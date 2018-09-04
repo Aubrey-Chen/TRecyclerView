@@ -31,17 +31,26 @@
 
  Step 2. 在你的model的build.gradle文件中增加TRecyclerView依赖<br/>
 
-     com.github.SelfZhangTQ:TRecyclerView:2.2.7
+     com.github.SelfZhangTQ:TRecyclerView:2.4.0
 
  Step 3.数据填充<br/>
 
     adapter = new MultiTypeAdapter();
-    //设置刷新头，加载更多foot以及itemView
-    adapter.bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
-    adapter.bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman));
-
+   
+    //设置刷新头 如果有刷新需求，此代码可不配置，刷新样式可配置
+    adapter.bind(HeaderVo.class, new HeaderViewHolder(this, ProgressStyle.Pacman));
+   
+    //设置item1，
+    adapter.bind(Bean1.class, new ItemView1(this));
+    
+    //设置item2，
+    adapter.bind(Bean2.class, new ItemView2(this));
+   
+    //加载更多，如果不需要加载更多，此代码可不配置
+    adapter.bind(FootVo.class, new FootViewHolder(this, ProgressStyle.Pacman));
+    
+    //数据容器
     items = new Items();
-
 
     layoutManager = new LinearLayoutManager(LinearLayoutActivity.this);
     mRecyclerView.setAdapter(adapter);
@@ -71,7 +80,18 @@
             }
         });
 
-
+  Step 5.刷新完成或加载更多完成后的操作<br/>
+   
+    //刷新完成，有更多
+    mRecyclerView.refreshComplete(items,false);
+    
+    注：如果默认加载不够一页数,即没有跟多 mRecyclerView.refreshComplete(items,true);
+   
+    
+    //加载更多完成，还有分页数据，
+    mRecyclerView.loadMoreComplete(items,false);
+    
+     注：如果默认加载不够一页数,即没有跟多mRecyclerView.refreshComplete(items,true);
 
  TRecyclerView使用步骤介绍完了，对了adapter好像忘了介绍，NO,NO,NO,你不需要关心adapter,只需要写对应UI以及数据设置就行，尽情的编写ViewHolder吧
 

@@ -135,7 +135,8 @@ public abstract class AbsItemView<T, VH extends ViewHolder> {
      * @since v3.2.0
      */
     protected long getItemId(@NonNull T item) {
-        return RecyclerView.NO_ID;
+//        return RecyclerView.NO_ID;
+        return item.hashCode();
     }
 
 

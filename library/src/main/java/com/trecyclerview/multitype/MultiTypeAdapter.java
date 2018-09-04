@@ -221,6 +221,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public final ViewHolder onCreateViewHolder(ViewGroup parent, int indexViewType) {
+        Log.e(TAG + "创建", System.currentTimeMillis() + "");
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         AbsItemView<?, ?> binder = typePool.getItemViewBinder(indexViewType);
         return binder.onCreateViewHolder(inflater, parent);
@@ -275,11 +276,10 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     @SuppressWarnings("unchecked")
     public final long getItemId(int position) {
-//        Object item = items.get(position);
-//        int itemViewType = getItemViewType(position);
-//        AbsItemView binder = typePool.getItemViewBinder(itemViewType);
-//        return binder.getItemId(item);
-        return items.get(position).hashCode();
+        Object item = items.get(position);
+        int itemViewType = getItemViewType(position);
+        AbsItemView binder = typePool.getItemViewBinder(itemViewType);
+        return binder.getItemId(item);
     }
 
 
@@ -382,4 +382,18 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         checkAndRemoveAllTypesIfNeeded(clazz);
         bind(clazz, binder, linker);
     }
+
+//    E/MultiTypeAdapter创建: 1536043704494
+//            09-04 14:48:24.499 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704499
+//            09-04 14:48:24.523 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704523
+//            09-04 14:48:24.527 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704527
+//            09-04 14:48:24.529 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704529
+//            09-04 14:48:24.532 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704532
+//            09-04 14:48:24.535 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704535
+//    E/ItemType结束: 1536043704523
+//            09-04 14:48:24.526 17835-17835/com.rv E/ItemType结束: 1536043704526
+//            09-04 14:48:24.529 17835-17835/com.rv E/ItemType结束: 1536043704529
+//            09-04 14:48:24.531 17835-17835/com.rv E/ItemType结束: 1536043704531
+//            09-04 14:48:24.535 17835-17835/com.rv E/ItemType结束: 1536043704535
+//            09-04 14:48:24.537 17835-17835/com.rv E/ItemType结束: 1536043704537
 }
