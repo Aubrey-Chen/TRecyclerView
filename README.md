@@ -1,6 +1,6 @@
 # TRecyclerView<br/>
 
-由于项目需求,很多地方使用了大量的多类型item，于是捣鼓捣鼓诞生了TRecyclerView，让开发者只关心ViewHolder的开发，高复用,TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
+由于项目需求,很多地方使用了大量的多类型item，于是捣鼓捣鼓出了TRecyclerView，旨意在于让开发者只关心ViewHolder的开发，高复用,TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
 ### 主要功能<br/>
    * 下拉刷新、加载更多；<br/>
    * 高复用,支持多类型；<br/>
@@ -92,6 +92,18 @@
     mRecyclerView.loadMoreComplete(items,false);
     
      注：如果默认加载不够一页数,即没有跟多mRecyclerView.refreshComplete(items,true);
+     
+  Step 6.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>   
+     
+     由于滑动冲突，滑动到底部加载更多加载时间长问题，需要自定义AppBarLayout.Behavior
+     
+     <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        app:elevation="0dp"
+        app:layout_behavior="com.trecyclerview.util.AppBarBehavior">
+     
 
  TRecyclerView使用步骤介绍完了，对了adapter好像忘了介绍，NO,NO,NO,你不需要关心adapter,只需要写对应UI以及数据设置就行，尽情的编写ViewHolder吧
 
