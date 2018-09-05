@@ -20,7 +20,6 @@ import com.trecyclerview.multitype.TypePool;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.view.AbsFootView;
 
-import java.util.Collection;
 import java.util.List;
 
 import static com.trecyclerview.util.Preconditions.checkNotNull;
@@ -31,6 +30,7 @@ import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
  * @author：tqzhang on 18/6/22 16:03
  */
 public class SwipeRecyclerView extends RecyclerView {
+
     private MultiTypeAdapter mMultiTypeAdapter;
 
     private boolean loadingMoreEnabled = false;
@@ -42,7 +42,6 @@ public class SwipeRecyclerView extends RecyclerView {
     private boolean isBottom;
 
     private int lastVisibleItemPosition;
-
 
     protected boolean isLoadMore = true;
 
@@ -79,10 +78,12 @@ public class SwipeRecyclerView extends RecyclerView {
         checkNotNull(list);
         mRefreshing = false;
         isNoMore = noMore;
-        if (noMore) {
-            ((List) list).add(new FootVo(STATE_NOMORE));
-        } else {
-            ((List) list).add(new FootVo(STATE_LOADING));
+        if (loadingMoreEnabled) {
+            if (noMore) {
+                ((List) list).add(new FootVo(STATE_NOMORE));
+            } else {
+                ((List) list).add(new FootVo(STATE_LOADING));
+            }
         }
         mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
@@ -105,6 +106,7 @@ public class SwipeRecyclerView extends RecyclerView {
         isLoadMore = false;
 
     }
+
     @Override
     public void setAdapter(Adapter adapter) {
         this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
