@@ -64,7 +64,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         @CheckResult
         @NonNull
-        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView... binders) {
+        public Builder bindArray(@NonNull Class<? extends T> clazz, @NonNull AbsItemView... binders) {
             Preconditions.checkNotNull(clazz);
             Preconditions.checkNotNull(binders);
             this.claz = clazz;
