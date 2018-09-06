@@ -30,6 +30,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public MultiTypeAdapter(Builder builder) {
         checkNotNull(builder);
+        items=Collections.emptyList();
         this.builder = builder;
         this.typePool = builder.typePool;
     }
