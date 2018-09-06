@@ -45,7 +45,7 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
         adapter = new MultiTypeAdapter.Builder()
                 .bind(HeaderVo.class, new HeaderViewHolder(StaggeredGridLayoutActivity.this, ProgressStyle.Pacman))
                 .bind(BannerVo.class, new banner(StaggeredGridLayoutActivity.this))
-                .bind(ItemVo.class, new StageredItemType(StaggeredGridLayoutActivity.this), new StageredItemType2(StaggeredGridLayoutActivity.this)).withClass(new ClassLinker<ItemVo>() {
+                .bindArray(ItemVo.class, new StageredItemType(StaggeredGridLayoutActivity.this), new StageredItemType2(StaggeredGridLayoutActivity.this)).withClass(new ClassLinker<ItemVo>() {
                     @NonNull
                     @Override
                     public Class<? extends AbsItemView<ItemVo, ?>> index(int var1, @NonNull ItemVo var2) {

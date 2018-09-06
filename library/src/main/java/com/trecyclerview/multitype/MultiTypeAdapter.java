@@ -47,14 +47,14 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
             typePool = new MultiTypePool();
         }
 
-        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder) {
+        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView binder) {
             checkNotNull(clazz);
             checkNotNull(binder);
             this.typePool.bind(clazz, binder);
             return this;
         }
 
-        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder, @NonNull Linker<T> linker) {
+        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView binder, @NonNull Linker<T> linker) {
             checkNotNull(clazz);
             checkNotNull(binder);
             checkNotNull(linker);
