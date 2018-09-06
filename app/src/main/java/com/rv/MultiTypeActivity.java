@@ -39,13 +39,14 @@ public class MultiTypeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_multi_type);
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
-        adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
-        adapter.bind(BannerVo.class, new banner(MultiTypeActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(MultiTypeActivity.this));
-        adapter.bind(Item1Vo.class, new ItemType1(MultiTypeActivity.this));
-        adapter.bind(Item2Vo.class, new ItemType2(MultiTypeActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman));
+        adapter = new MultiTypeAdapter.Builder()
+                .bind(HeaderVo.class, new HeaderViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman))
+                .bind(BannerVo.class, new banner(MultiTypeActivity.this))
+                .bind(ItemVo.class, new ItemType(MultiTypeActivity.this))
+                .bind(Item1Vo.class, new ItemType1(MultiTypeActivity.this))
+                .bind(Item2Vo.class, new ItemType2(MultiTypeActivity.this))
+                .bind(FootVo.class, new FootViewHolder(MultiTypeActivity.this, ProgressStyle.Pacman))
+                .build();
         GridLayoutManager layoutManager = new GridLayoutManager(MultiTypeActivity.this, 4);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -100,7 +101,7 @@ public class MultiTypeActivity extends AppCompatActivity {
                             item.add(new ItemVo());
                         }
                         items.addAll(item);
-                        tRecyclerView.loadMoreComplete(item,false);
+                        tRecyclerView.loadMoreComplete(item, false);
 //                        tRecyclerView.setNoMore(20);
                     }
 
@@ -123,6 +124,6 @@ public class MultiTypeActivity extends AppCompatActivity {
         for (int i = 0; i < 6; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items,false);
+        tRecyclerView.refreshComplete(items, false);
     }
 }

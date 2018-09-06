@@ -3,9 +3,6 @@ package com.trecyclerview.multitype;
 
 import android.support.annotation.NonNull;
 
-/**
- * @author drakeet
- */
 class BinderNotFoundException extends RuntimeException {
 
   BinderNotFoundException(@NonNull Class<?> clazz) {

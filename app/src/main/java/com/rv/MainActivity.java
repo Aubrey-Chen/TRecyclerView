@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.trecyclerview.multitype.MultiTypeAdapter;
+
 /**
  * @author：tqzhang on 18/8/22 13:27
  */
@@ -75,5 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
     }
 }

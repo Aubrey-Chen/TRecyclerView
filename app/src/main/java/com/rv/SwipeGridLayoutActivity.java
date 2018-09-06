@@ -40,10 +40,11 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         items = new Items();
-        adapter = new MultiTypeAdapter();
-        adapter.bind(BannerVo.class, new banner(SwipeGridLayoutActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(SwipeGridLayoutActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.SysProgress));
+        adapter = new MultiTypeAdapter.Builder()
+                .bind(BannerVo.class, new banner(SwipeGridLayoutActivity.this))
+                .bind(ItemVo.class, new ItemType(SwipeGridLayoutActivity.this))
+                .bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.SysProgress))
+                .build();
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeGridLayoutActivity.this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -76,7 +77,7 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 10; i++) {
                             items.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete(items,false);
+                        tRecyclerView.refreshComplete(items, false);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -90,7 +91,7 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-               final Items item=new Items();
+                final Items item = new Items();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -98,7 +99,7 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
                             item.add(new ItemVo());
                         }
                         items.addAll(item);
-                        tRecyclerView.loadMoreComplete(item,false);
+                        tRecyclerView.loadMoreComplete(item, false);
 //                        tRecyclerView.setNoMore(20);
                     }
 
@@ -113,6 +114,6 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items,false);
+        tRecyclerView.refreshComplete(items, false);
     }
 }

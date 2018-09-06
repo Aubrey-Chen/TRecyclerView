@@ -5,168 +5,87 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.trecyclerview.pojo.FootVo;
-import com.trecyclerview.pojo.HeaderVo;
+import com.trecyclerview.util.Preconditions;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.trecyclerview.util.Preconditions.checkNotNull;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
 
-/**
- * @author drakeet
- */
 public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private static final String TAG = "MultiTypeAdapter";
+
+    private LayoutInflater inflater;
 
     private @NonNull
     List<?> items;
     private @NonNull
     TypePool typePool;
 
-    /**
-     * Constructs a MultiTypeAdapter with an empty items list.
-     */
-    public MultiTypeAdapter() {
-        this(Collections.emptyList());
+    private MultiTypeAdapter.Builder builder;
+
+    public MultiTypeAdapter(Builder builder) {
+        checkNotNull(builder);
+        this.builder = builder;
+        this.typePool = builder.typePool;
     }
 
+    public static class Builder<T> {
 
-    /**
-     * Constructs a MultiTypeAdapter with a items list.
-     *
-     * @param items the items list
-     */
-    public MultiTypeAdapter(@NonNull List<?> items) {
-        this(items, new MultiTypePool());
-    }
+        private TypePool typePool;
 
+        private Class<? extends T> claz;
 
-    /**
-     * Constructs a MultiTypeAdapter with a items list and an initial capacity of TypePool.
-     *
-     * @param items           the items list
-     * @param initialCapacity the initial capacity of TypePool
-     */
-    public MultiTypeAdapter(@NonNull List<?> items, int initialCapacity) {
-        this(items, new MultiTypePool(initialCapacity));
-    }
+        private AbsItemView<T, ?>[] binders;
 
+        public Builder() {
+            typePool = new MultiTypePool();
+        }
 
-    /**
-     * Constructs a MultiTypeAdapter with a items list and a TypePool.
-     *
-     * @param items the items list
-     * @param pool  the type pool
-     */
-    public MultiTypeAdapter(@NonNull List<?> items, @NonNull TypePool pool) {
-        checkNotNull(items);
-        checkNotNull(pool);
-        this.items = items;
-        this.typePool = pool;
-    }
+        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder) {
+            checkNotNull(clazz);
+            checkNotNull(binder);
+            this.typePool.bind(clazz, binder);
+            return this;
+        }
 
+        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder, @NonNull Linker<T> linker) {
+            checkNotNull(clazz);
+            checkNotNull(binder);
+            checkNotNull(linker);
+            this.typePool.bind(clazz, binder, linker);
+            return this;
+        }
 
-    /**
-     * Registers a type class and its item view binder. If you have registered the class,
-     * it will override the original binder(s). Note that the method is non-thread-safe
-     * so that you should not use it in concurrent operation.
-     * <p>
-     * Note that the method should not be called after
-     * {@link RecyclerView#setAdapter(RecyclerView.Adapter)}, or you have to call the setAdapter
-     * again.
-     * </p>
-     *
-     * @param clazz  the class of a item
-     * @param binder the item view binder
-     * @param <T>    the item data type
-     */
-    public <T> void bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView<T, ?> binder) {
-        checkNotNull(clazz);
-        checkNotNull(binder);
-        checkAndRemoveAllTypesIfNeeded(clazz);
-        bind(clazz, binder, new DefaultLinker<T>());
-    }
+        @CheckResult
+        @NonNull
+        public Builder bind(@NonNull Class<? extends T> clazz, @NonNull AbsItemView... binders) {
+            Preconditions.checkNotNull(clazz);
+            Preconditions.checkNotNull(binders);
+            this.claz = clazz;
+            this.binders = binders;
+            return this;
+        }
 
+        public Builder withClass(@NonNull ClassLinker<T> classLinker) {
+            Preconditions.checkNotNull(classLinker);
+            Linker<T> linker = ClassLinkerWrapper.wrap(classLinker, binders);
+            AbsItemView[] var2 = this.binders;
+            for (AbsItemView binder : var2) {
+                this.bind(this.claz, binder, linker);
+            }
+            return this;
+        }
 
-    <T> void bind(
-            @NonNull Class<? extends T> clazz,
-            @NonNull AbsItemView<T, ?> binder,
-            @NonNull Linker<T> linker) {
-        typePool.bind(clazz, binder, linker);
-        binder.adapter = this;
-    }
-
-    /**
-     * Registers a type class to multiple item view binders. If you have registered the
-     * class, it will override the original binder(s). Note that the method is non-thread-safe
-     * so that you should not use it in concurrent operation.
-     * <p>
-     * Note that the method should not be called after
-     * {@link RecyclerView#setAdapter(RecyclerView.Adapter)}, or you have to call the setAdapter
-     * again.
-     * </p>
-     *
-     * @param clazz the class of a item
-     * @param <T>   the item data type
-     * @return {@link OneToManyFlow} for setting the binders
-     * @see #bind(Class, AbsItemView)
-     */
-    @CheckResult
-    public @NonNull
-    <T> OneToManyFlow<T> bind(@NonNull Class<? extends T> clazz) {
-        checkNotNull(clazz);
-        checkAndRemoveAllTypesIfNeeded(clazz);
-        return new com.trecyclerview.multitype.OneToManyBuilder<>(this, clazz);
-    }
-
-
-    /**
-     * Registers all of the contents in the specified type pool. If you have registered a
-     * class, it will override the original binder(s). Note that the method is non-thread-safe
-     * so that you should not use it in concurrent operation.
-     * <p>
-     * Note that the method should not be called after
-     * {@link RecyclerView#setAdapter(RecyclerView.Adapter)}, or you have to call the setAdapter
-     * again.
-     * </p>
-     *
-     * @param pool type pool containing contents to be added to this adapter inner pool
-     * @see #bind(Class, AbsItemView)
-     * @see #bind(Class)
-     */
-    public void bindAll(@NonNull final TypePool pool) {
-        checkNotNull(pool);
-        final int size = pool.size();
-        for (int i = 0; i < size; i++) {
-            registerWithoutChecking(
-                    pool.getClass(i),
-                    pool.getItemViewBinder(i),
-                    pool.getLinker(i)
-            );
+        public MultiTypeAdapter build() {
+            return new MultiTypeAdapter(this);
         }
     }
 
-
-    /**
-     * Sets and updates the items atomically and safely. It is recommended to use this method
-     * to update the items with a new wrapper list or consider using {@link CopyOnWriteArrayList}.
-     * <p>
-     * <p>Note: If you want to refresh the list views after setting items, you should
-     * call {@link RecyclerView.Adapter#notifyDataSetChanged()} by yourself.</p>
-     *
-     * @param items the new items list
-     * @since v2.4.1
-     */
     public void setItems(@NonNull List<?> items) {
         checkNotNull(items);
         this.items = items;
@@ -175,34 +94,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     public @NonNull
     List<?> getItems() {
         return items;
-    }
-
-    public void notifyDataChanged() {
-        ((List )getItems()).add(0, new HeaderVo());
-        notifyDataSetChanged();
-    }
-
-    public void notifyFootViewChanged(boolean isNoMore) {
-        if (isNoMore) {
-            ((List )getItems()).add(new FootVo(STATE_NOMORE));
-        } else {
-            ((List )getItems()).add(new FootVo(STATE_LOADING));
-        }
-        notifyItemRangeChanged(items.size() - 1, items.size());
-    }
-
-    public void notifyMoreDataChanged(int positionStart, int itemCount) {
-        notifyItemRangeChanged(positionStart, itemCount);
-    }
-
-    /**
-     * Set the TypePool to hold the types and view binders.
-     *
-     * @param typePool the TypePool implementation
-     */
-    public void setTypePool(@NonNull TypePool typePool) {
-        checkNotNull(typePool);
-        this.typePool = typePool;
     }
 
 
@@ -221,40 +112,24 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public final ViewHolder onCreateViewHolder(ViewGroup parent, int indexViewType) {
-        Log.e(TAG + "创建", System.currentTimeMillis() + "");
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        if (null == inflater) {
+            inflater = LayoutInflater.from(parent.getContext());
+        }
         AbsItemView<?, ?> binder = typePool.getItemViewBinder(indexViewType);
         return binder.onCreateViewHolder(inflater, parent);
     }
 
-
-    /**
-     * This method is deprecated and unused. You should not call this method.
-     * <p>
-     * If you need to call the binding, use {@link RecyclerView.Adapter#onBindViewHolder(ViewHolder,
-     * int, List)} instead.
-     * </p>
-     *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the
-     *                 item at the given position in the data set.
-     * @param position The position of the item within the adapter's data set.
-     * @throws IllegalAccessError By default.
-     * @deprecated Call {@link RecyclerView.Adapter#onBindViewHolder(ViewHolder, int, List)}
-     * instead.
-     */
     @Override
     @Deprecated
     public final void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         onBindViewHolder(holder, position, Collections.emptyList());
     }
 
-
     @Override
     @SuppressWarnings("unchecked")
     public final void onBindViewHolder(ViewHolder holder, int position, @NonNull List<Object> payloads) {
-        Object item = items.get(position);
         AbsItemView binder = typePool.getItemViewBinder(holder.getItemViewType());
-        binder.onBindViewHolder(holder, item, payloads);
+        binder.onBindViewHolder(holder, items.get(position), payloads);
     }
 
 
@@ -264,15 +139,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-    /**
-     * Called to return the stable ID for the item, and passes the event to its associated binder.
-     *
-     * @param position Adapter position to query
-     * @return the stable ID of the item at position
-     * @see AbsItemView#getItemId(Object)
-     * @see RecyclerView.Adapter#setHasStableIds(boolean)
-     * @since v3.2.0
-     */
     @Override
     @SuppressWarnings("unchecked")
     public final long getItemId(int position) {
@@ -283,14 +149,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-    /**
-     * Called when a view created by this adapter has been recycled, and passes the event to its
-     * associated binder.
-     *
-     * @param holder The ViewHolder for the view being recycled
-     * @see RecyclerView.Adapter#onViewRecycled(ViewHolder)
-     * @see AbsItemView#onViewRecycled(ViewHolder)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public final void onViewRecycled(@NonNull ViewHolder holder) {
@@ -298,20 +156,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-    /**
-     * Called by the RecyclerView if a ViewHolder created by this Adapter cannot be recycled
-     * due to its transient state, and passes the event to its associated item view binder.
-     *
-     * @param holder The ViewHolder containing the View that could not be recycled due to its
-     *               transient state.
-     * @return True if the View should be recycled, false otherwise. Note that if this method
-     * returns <code>true</code>, RecyclerView <em>will ignore</em> the transient state of
-     * the View and recycle it regardless. If this method returns <code>false</code>,
-     * RecyclerView will check the View's transient state again before giving a final decision.
-     * Default implementation returns false.
-     * @see RecyclerView.Adapter#onFailedToRecycleView(ViewHolder)
-     * @see AbsItemView#onFailedToRecycleView(ViewHolder)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public final boolean onFailedToRecycleView(@NonNull ViewHolder holder) {
@@ -319,14 +163,6 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-    /**
-     * Called when a view created by this adapter has been attached to a window, and passes the
-     * event to its associated item view binder.
-     *
-     * @param holder Holder of the view being attached
-     * @see RecyclerView.Adapter#onViewAttachedToWindow(ViewHolder)
-     * @see AbsItemView#onViewAttachedToWindow(ViewHolder)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public final void onViewAttachedToWindow(@NonNull ViewHolder holder) {
@@ -334,66 +170,24 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
-    /**
-     * Called when a view created by this adapter has been detached from its window, and passes
-     * the event to its associated item view binder.
-     *
-     * @param holder Holder of the view being detached
-     * @see RecyclerView.Adapter#onViewDetachedFromWindow(ViewHolder)
-     * @see AbsItemView#onViewDetachedFromWindow(ViewHolder)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public final void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
         getRawBinderByViewHolder(holder).onViewDetachedFromWindow(holder);
     }
 
-
     private @NonNull
     AbsItemView getRawBinderByViewHolder(@NonNull ViewHolder holder) {
         return typePool.getItemViewBinder(holder.getItemViewType());
     }
 
-
-    int indexInTypesOf(int position, @NonNull Object item) throws com.trecyclerview.multitype.BinderNotFoundException {
-        int index = typePool.firstIndexOf(item.getClass());
+    public int indexInTypesOf(int position, @NonNull Object item) throws BinderNotFoundException {
+        int index = this.typePool.firstIndexOf(item.getClass());
         if (index != -1) {
-            @SuppressWarnings("unchecked")
-            Linker<Object> linker = (Linker<Object>) typePool.getLinker(index);
+            Linker<Object> linker = (Linker<Object>) this.typePool.getLinker(index);
             return index + linker.index(position, item);
-        }
-        throw new BinderNotFoundException(item.getClass());
-    }
-
-
-    private void checkAndRemoveAllTypesIfNeeded(@NonNull Class<?> clazz) {
-        if (typePool.unbind(clazz)) {
-            Log.w(TAG, "You have registered the " + clazz.getSimpleName() + " type. " +
-                    "It will override the original binder(s).");
+        } else {
+            throw new BinderNotFoundException(item.getClass());
         }
     }
-
-
-    /**
-     * A safe bind method base on the TypePool's safety for TypePool.
-     */
-    @SuppressWarnings("unchecked")
-    private void registerWithoutChecking(@NonNull Class clazz, @NonNull AbsItemView binder, @NonNull Linker linker) {
-        checkAndRemoveAllTypesIfNeeded(clazz);
-        bind(clazz, binder, linker);
-    }
-
-//    E/MultiTypeAdapter创建: 1536043704494
-//            09-04 14:48:24.499 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704499
-//            09-04 14:48:24.523 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704523
-//            09-04 14:48:24.527 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704527
-//            09-04 14:48:24.529 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704529
-//            09-04 14:48:24.532 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704532
-//            09-04 14:48:24.535 17835-17835/com.rv E/MultiTypeAdapter创建: 1536043704535
-//    E/ItemType结束: 1536043704523
-//            09-04 14:48:24.526 17835-17835/com.rv E/ItemType结束: 1536043704526
-//            09-04 14:48:24.529 17835-17835/com.rv E/ItemType结束: 1536043704529
-//            09-04 14:48:24.531 17835-17835/com.rv E/ItemType结束: 1536043704531
-//            09-04 14:48:24.535 17835-17835/com.rv E/ItemType结束: 1536043704535
-//            09-04 14:48:24.537 17835-17835/com.rv E/ItemType结束: 1536043704537
 }

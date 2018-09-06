@@ -19,9 +19,6 @@ package com.trecyclerview.multitype;
 import android.support.annotation.NonNull;
 import java.util.Arrays;
 
-/**
- * @author drakeet
- */
 final class ClassLinkerWrapper<T> implements Linker<T> {
 
   private final @NonNull ClassLinker<T> classLinker;

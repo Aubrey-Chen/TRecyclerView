@@ -40,10 +40,11 @@ public class SwipeStaggeredGridLayoutActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         items = new Items();
-        adapter = new MultiTypeAdapter();
-        adapter.bind(BannerVo.class, new banner(SwipeStaggeredGridLayoutActivity.this));
-        adapter.bind(ItemVo.class, new StageredItemType(SwipeStaggeredGridLayoutActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(SwipeStaggeredGridLayoutActivity.this, ProgressStyle.Pacman));
+        adapter = new MultiTypeAdapter.Builder()
+                .bind(BannerVo.class, new banner(SwipeStaggeredGridLayoutActivity.this))
+                .bind(ItemVo.class, new StageredItemType(SwipeStaggeredGridLayoutActivity.this))
+                .bind(FootVo.class, new FootViewHolder(SwipeStaggeredGridLayoutActivity.this, ProgressStyle.Pacman))
+                .build();
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         tRecyclerView.setAdapter(adapter);
         tRecyclerView.setLayoutManager(layoutManager);
@@ -67,7 +68,7 @@ public class SwipeStaggeredGridLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 20; i++) {
                             items.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete(items,false);
+                        tRecyclerView.refreshComplete(items, false);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -89,7 +90,7 @@ public class SwipeStaggeredGridLayoutActivity extends AppCompatActivity {
                             item.add(new ItemVo());
                         }
                         items.addAll(item);
-                        tRecyclerView.loadMoreComplete(item,false);
+                        tRecyclerView.loadMoreComplete(item, false);
                     }
 
                 }, 2000);

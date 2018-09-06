@@ -74,15 +74,15 @@ public class SwipeRecyclerView extends RecyclerView {
      * @param list
      * @param noMore 是否有更多
      */
-    public void refreshComplete(List<?> list, boolean noMore) {
+    public void refreshComplete(List<Object> list, boolean noMore) {
         checkNotNull(list);
         mRefreshing = false;
         isNoMore = noMore;
         if (loadingMoreEnabled) {
             if (noMore) {
-                ((List) list).add(new FootVo(STATE_NOMORE));
+                list.add(new FootVo(STATE_NOMORE));
             } else {
-                ((List) list).add(new FootVo(STATE_LOADING));
+                list.add(new FootVo(STATE_LOADING));
             }
         }
         mMultiTypeAdapter.setItems(list);
@@ -101,7 +101,7 @@ public class SwipeRecyclerView extends RecyclerView {
         } else {
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
         }
-        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
+        mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
 
@@ -195,9 +195,6 @@ public class SwipeRecyclerView extends RecyclerView {
         return max;
     }
 
-    /**
-     * 当前RecyclerView类型
-     */
     protected LayoutManagerType layoutManagerType;
 
     public enum LayoutManagerType {
@@ -222,7 +219,6 @@ public class SwipeRecyclerView extends RecyclerView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        //解决LRecyclerView与CollapsingToolbarLayout滑动冲突的问题
         AppBarLayout appBarLayout = null;
         ViewParent p = getParent();
         while (p != null) {
@@ -274,7 +270,6 @@ public class SwipeRecyclerView extends RecyclerView {
 
     public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
 
-
         private State mCurrentState = State.IDLE;
 
         @Override
@@ -314,6 +309,11 @@ public class SwipeRecyclerView extends RecyclerView {
     }
 
     public interface AppBarStateListener {
+        /**
+         *  AppBarStateListener
+         * @param appBarLayout AppBarLayout
+         * @param state State
+         */
         void onChanged(AppBarLayout appBarLayout, State state);
     }
 }

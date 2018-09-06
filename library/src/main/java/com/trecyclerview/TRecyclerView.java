@@ -112,9 +112,9 @@ public class TRecyclerView extends RecyclerView {
         }
         if (loadingMoreEnabled) {
             if (noMore) {
-                (list).add(new FootVo(STATE_NOMORE));
+                list.add(new FootVo(STATE_NOMORE));
             } else {
-                (list).add(new FootVo(STATE_LOADING));
+                list.add(new FootVo(STATE_LOADING));
             }
         }
         mMultiTypeAdapter.setItems(list);
@@ -139,7 +139,7 @@ public class TRecyclerView extends RecyclerView {
         } else {
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
         }
-        mMultiTypeAdapter.notifyMoreDataChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
+        mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
     }

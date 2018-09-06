@@ -45,13 +45,14 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         items = new Items();
-        adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman));
-        adapter.bind(BannerVo.class, new banner(SwipeAppBarLayoutMultiTypeActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(SwipeAppBarLayoutMultiTypeActivity.this));
-        adapter.bind(Item1Vo.class, new ItemType1(SwipeAppBarLayoutMultiTypeActivity.this));
-        adapter.bind(Item2Vo.class, new ItemType2(SwipeAppBarLayoutMultiTypeActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman));
+        adapter = new MultiTypeAdapter.Builder()
+                .bind(HeaderVo.class, new HeaderViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman))
+                .bind(BannerVo.class, new banner(SwipeAppBarLayoutMultiTypeActivity.this))
+                .bind(ItemVo.class, new ItemType(SwipeAppBarLayoutMultiTypeActivity.this))
+                .bind(Item1Vo.class, new ItemType1(SwipeAppBarLayoutMultiTypeActivity.this))
+                .bind(Item2Vo.class, new ItemType2(SwipeAppBarLayoutMultiTypeActivity.this))
+                .bind(FootVo.class, new FootViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman))
+                .build();
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeAppBarLayoutMultiTypeActivity.this, 4);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -135,7 +136,7 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
                             item.add(new ItemVo());
                         }
                         items.addAll(item);
-                        tRecyclerView.loadMoreComplete(item,false);
+                        tRecyclerView.loadMoreComplete(item, false);
 //                        tRecyclerView.setNoMore(20);
                     }
 

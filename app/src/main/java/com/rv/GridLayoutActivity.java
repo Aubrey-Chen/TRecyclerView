@@ -35,11 +35,12 @@ public class GridLayoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_multi_type);
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
-        adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman));
-        adapter.bind(BannerVo.class, new banner(GridLayoutActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(GridLayoutActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman));
+        adapter = new MultiTypeAdapter.Builder()
+                .bind(HeaderVo.class, new HeaderViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman))
+                .bind(BannerVo.class, new banner(GridLayoutActivity.this))
+                .bind(ItemVo.class, new ItemType(GridLayoutActivity.this))
+                .bind(FootVo.class, new FootViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman))
+                .build();
         GridLayoutManager layoutManager = new GridLayoutManager(GridLayoutActivity.this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -69,7 +70,7 @@ public class GridLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 10; i++) {
                             items.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete(items,false);
+                        tRecyclerView.refreshComplete(items, false);
                     }
 
                 }, 5000);
@@ -86,7 +87,7 @@ public class GridLayoutActivity extends AppCompatActivity {
                             l.add(new ItemVo());
                         }
                         items.addAll(l);
-                        tRecyclerView.loadMoreComplete(l,false);
+                        tRecyclerView.loadMoreComplete(l, false);
 //                        tRecyclerView.setNoMore(20);
                     }
 
@@ -101,6 +102,6 @@ public class GridLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items,false);
+        tRecyclerView.refreshComplete(items, false);
     }
 }

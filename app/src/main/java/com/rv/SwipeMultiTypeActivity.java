@@ -44,13 +44,14 @@ public class SwipeMultiTypeActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         items = new Items();
-        adapter = new MultiTypeAdapter();
-        adapter.bind(HeaderVo.class, new HeaderViewHolder(SwipeMultiTypeActivity.this, ProgressStyle.Pacman));
-        adapter.bind(BannerVo.class, new banner(SwipeMultiTypeActivity.this));
-        adapter.bind(ItemVo.class, new ItemType(SwipeMultiTypeActivity.this));
-        adapter.bind(Item1Vo.class, new ItemType1(SwipeMultiTypeActivity.this));
-        adapter.bind(Item2Vo.class, new ItemType2(SwipeMultiTypeActivity.this));
-        adapter.bind(FootVo.class, new FootViewHolder(SwipeMultiTypeActivity.this, ProgressStyle.Pacman));
+        adapter = new MultiTypeAdapter.Builder()
+                .bind(HeaderVo.class, new HeaderViewHolder(SwipeMultiTypeActivity.this, ProgressStyle.Pacman))
+                .bind(BannerVo.class, new banner(SwipeMultiTypeActivity.this))
+                .bind(ItemVo.class, new ItemType(SwipeMultiTypeActivity.this))
+                .bind(Item1Vo.class, new ItemType1(SwipeMultiTypeActivity.this))
+                .bind(Item2Vo.class, new ItemType2(SwipeMultiTypeActivity.this))
+                .bind(FootVo.class, new FootViewHolder(SwipeMultiTypeActivity.this, ProgressStyle.Pacman))
+                .build();
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeMultiTypeActivity.this, 4);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -115,7 +116,7 @@ public class SwipeMultiTypeActivity extends AppCompatActivity {
                             item.add(new ItemVo());
                         }
                         items.addAll(item);
-                        tRecyclerView.loadMoreComplete(item,false);
+                        tRecyclerView.loadMoreComplete(item, false);
 //                        tRecyclerView.setNoMore(20);
                     }
 
@@ -138,6 +139,6 @@ public class SwipeMultiTypeActivity extends AppCompatActivity {
         for (int i = 0; i < 6; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items,false);
+        tRecyclerView.refreshComplete(items, false);
     }
 }
