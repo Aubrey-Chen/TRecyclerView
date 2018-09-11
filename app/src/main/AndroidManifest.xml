@@ -26,6 +26,7 @@
         <activity android:name=".SwipeStaggeredGridLayoutActivity" />
         <activity android:name=".SwipeMultiTypeActivity" />
         <activity android:name=".SwipeAppBarLayoutMultiTypeActivity" />
+        <activity android:name=".TestGridLayoutActivity" />
     </application>
 
 </manifest>

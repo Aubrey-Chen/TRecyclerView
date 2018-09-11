@@ -31,11 +31,11 @@
 
  Step 2. 在你的model的build.gradle文件中增加TRecyclerView依赖<br/>
 
-     com.github.SelfZhangTQ:TRecyclerView:2.4.2
+     com.github.SelfZhangTQ:TRecyclerView:2.4.5
 
  Step 3.数据填充<br/>
 
-    adapter = new MultiTypeAdapter();
+    adapter = new MultiTypeAdapter.Builder<>();
    
     //设置刷新头 如果有刷新需求，此代码可不配置，刷新样式可配置
     adapter.bind(HeaderVo.class, new HeaderViewHolder(this, ProgressStyle.Pacman));
@@ -48,6 +48,8 @@
    
     //加载更多，如果不需要加载更多，此代码可不配置
     adapter.bind(FootVo.class, new FootViewHolder(this, ProgressStyle.Pacman));
+    
+    adapter.build();
     
     //数据容器
     items = new Items();

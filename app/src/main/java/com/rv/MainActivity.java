@@ -70,10 +70,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SwipeMultiTypeActivity.class));
 
             }
-        });findViewById(R.id.tv_9).setOnClickListener(new View.OnClickListener() {
+        });
+        findViewById(R.id.tv_9).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SwipeAppBarLayoutMultiTypeActivity.class));
+
+            }
+        });
+        findViewById(R.id.tv_10).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TestGridLayoutActivity.class));
 
             }
         });
