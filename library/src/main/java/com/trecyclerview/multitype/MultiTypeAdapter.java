@@ -39,7 +39,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         private TypePool typePool;
 
-        private Class<? extends T> claz;
+        private Class<? extends T> clazz;
 
         private AbsItemView<T, ?>[] binders;
 
@@ -67,7 +67,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
         public Builder bindArray(@NonNull Class<? extends T> clazz, @NonNull AbsItemView... binders) {
             Preconditions.checkNotNull(clazz);
             Preconditions.checkNotNull(binders);
-            this.claz = clazz;
+            this.clazz = clazz;
             this.binders = binders;
             return this;
         }
@@ -77,7 +77,7 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
             Linker<T> linker = ClassLinkerWrapper.wrap(classLinker, binders);
             AbsItemView[] var2 = this.binders;
             for (AbsItemView binder : var2) {
-                this.bind(this.claz, binder, linker);
+                this.bind(this.clazz, binder, linker);
             }
             return this;
         }

@@ -37,7 +37,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private boolean mRefreshing = false;
 
-    private boolean isNoMore = false;
+    private boolean isNoMore = false; //true 没有更多
 
     private boolean isBottom;
 
@@ -90,18 +90,23 @@ public class SwipeRecyclerView extends RecyclerView {
     }
 
     public void loadMoreComplete(List<?> list, boolean noMore) {
-        checkNotNull(list);
         if (mRefreshing) {
             mRefreshing = false;
         }
         isNoMore = noMore;
-        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
-        if (!isNoMore) {
-            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
-        } else {
+        if (null == list) {
+            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1);
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - 1, mMultiTypeAdapter.getItems().size());
+        } else {
+            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
+            if (!isNoMore) {
+                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+            } else {
+                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            }
+            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         }
-        mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
 
@@ -310,9 +315,10 @@ public class SwipeRecyclerView extends RecyclerView {
 
     public interface AppBarStateListener {
         /**
-         *  AppBarStateListener
+         * AppBarStateListener
+         *
          * @param appBarLayout AppBarLayout
-         * @param state State
+         * @param state        State
          */
         void onChanged(AppBarLayout appBarLayout, State state);
     }

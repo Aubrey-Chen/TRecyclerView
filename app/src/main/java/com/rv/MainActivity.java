@@ -83,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TestGridLayoutActivity.class));
 
+//                Intent intent = getPackageManager().getLaunchIntentForPackage("com.jzyd.coupon");
+//                if (intent != null) {
+//                    intent.putExtra("type", "110");
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(intent);
+//                }
             }
         });
 

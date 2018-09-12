@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 
+import com.rv.headerview.RefreshHeader;
 import com.rv.itemView.ItemType;
 import com.rv.itemView.banner;
 import com.rv.pojo.BannerVo;
@@ -37,7 +39,8 @@ public class LinearLayoutActivity extends AppCompatActivity {
         tRecyclerView = findViewById(R.id.recycler_view);
         items = new Items();
         adapter = new MultiTypeAdapter.Builder()
-                .bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman))
+//                .bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, LayoutInflater.from(this).inflate(R.layout.custom_header_view,null)))
+                .bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, new RefreshHeader(this), new RefreshHeader(this).getOnTouchMoveListener()))
                 .bind(BannerVo.class, new banner(LinearLayoutActivity.this))
                 .bind(ItemVo.class, new ItemType(LinearLayoutActivity.this))
                 .bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman))
@@ -81,6 +84,9 @@ public class LinearLayoutActivity extends AppCompatActivity {
                         }
                         items.addAll(l);
                         tRecyclerView.loadMoreComplete(l, false);
+
+                        //数据返回是空的  没有更多  tRecyclerView.loadMoreComplete(null, false);
+                        //
 //                        tRecyclerView.setNoMore(l);
                     }
 

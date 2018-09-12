@@ -100,7 +100,6 @@ public class TRecyclerView extends RecyclerView {
      * @param noMore 是否有更多
      */
     public void refreshComplete(List<Object> list, boolean noMore) {
-        checkNotNull(list);
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
@@ -109,8 +108,6 @@ public class TRecyclerView extends RecyclerView {
         isNoMore = noMore;
         if (pullRefreshEnabled) {
             list.add(0, new HeaderVo());
-        }
-        if (loadingMoreEnabled) {
             if (noMore) {
                 list.add(new FootVo(STATE_NOMORE));
             } else {
@@ -128,21 +125,29 @@ public class TRecyclerView extends RecyclerView {
      * @param noMore
      */
     public void loadMoreComplete(List<?> list, boolean noMore) {
-        checkNotNull(list);
         if (mRefreshing) {
             mRefreshing = false;
         }
         isNoMore = noMore;
-        mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
-        if (isNoMore) {
+        if (null == list) {
+            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1);
             ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - 1, mMultiTypeAdapter.getItems().size());
+
         } else {
-            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
+            if (isNoMore) {
+                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            } else {
+                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+            }
+            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
+
         }
-        mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
         isLoading = true;
         isLoadMore = false;
     }
+
     /**
      * set adapter
      */

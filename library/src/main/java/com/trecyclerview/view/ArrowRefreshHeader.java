@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,10 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.trecyclerview.listener.OnTouchMoveListener;
 import com.trecyclerview.progressindicator.ProgressStyle;
 import com.trecyclerview.R;
 import com.trecyclerview.progressindicator.AVLoadingIndicatorView;
@@ -26,6 +27,9 @@ import java.util.Date;
 public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeader {
 
     private LinearLayout mContainer;
+    private RelativeLayout mDefHeaderContent;
+
+    private View mCustomView;
     private ImageView mArrowImageView;
     private SimpleViewSwitcher mProgressBar;
     private TextView mStatusTextView;
@@ -40,8 +44,18 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 
     public int mMeasuredHeight;
 
+    private OnTouchMoveListener onTouchMoveListener;
+
+
     public ArrowRefreshHeader(Context context) {
         super(context);
+        initView();
+    }
+
+
+    public ArrowRefreshHeader(Context context, View view) {
+        super(context);
+        this.mCustomView = view;
         initView();
     }
 
@@ -58,19 +72,26 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         // 初始情况，设置下拉刷新view高度为0
         mContainer = (LinearLayout) LayoutInflater.from(getContext()).inflate(
                 R.layout.listview_header, null);
+        mDefHeaderContent = (RelativeLayout) LayoutInflater.from(getContext()).inflate(
+                R.layout.listview_header_content, null);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 0);
         this.setLayoutParams(lp);
         this.setPadding(0, 0, 0, 0);
+        if (mCustomView != null) {
+            mContainer.addView(mCustomView);
+        } else {
+            mContainer.addView(mDefHeaderContent);
+        }
 
         addView(mContainer, new LayoutParams(LayoutParams.MATCH_PARENT, 0));
         setGravity(Gravity.BOTTOM);
 
-        mArrowImageView = (ImageView) findViewById(R.id.listview_header_arrow);
-        mStatusTextView = (TextView) findViewById(R.id.refresh_status_textview);
+        mArrowImageView = (ImageView) mDefHeaderContent.findViewById(R.id.listview_header_arrow);
+        mStatusTextView = (TextView) mDefHeaderContent.findViewById(R.id.refresh_status_textview);
 
         //init the progress view
-        mProgressBar = (SimpleViewSwitcher) findViewById(R.id.listview_header_progressbar);
+        mProgressBar = (SimpleViewSwitcher) mDefHeaderContent.findViewById(R.id.listview_header_progressbar);
         AVLoadingIndicatorView progressView = new AVLoadingIndicatorView(getContext());
         progressView.setIndicatorColor(0xffB5B5B5);
         progressView.setIndicatorId(ProgressStyle.BallSpinFadeLoader);
@@ -86,7 +107,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         mRotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
         mRotateDownAnim.setFillAfter(true);
 
-        mHeaderTimeView = (TextView) findViewById(R.id.last_refresh_time);
+        mHeaderTimeView = (TextView) mDefHeaderContent.findViewById(R.id.last_refresh_time);
         measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mMeasuredHeight = getMeasuredHeight();
     }
@@ -151,6 +172,10 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         }
 
         mState = state;
+        if (onTouchMoveListener != null) {
+            onTouchMoveListener.onRefreshState(state);
+        }
+
     }
 
     public int getState() {
@@ -185,6 +210,10 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 
     @Override
     public void onMove(float delta) {
+        if (onTouchMoveListener != null) {
+            onTouchMoveListener.onMove(delta);
+        }
+
         if (getVisibleHeight() > 0 || delta > 0) {
             setVisibleHeight((int) delta + getVisibleHeight());
             if (mState <= STATE_RELEASE_TO_REFRESH) {
@@ -209,6 +238,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         if (getVisibleHeight() > mMeasuredHeight && mState < STATE_REFRESHING) {
             setState(STATE_REFRESHING);
             isOnRefresh = true;
+
         }
         if (mState != STATE_REFRESHING) {
             smoothScrollTo(0);
@@ -225,10 +255,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     public void reset() {
         smoothScrollTo(0);
         new Handler().postDelayed(new Runnable() {
+            @Override
             public void run() {
                 setState(STATE_NORMAL);
             }
-        }, 500);
+        }, 300);
     }
 
     private void smoothScrollTo(int destHeight) {
@@ -270,4 +301,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         return ct / 31104000 + "年前";
     }
 
+    public void setOnTouchMoveListener(OnTouchMoveListener onTouchMoveListener) {
+        this.onTouchMoveListener = onTouchMoveListener;
+    }
 }

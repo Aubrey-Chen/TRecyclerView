@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.trecyclerview.listener.OnTouchMoveListener;
 import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.multitype.AbsItemView;
 
@@ -18,13 +19,24 @@ public abstract class AbsHeaderView extends AbsItemView<HeaderVo, AbsHeaderView.
 
     private ArrowRefreshHeader mRefreshHeader;
 
+    protected View mView;
+
     protected Context mContext;
 
     protected int mProgressStyle;
 
-    public AbsHeaderView(Context context,int progressStyle) {
+    protected OnTouchMoveListener mOnTouchMoveListener;
+
+    public AbsHeaderView(Context context, int progressStyle) {
         this.mContext = context;
         this.mProgressStyle = progressStyle;
+        mRefreshHeader = createRefreshHeader();
+    }
+
+    public AbsHeaderView(Context context, View view, OnTouchMoveListener onTouchMoveListener) {
+        this.mContext = context;
+        this.mView = view;
+        this.mOnTouchMoveListener = onTouchMoveListener;
         mRefreshHeader = createRefreshHeader();
     }
 
@@ -46,7 +58,6 @@ public abstract class AbsHeaderView extends AbsItemView<HeaderVo, AbsHeaderView.
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
