@@ -114,6 +114,6 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items, false);
+        tRecyclerView.refreshComplete(items, true);
     }
 }

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
 
@@ -75,8 +76,11 @@ public class SwipeRecyclerView extends RecyclerView {
      * @param noMore 是否有更多
      */
     public void refreshComplete(List<Object> list, boolean noMore) {
-        checkNotNull(list);
+        if (null == list || list.size() == 0) {
+            return;
+        }
         mRefreshing = false;
+        isLoadMore = false;
         isNoMore = noMore;
         if (loadingMoreEnabled) {
             if (noMore) {
@@ -168,6 +172,7 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
+            Log.e("isNoMore",""+isNoMore);
             if (!isNoMore) {
                 isLoadMore = true;
             }
