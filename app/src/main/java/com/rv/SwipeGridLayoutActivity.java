@@ -43,7 +43,7 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         adapter = new MultiTypeAdapter.Builder()
                 .bind(BannerVo.class, new banner(SwipeGridLayoutActivity.this))
                 .bind(ItemVo.class, new ItemType(SwipeGridLayoutActivity.this))
-                .bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.SysProgress))
+                .bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.SysProgress,"努力加载","没有更多啦。。"))
                 .build();
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeGridLayoutActivity.this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {

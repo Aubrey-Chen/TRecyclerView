@@ -1,8 +1,9 @@
 # TRecyclerView<br/>
 
-由于项目需求,很多地方使用了大量的多类型item，于是捣鼓捣鼓出了TRecyclerView，旨意在于让开发者只关心ViewHolder的开发，高复用,TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
+由于项目需求,很多地方使用了大量的多类型item，就做了下封装，感觉再怎么封装依旧不是很完美，于是捣鼓捣鼓，自己弄了套刷新库，主要是整合了针对单类型,多类型的item开发,支持下拉刷新，加载更多功能的TRecyclerView，旨意在于让开发者只关心ViewHolder的开发，高复用,TRecyclerView(面向ViewHolder开发的刷新库,多类型item终结者,好不好用你试试就知道) <br/>
 ### 主要功能<br/>
    * 下拉刷新、加载更多；<br/>
+   * 自定义下拉动画；<br/>
    * 高复用,支持多类型；<br/>
    * ...<br/>
    项目github地址:<https://github.com/SelfZhangTQ/TRecyclerView> <br/>
@@ -31,25 +32,20 @@
 
  Step 2. 在你的model的build.gradle文件中增加TRecyclerView依赖<br/>
 
-     com.github.SelfZhangTQ:TRecyclerView:2.4.5
+     com.github.SelfZhangTQ:TRecyclerView:2.4.9
 
- Step 3.数据填充<br/>
+ Step 3. Item类型配置<br/>
 
-    adapter = new MultiTypeAdapter.Builder<>();
-   
-    //设置刷新头 如果有刷新需求，此代码可不配置，刷新样式可配置
-    adapter.bind(HeaderVo.class, new HeaderViewHolder(this, ProgressStyle.Pacman));
-   
-    //设置item1，
-    adapter.bind(Bean1.class, new ItemView1(this));
-    
-    //设置item2，
-    adapter.bind(Bean2.class, new ItemView2(this));
-   
-    //加载更多，如果不需要加载更多，此代码可不配置
-    adapter.bind(FootVo.class, new FootViewHolder(this, ProgressStyle.Pacman));
-    
-    adapter.build();
+    MultiTypeAdapter adapter = new MultiTypeAdapter.Builder<>()
+            //设置刷新头 如果有刷新需求，此代码不配置，则不具有刷新功能，ProgressStyle.Pacman配置刷新样式
+           .bind(HeaderVo.class, new HeaderViewHolder(this, ProgressStyle.Pacman));
+            //设置item1，
+           .bind(Bean1.class, new ItemView1(this))
+           //设置item2，
+           .bind(Bean2.class, new ItemView2(this))
+           //加载更多，如果不需要加载更多，此代码可不配置
+           .bind(FootVo.class, new FootViewHolder(this, ProgressStyle.Pacman))
+           .build();
     
     //数据容器
     items = new Items();
@@ -58,7 +54,18 @@
     mRecyclerView.setAdapter(adapter);
     mRecyclerView.setLayoutManager(layoutManager);
 
- Step 4.下拉刷新,加载更多,滚动监听回调<br/>
+
+ Step 4. 自定义刷新动画配置和加载更多描述配置<br/>
+       
+      //自定义刷新头 需要实现OnTouchMoveListener接口，
+      RefreshHeader refreshHeader = new RefreshHeader(this);
+     .bind(HeaderVo.class,newHeaderViewHolder(LinearLayoutActivity.this,refreshHeader, new refreshHeader.getOnTouchMoveListener()))
+                
+                
+    //加载更多描述配置，用4个参数的构造方法即可。
+    new FootViewHolder(this, ProgressStyle.SysProgress,"努力加载","没有更多啦。。")；          
+
+ Step 5.下拉刷新,加载更多,滚动监听回调<br/>
 
     mRecyclerView.addOnRefreshListener(new OnRefreshListener(){
             @Override
@@ -82,20 +89,23 @@
             }
         });
 
-  Step 5.刷新完成或加载更多完成后的操作<br/>
+  Step 6.刷新完成或加载更多完成后的操作<br/>
    
     //刷新完成，有更多
     mRecyclerView.refreshComplete(items,false);
     
-    注：如果默认加载不够一页数,即没有更多 mRecyclerView.refreshComplete(items,true);
+    //注：如果默认加载不够一页数,即没有更多
+    mRecyclerView.refreshComplete(items,true);
    
     
     //加载更多完成，还有分页数据，
+    //此处是服务器返回的数据集合，并非是所有数据集合
     mRecyclerView.loadMoreComplete(items,false);
     
-     注：如果默认加载不够一页数,即没有更多mRecyclerView.refreshComplete(items,true);
+    // 注：如果默认加载不够一页数,即没有更多
+    mRecyclerView.refreshComplete(items,true);
      
-  Step 6.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>   
+  Step 7.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>   
      
      由于滑动冲突，滑动到底部加载更多加载时间长问题，需要自定义AppBarLayout.Behavior
      

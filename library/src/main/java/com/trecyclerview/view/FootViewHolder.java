@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,20 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
 
     private int mProgressStyle;
 
+    private String mLoadingHint;
+
+    private String mLoadFinishHint;
+
     public FootViewHolder(Context context, int progressStyle) {
         super(context);
-        mProgressStyle = progressStyle;
+        this.mProgressStyle = progressStyle;
+    }
+
+    public FootViewHolder(Context context, int progressStyle,String loadingHint,String loadFinishHint) {
+        super(context);
+        this.mProgressStyle = progressStyle;
+        this.mLoadingHint = loadingHint;
+        this.mLoadFinishHint = loadFinishHint;
     }
 
     @Override
@@ -42,11 +54,19 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
             ((StaggeredGridLayoutManager.LayoutParams) clp).setFullSpan(true);
         }
         holder.loadingProgressBar.setProgressStyle(mProgressStyle);
+
+        if (!TextUtils.isEmpty(mLoadingHint)){
+            holder.loadingProgressBar.setLoadingHint(mLoadingHint);
+        }
+        if (!TextUtils.isEmpty(mLoadFinishHint)) {
+            holder.loadingProgressBar.setNoMoreHint(mLoadFinishHint);
+        }
         if (mFootData.state == STATE_NOMORE) {
             holder.loadingProgressBar.setState(STATE_NOMORE);
         } else if (mFootData.state == STATE_LOADING) {
             holder.loadingProgressBar.setState(STATE_LOADING);
         }
+
 
     }
 
