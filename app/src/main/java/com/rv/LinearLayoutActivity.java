@@ -43,7 +43,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
                 .bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, new RefreshHeader(this), new RefreshHeader(this).getOnTouchMoveListener()))
                 .bind(BannerVo.class, new banner(LinearLayoutActivity.this))
                 .bind(ItemVo.class, new ItemType(LinearLayoutActivity.this))
-                .bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman))
+//                .bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman))
                 .build();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(LinearLayoutActivity.this);
@@ -101,7 +101,7 @@ public class LinearLayoutActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) {
             items.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items, false);
+        tRecyclerView.refreshComplete(items, true);
 //        tRecyclerView.setNoMore(items);
     }
 }

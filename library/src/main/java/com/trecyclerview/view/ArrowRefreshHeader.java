@@ -87,11 +87,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
         addView(mContainer, new LayoutParams(LayoutParams.MATCH_PARENT, 0));
         setGravity(Gravity.BOTTOM);
 
-        mArrowImageView = (ImageView) mDefHeaderContent.findViewById(R.id.listview_header_arrow);
+        mArrowImageView = (ImageView) mDefHeaderContent.findViewById(R.id.header_arrow);
         mStatusTextView = (TextView) mDefHeaderContent.findViewById(R.id.refresh_status_textview);
 
         //init the progress view
-        mProgressBar = (SimpleViewSwitcher) mDefHeaderContent.findViewById(R.id.listview_header_progressbar);
+        mProgressBar = (SimpleViewSwitcher) mDefHeaderContent.findViewById(R.id.header_progressbar);
         AVLoadingIndicatorView progressView = new AVLoadingIndicatorView(getContext());
         progressView.setIndicatorColor(0xffB5B5B5);
         progressView.setIndicatorId(ProgressStyle.BallSpinFadeLoader);

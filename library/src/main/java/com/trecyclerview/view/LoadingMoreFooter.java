@@ -76,6 +76,8 @@ public class LoadingMoreFooter extends LinearLayout {
         if(style == ProgressStyle.SysProgress){
             ProgressBar progressBar= new ProgressBar(getContext(), null, android.R.attr.progressBarStyle);
             progressBar.setLayoutParams(new ViewGroup.LayoutParams(55,55));
+
+
             progressCon.setView(progressBar);
         }else{
             AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());

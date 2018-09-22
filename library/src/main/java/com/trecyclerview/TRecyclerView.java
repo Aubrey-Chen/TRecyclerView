@@ -108,11 +108,14 @@ public class TRecyclerView extends RecyclerView {
         isNoMore = noMore;
         if (pullRefreshEnabled) {
             list.add(0, new HeaderVo());
-            if (noMore) {
-                list.add(new FootVo(STATE_NOMORE));
-            } else {
-                list.add(new FootVo(STATE_LOADING));
+            if (loadingMoreEnabled){
+                if (noMore) {
+                    list.add(new FootVo(STATE_NOMORE));
+                } else {
+                    list.add(new FootVo(STATE_LOADING));
+                }
             }
+
         }
         mMultiTypeAdapter.setItems(list);
         mMultiTypeAdapter.notifyDataSetChanged();
