@@ -104,8 +104,61 @@
     
     // 注：如果默认加载不够一页数,即没有更多
     mRecyclerView.refreshComplete(items,true);
-     
-  Step 7.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>   
+
+    // 局部刷新
+    mRecyclerView.notifyItemRangeChanged(position,1);
+
+
+  Step 7. 添加Item点击事件
+
+        adapter.setOnItemClickListener(this);//实现OnItemClickListener 接口
+
+        //在holder中设置监听事件
+        public class ItemType extends AbsViewHolder<ItemVo, ItemType1.ViewHolder> {
+            public ItemType1(Context context) {
+                super(context);
+            }
+
+            @Override
+            public int getLayoutResId() {
+                return R.layout.type_1;
+            }
+
+            @Override
+            public ViewHolder createViewHolder(View view) {
+                return new ViewHolder(view,mOnItemClickListener);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ItemVo item) {
+                holder.tvType.setText(item.type);
+            }
+
+            static class ViewHolder extends BaseHolder {
+
+                TextView tvType;
+
+                ViewHolder(@NonNull final View itemView, final OnItemClickListener mOnItemClickListener) {
+                    super(itemView);
+                    tvType = getViewById(R.id.tv_type);
+                    itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (null!=mOnItemClickListener){
+                                mOnItemClickListener.onItemClick(v,getAdapterPosition(),itemView.getTag());
+                            }
+
+                        }
+                    });
+                }
+
+            }
+
+        }
+
+      项目实战使用可参考:<https://github.com/SelfZhangTQ/T-MVVM> <br/>
+
+  Step 8.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>
      
      由于滑动冲突，滑动到底部加载更多加载时间长问题，需要自定义AppBarLayout.Behavior
      

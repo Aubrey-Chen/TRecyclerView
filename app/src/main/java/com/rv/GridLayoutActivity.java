@@ -39,7 +39,7 @@ public class GridLayoutActivity extends AppCompatActivity {
                 .bind(HeaderVo.class, new HeaderViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman))
                 .bind(BannerVo.class, new banner(GridLayoutActivity.this))
                 .bind(ItemVo.class, new ItemType(GridLayoutActivity.this))
-                .bind(FootVo.class, new FootViewHolder(GridLayoutActivity.this, ProgressStyle.Pacman))
+                .bind(FootVo.class, new FootViewHolder(GridLayoutActivity.this, ProgressStyle.SysProgress))
                 .build();
         GridLayoutManager layoutManager = new GridLayoutManager(GridLayoutActivity.this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {

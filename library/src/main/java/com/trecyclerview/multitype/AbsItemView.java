@@ -23,6 +23,8 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.trecyclerview.listener.OnItemClickListener;
+
 import java.util.List;
 
 /***
@@ -31,6 +33,8 @@ import java.util.List;
 public abstract class AbsItemView<T, VH extends ViewHolder> {
 
     /* internal */ MultiTypeAdapter adapter;
+
+    protected OnItemClickListener mOnItemClickListener;
 
     protected abstract @NonNull
     VH onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent);
@@ -80,6 +84,7 @@ public abstract class AbsItemView<T, VH extends ViewHolder> {
      * @since v2.5.0
      */
     protected void onBindViewHolder(@NonNull VH holder, @NonNull T item, @NonNull List<Object> payloads) {
+        holder.itemView.setTag(item);
         onBindViewHolder(holder, item);
     }
 
@@ -228,5 +233,9 @@ public abstract class AbsItemView<T, VH extends ViewHolder> {
      * @since v3.1.0
      */
     protected void onViewDetachedFromWindow(@NonNull VH holder) {
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener=onItemClickListener;
     }
 }

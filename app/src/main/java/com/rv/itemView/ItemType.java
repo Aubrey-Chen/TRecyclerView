@@ -8,6 +8,7 @@ import com.rv.R;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.holder.AbsViewHolder;
 import com.trecyclerview.holder.BaseHolder;
+import com.trecyclerview.listener.OnItemClickListener;
 
 /**
  * @author：tqzhang on 18/8/22 13:57
@@ -24,7 +25,7 @@ public class ItemType extends AbsViewHolder<ItemVo, ItemType.ViewHolder> {
 
     @Override
     public ViewHolder createViewHolder(View view) {
-        return new ViewHolder(view);
+        return new ViewHolder(view,mOnItemClickListener);
     }
 
     @Override
@@ -34,8 +35,17 @@ public class ItemType extends AbsViewHolder<ItemVo, ItemType.ViewHolder> {
 
     static class ViewHolder extends BaseHolder {
 
-        ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull final View itemView, final OnItemClickListener mOnItemClickListener) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null!=mOnItemClickListener){
+                        mOnItemClickListener.onItemClick(v,getAdapterPosition(),itemView.getTag());
+                    }
+
+                }
+            });
         }
 
     }

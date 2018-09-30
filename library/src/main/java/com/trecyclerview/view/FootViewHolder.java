@@ -23,6 +23,7 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
 
     private int mProgressStyle;
 
+
     private String mLoadingHint;
 
     private String mLoadFinishHint;

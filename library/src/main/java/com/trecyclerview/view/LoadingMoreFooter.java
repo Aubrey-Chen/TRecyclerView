@@ -1,6 +1,9 @@
 package com.trecyclerview.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -25,14 +28,15 @@ public class LoadingMoreFooter extends LinearLayout {
     private String noMoreHint;
     private String loadingDoneHint;
 
-	public LoadingMoreFooter(Context context) {
-		super(context);
-		initView();
-	}
-	public LoadingMoreFooter(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		initView();
-	}
+    public LoadingMoreFooter(Context context) {
+        super(context);
+        initView();
+    }
+
+    public LoadingMoreFooter(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView();
+    }
 
     public void setLoadingHint(String hint) {
         loadingHint = hint;
@@ -46,7 +50,7 @@ public class LoadingMoreFooter extends LinearLayout {
         loadingDoneHint = hint;
     }
 
-    public void initView(){
+    public void initView() {
         setGravity(Gravity.CENTER);
         setLayoutParams(new RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -54,7 +58,7 @@ public class LoadingMoreFooter extends LinearLayout {
         progressCon.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());
+        AVLoadingIndicatorView progressView = new AVLoadingIndicatorView(this.getContext());
         progressView.setIndicatorColor(0xffB5B5B5);
         progressView.setIndicatorId(ProgressStyle.BallSpinFadeLoader);
         progressCon.setView(progressView);
@@ -63,37 +67,35 @@ public class LoadingMoreFooter extends LinearLayout {
         mText = new TextView(getContext());
         mText.setText("正在加载...");
         mText.setTextColor(getResources().getColor(android.R.color.darker_gray));
-        loadingHint = (String)getContext().getText(R.string.listview_loading);
-        noMoreHint = (String)getContext().getText(R.string.nomore_loading);
-        loadingDoneHint = (String)getContext().getText(R.string.loading_done);
+        loadingHint = (String) getContext().getText(R.string.listview_loading);
+        noMoreHint = (String) getContext().getText(R.string.nomore_loading);
+        loadingDoneHint = (String) getContext().getText(R.string.loading_done);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins( (int)getResources().getDimension(R.dimen.textandiconmargin),0,0,0 );
+        layoutParams.setMargins((int) getResources().getDimension(R.dimen.textandiconmargin), 0, 0, 0);
         mText.setLayoutParams(layoutParams);
         addView(mText);
     }
 
     public void setProgressStyle(int style) {
-        if(style == ProgressStyle.SysProgress){
-            ProgressBar progressBar= new ProgressBar(getContext(), null, android.R.attr.progressBarStyle);
-            progressBar.setLayoutParams(new ViewGroup.LayoutParams(55,55));
-
-
+        if (style == ProgressStyle.SysProgress) {
+            ProgressBar progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyle);
+            progressBar.setLayoutParams(new ViewGroup.LayoutParams(55, 55));
             progressCon.setView(progressBar);
-        }else{
-            AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());
+        } else {
+            AVLoadingIndicatorView progressView = new AVLoadingIndicatorView(this.getContext());
             progressView.setIndicatorColor(0xffB5B5B5);
             progressView.setIndicatorId(style);
             progressCon.setView(progressView);
         }
     }
 
-    public void  setState(int state) {
-        switch(state) {
+    public void setState(int state) {
+        switch (state) {
             case STATE_LOADING:
                 progressCon.setVisibility(View.VISIBLE);
                 mText.setText(loadingHint);
                 this.setVisibility(View.VISIBLE);
-                    break;
+                break;
             case STATE_COMPLETE:
                 mText.setText(loadingDoneHint);
                 this.setVisibility(View.GONE);

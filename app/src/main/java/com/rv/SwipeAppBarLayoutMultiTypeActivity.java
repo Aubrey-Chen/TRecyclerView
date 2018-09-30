@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.View;
 import android.widget.Toast;
 
 import com.rv.itemView.ItemType;
@@ -18,6 +19,7 @@ import com.rv.pojo.Item1Vo;
 import com.rv.pojo.Item2Vo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.SwipeRecyclerView;
+import com.trecyclerview.listener.OnItemClickListener;
 import com.trecyclerview.listener.OnLoadMoreListener;
 import com.trecyclerview.listener.OnTScrollListener;
 import com.trecyclerview.multitype.Items;
@@ -32,7 +34,7 @@ import com.trecyclerview.view.HeaderViewHolder;
 /**
  * @author：tqzhang on 18/8/22 13:48
  */
-public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implements SwipeRecyclerView.AppBarStateListener {
+public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implements SwipeRecyclerView.AppBarStateListener, OnItemClickListener {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SwipeRecyclerView tRecyclerView;
     private Items items;
@@ -45,6 +47,7 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         items = new Items();
+
         adapter = new MultiTypeAdapter.Builder()
                 .bind(HeaderVo.class, new HeaderViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman))
                 .bind(BannerVo.class, new banner(SwipeAppBarLayoutMultiTypeActivity.this))
@@ -53,6 +56,7 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
                 .bind(Item2Vo.class, new ItemType2(SwipeAppBarLayoutMultiTypeActivity.this))
                 .bind(FootVo.class, new FootViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman))
                 .build();
+        adapter.setOnItemClickListener(this);
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeAppBarLayoutMultiTypeActivity.this, 4);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -116,6 +120,8 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
                 }
             }
         });
+
+
     }
 
     private void setListener() {
@@ -176,4 +182,19 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
             isOffsetScroll = state;
         }
     }
+
+    @Override
+    public void onItemClick(View view, int position, Object o) {
+       if (o instanceof ItemVo){
+           ItemVo itemVo= (ItemVo) o;
+           Toast.makeText(this, ""+itemVo.type, Toast.LENGTH_SHORT).show();
+
+       }else if (o instanceof Item1Vo){
+           Item1Vo  item1Vo= (Item1Vo) items.get(position);
+           item1Vo.type="刷新";
+           tRecyclerView.notifyItemRangeChanged(position,1);
+
+       }
+
+      }
 }

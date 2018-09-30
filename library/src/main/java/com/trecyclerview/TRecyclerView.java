@@ -151,6 +151,16 @@ public class TRecyclerView extends RecyclerView {
         isLoadMore = false;
     }
 
+
+    public void notifyItemRangeChanged(int positionStart, int itemCount) {
+        mMultiTypeAdapter.notifyItemRangeChanged(positionStart, itemCount);
+
+    }
+
+    public void notifyItemChanged(int position) {
+        mMultiTypeAdapter.notifyItemChanged(position);
+    }
+
     /**
      * set adapter
      */

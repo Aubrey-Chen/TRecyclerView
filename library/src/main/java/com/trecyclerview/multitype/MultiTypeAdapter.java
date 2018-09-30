@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.trecyclerview.listener.OnItemClickListener;
 import com.trecyclerview.util.Preconditions;
 
 import java.util.Collections;
@@ -26,13 +27,19 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
     private @NonNull
     TypePool typePool;
 
+    private OnItemClickListener mOnItemClickListener;
+
     private MultiTypeAdapter.Builder builder;
 
     public MultiTypeAdapter(Builder builder) {
         checkNotNull(builder);
-        items=Collections.emptyList();
+        items = Collections.emptyList();
         this.builder = builder;
         this.typePool = builder.typePool;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     public static class Builder<T> {
@@ -117,6 +124,10 @@ public class MultiTypeAdapter extends RecyclerView.Adapter<ViewHolder> {
             inflater = LayoutInflater.from(parent.getContext());
         }
         AbsItemView<?, ?> binder = typePool.getItemViewBinder(indexViewType);
+        if (null != mOnItemClickListener) {
+            binder.setOnItemClickListener(mOnItemClickListener);
+        }
+
         return binder.onCreateViewHolder(inflater, parent);
     }
 

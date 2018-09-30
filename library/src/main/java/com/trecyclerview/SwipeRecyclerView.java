@@ -116,6 +116,20 @@ public class SwipeRecyclerView extends RecyclerView {
 
     }
 
+    public void notifyItemRangeChanged(int positionStart, int itemCount) {
+        mMultiTypeAdapter.notifyItemRangeChanged(positionStart, itemCount);
+
+    }
+
+    public void notifyItemChanged(int position) {
+        mMultiTypeAdapter.notifyItemChanged(position);
+    }
+
+
+    public void setRefreshing(boolean mRefreshing) {
+        this.mRefreshing = mRefreshing;
+    }
+
     @Override
     public void setAdapter(Adapter adapter) {
         this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
@@ -172,7 +186,6 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
             mRefreshing = false;
             isLoading = false;
-            Log.e("isNoMore",""+isNoMore);
             if (!isNoMore) {
                 isLoadMore = true;
             }
