@@ -32,7 +32,8 @@
 
  Step 2. 在你的model的build.gradle文件中增加TRecyclerView依赖<br/>
 
-     com.github.SelfZhangTQ:TRecyclerView:2.4.9
+     com.github.SelfZhangTQ:TRecyclerView:2.5.1
+
 
  Step 3. Item类型配置<br/>
 
