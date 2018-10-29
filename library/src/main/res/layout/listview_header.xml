@@ -4,5 +4,4 @@
     android:layout_height="wrap_content"
     android:gravity="bottom|center_horizontal"
     android:orientation="vertical">
-
 </LinearLayout>
