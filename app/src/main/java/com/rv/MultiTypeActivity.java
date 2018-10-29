@@ -156,6 +156,7 @@ public class MultiTypeActivity extends AppCompatActivity implements OnItemClickL
 
     @Override
     public void onItemClick(View view, int position, Object o) {
-        Toast.makeText(this, ((Item1Vo) o).type, Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(this, ((Item1Vo) o).type, Toast.LENGTH_SHORT).show();
     }
 }
