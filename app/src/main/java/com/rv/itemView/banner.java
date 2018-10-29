@@ -6,17 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.rv.R;
 import com.rv.pojo.BannerVo;
-import com.trecyclerview.holder.AbsViewHolder;
-import com.trecyclerview.holder.BaseHolder;
+import com.trecyclerview.holder.AbsItemHolder;
+import com.trecyclerview.holder.AbsHolder;
 
 /**
  * @author：tqzhang on 18/8/22 13:57
  */
-public class banner extends AbsViewHolder<BannerVo, banner.ViewHolder> {
+public class banner extends AbsItemHolder<BannerVo, banner.ViewHolder> {
     public banner(Context context) {
         super(context);
     }
@@ -39,7 +38,7 @@ public class banner extends AbsViewHolder<BannerVo, banner.ViewHolder> {
         }
     }
 
-    static class ViewHolder extends BaseHolder {
+    static class ViewHolder extends AbsHolder {
 
         private RelativeLayout mBannerView;
         ViewHolder(@NonNull View itemView) {

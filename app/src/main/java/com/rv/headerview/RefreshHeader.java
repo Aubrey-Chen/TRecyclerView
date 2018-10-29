@@ -12,8 +12,6 @@ import android.widget.ProgressBar;
 
 import com.rv.R;
 import com.trecyclerview.listener.OnTouchMoveListener;
-import com.trecyclerview.view.ArrowRefreshHeader;
-import com.trecyclerview.view.BaseRefreshHeader;
 
 /**
  * @author：tqzhang on 18/9/12 11:24

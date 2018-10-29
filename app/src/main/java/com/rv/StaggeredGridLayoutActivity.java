@@ -14,17 +14,15 @@ import com.rv.pojo.BannerVo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.TRecyclerView;
 import com.trecyclerview.listener.OnRefreshListener;
-import com.trecyclerview.multitype.AbsItemView;
-import com.trecyclerview.multitype.ClassLinker;
-import com.trecyclerview.multitype.Items;
-import com.trecyclerview.multitype.MultiTypeAdapter;
+import com.trecyclerview.adapter.VHolder;
+import com.trecyclerview.adapter.OneToMany;
+import com.trecyclerview.adapter.ItemData;
+import com.trecyclerview.adapter.DelegateAdapter;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.progressindicator.ProgressStyle;
-import com.trecyclerview.view.FootViewHolder;
-import com.trecyclerview.view.HeaderViewHolder;
-
-import static android.support.v7.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE;
+import com.trecyclerview.footview.FootViewHolder;
+import com.trecyclerview.headview.HeaderViewHolder;
 
 
 /**
@@ -32,8 +30,8 @@ import static android.support.v7.widget.StaggeredGridLayoutManager.GAP_HANDLING_
  */
 public class StaggeredGridLayoutActivity extends AppCompatActivity {
     private TRecyclerView tRecyclerView;
-    private Items items;
-    private MultiTypeAdapter adapter;
+    private ItemData itemData;
+    private DelegateAdapter adapter;
     private int indexPage = 1;
 
     @Override
@@ -41,15 +39,15 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_type);
         tRecyclerView = findViewById(R.id.recycler_view);
-        items = new Items();
-        adapter = new MultiTypeAdapter.Builder()
+        itemData = new ItemData();
+        adapter = new DelegateAdapter.Builder()
                 .bind(HeaderVo.class, new HeaderViewHolder(StaggeredGridLayoutActivity.this, ProgressStyle.Pacman))
                 .bind(BannerVo.class, new banner(StaggeredGridLayoutActivity.this))
                 .bindArray(ItemVo.class, new StageredItemType(StaggeredGridLayoutActivity.this), new StageredItemType2(StaggeredGridLayoutActivity.this))
-                .withClass(new ClassLinker<ItemVo>() {
+                .withClass(new OneToMany<ItemVo>() {
                     @NonNull
                     @Override
-                    public Class<? extends AbsItemView<ItemVo, ?>> index(int var1, @NonNull ItemVo var2) {
+                    public Class<? extends VHolder<ItemVo, ?>> onItemView(int var1, @NonNull ItemVo var2) {
                         if (Integer.parseInt(var2.type) == 1) {
                             return StageredItemType.class;
                         } else {
@@ -73,17 +71,17 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        items.clear();
-                        items.add(new BannerVo());
+                        itemData.clear();
+                        itemData.add(new BannerVo());
                         for (int i = 0; i < 20; i++) {
                             if (i % 2 == 0) {
-                                items.add(new ItemVo("" + 1));
+                                itemData.add(new ItemVo("" + 1));
                             } else {
-                                items.add(new ItemVo("" + 2));
+                                itemData.add(new ItemVo("" + 2));
                             }
 
                         }
-                        tRecyclerView.refreshComplete(items, false);
+                        tRecyclerView.refreshComplete(itemData, false);
 
                     }
 
@@ -93,7 +91,7 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                final Items item = new Items();
+                final ItemData item = new ItemData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -101,7 +99,7 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
                         for (int i = 0; i < 20; i++) {
                             item.add(new ItemVo(i + ""));
                         }
-                        items.addAll(item);
+                        itemData.addAll(item);
                         //模拟加载多页没有更多
                         if (indexPage == 4) {
                             tRecyclerView.loadMoreComplete(item, true);
@@ -117,15 +115,15 @@ public class StaggeredGridLayoutActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        items.clear();
-        items.add(new BannerVo());
+        itemData.clear();
+        itemData.add(new BannerVo());
         for (int i = 0; i < 20; i++) {
             if (i % 2 == 0) {
-                items.add(new ItemVo("" + 1));
+                itemData.add(new ItemVo("" + 1));
             } else {
-                items.add(new ItemVo("" + 2));
+                itemData.add(new ItemVo("" + 2));
             }
         }
-        tRecyclerView.refreshComplete(items, true);
+        tRecyclerView.refreshComplete(itemData, true);
     }
 }

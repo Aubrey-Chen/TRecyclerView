@@ -6,17 +6,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.rv.R;
-import com.rv.pojo.BannerVo;
 import com.rv.pojo.Item1Vo;
-import com.rv.pojo.ItemVo;
-import com.trecyclerview.holder.AbsViewHolder;
-import com.trecyclerview.holder.BaseHolder;
-import com.trecyclerview.listener.OnItemClickListener;
+import com.trecyclerview.holder.AbsItemHolder;
+import com.trecyclerview.holder.AbsHolder;
 
 /**
  * @author：tqzhang on 18/8/22 13:57
  */
-public class ItemType1 extends AbsViewHolder<Item1Vo, ItemType1.ViewHolder> {
+public class ItemType1 extends AbsItemHolder<Item1Vo, ItemType1.ViewHolder> {
     public ItemType1(Context context) {
         super(context);
     }
@@ -28,7 +25,7 @@ public class ItemType1 extends AbsViewHolder<Item1Vo, ItemType1.ViewHolder> {
 
     @Override
     public ViewHolder createViewHolder(View view) {
-        return new ViewHolder(view,mOnItemClickListener);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -36,22 +33,13 @@ public class ItemType1 extends AbsViewHolder<Item1Vo, ItemType1.ViewHolder> {
         holder.tvType.setText(item.type);
     }
 
-    static class ViewHolder extends BaseHolder {
+    static class ViewHolder extends AbsHolder {
 
         TextView tvType;
 
-        ViewHolder(@NonNull final View itemView, final OnItemClickListener mOnItemClickListener) {
+        ViewHolder(@NonNull final View itemView) {
             super(itemView);
             tvType = getViewById(R.id.tv_type);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null!=mOnItemClickListener){
-                        mOnItemClickListener.onItemClick(v,getAdapterPosition(),itemView.getTag());
-                    }
-
-                }
-            });
         }
 
     }

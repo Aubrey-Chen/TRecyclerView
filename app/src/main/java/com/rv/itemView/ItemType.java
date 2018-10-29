@@ -6,14 +6,13 @@ import android.view.View;
 
 import com.rv.R;
 import com.rv.pojo.ItemVo;
-import com.trecyclerview.holder.AbsViewHolder;
-import com.trecyclerview.holder.BaseHolder;
-import com.trecyclerview.listener.OnItemClickListener;
+import com.trecyclerview.holder.AbsItemHolder;
+import com.trecyclerview.holder.AbsHolder;
 
 /**
  * @author：tqzhang on 18/8/22 13:57
  */
-public class ItemType extends AbsViewHolder<ItemVo, ItemType.ViewHolder> {
+public class ItemType extends AbsItemHolder<ItemVo, ItemType.ViewHolder> {
     public ItemType(Context context) {
         super(context);
     }
@@ -25,7 +24,7 @@ public class ItemType extends AbsViewHolder<ItemVo, ItemType.ViewHolder> {
 
     @Override
     public ViewHolder createViewHolder(View view) {
-        return new ViewHolder(view,mOnItemClickListener);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -33,19 +32,10 @@ public class ItemType extends AbsViewHolder<ItemVo, ItemType.ViewHolder> {
 
     }
 
-    static class ViewHolder extends BaseHolder {
+    static class ViewHolder extends AbsHolder {
 
-        ViewHolder(@NonNull final View itemView, final OnItemClickListener mOnItemClickListener) {
+        ViewHolder(@NonNull final View itemView) {
             super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null!=mOnItemClickListener){
-                        mOnItemClickListener.onItemClick(v,getAdapterPosition(),itemView.getTag());
-                    }
-
-                }
-            });
         }
 
     }

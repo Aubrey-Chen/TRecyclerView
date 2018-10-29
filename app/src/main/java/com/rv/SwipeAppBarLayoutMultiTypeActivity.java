@@ -19,16 +19,16 @@ import com.rv.pojo.Item1Vo;
 import com.rv.pojo.Item2Vo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.SwipeRecyclerView;
+import com.trecyclerview.adapter.ItemData;
 import com.trecyclerview.listener.OnItemClickListener;
 import com.trecyclerview.listener.OnLoadMoreListener;
 import com.trecyclerview.listener.OnTScrollListener;
-import com.trecyclerview.multitype.Items;
-import com.trecyclerview.multitype.MultiTypeAdapter;
+import com.trecyclerview.adapter.DelegateAdapter;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.progressindicator.ProgressStyle;
-import com.trecyclerview.view.FootViewHolder;
-import com.trecyclerview.view.HeaderViewHolder;
+import com.trecyclerview.footview.FootViewHolder;
+import com.trecyclerview.headview.HeaderViewHolder;
 
 
 /**
@@ -37,8 +37,8 @@ import com.trecyclerview.view.HeaderViewHolder;
 public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implements SwipeRecyclerView.AppBarStateListener, OnItemClickListener {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SwipeRecyclerView tRecyclerView;
-    private Items items;
-    private MultiTypeAdapter adapter;
+    private ItemData itemData;
+    private DelegateAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,29 +46,30 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
         setContentView(R.layout.activity_multi_type3);
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        items = new Items();
+        itemData = new ItemData();
 
-        adapter = new MultiTypeAdapter.Builder()
+        adapter = new DelegateAdapter.Builder()
                 .bind(HeaderVo.class, new HeaderViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman))
                 .bind(BannerVo.class, new banner(SwipeAppBarLayoutMultiTypeActivity.this))
                 .bind(ItemVo.class, new ItemType(SwipeAppBarLayoutMultiTypeActivity.this))
                 .bind(Item1Vo.class, new ItemType1(SwipeAppBarLayoutMultiTypeActivity.this))
                 .bind(Item2Vo.class, new ItemType2(SwipeAppBarLayoutMultiTypeActivity.this))
                 .bind(FootVo.class, new FootViewHolder(SwipeAppBarLayoutMultiTypeActivity.this, ProgressStyle.Pacman))
+                .setOnItemClickListener(this)
                 .build();
-        adapter.setOnItemClickListener(this);
+
         GridLayoutManager layoutManager = new GridLayoutManager(SwipeAppBarLayoutMultiTypeActivity.this, 4);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (items.get(position) instanceof BannerVo
-                        || items.get(position) instanceof HeaderVo
-                        || items.get(position) instanceof Item1Vo
-                        || items.get(position) instanceof FootVo) {
+                if (itemData.get(position) instanceof BannerVo
+                        || itemData.get(position) instanceof HeaderVo
+                        || itemData.get(position) instanceof Item1Vo
+                        || itemData.get(position) instanceof FootVo) {
                     return 4;
-                } else if (items.get(position) instanceof ItemVo) {
+                } else if (itemData.get(position) instanceof ItemVo) {
                     return 2;
-                } else if (items.get(position) instanceof Item2Vo) {
+                } else if (itemData.get(position) instanceof Item2Vo) {
                     return 1;
                 }
                 return 4;
@@ -129,7 +130,7 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
 
             @Override
             public void onLoadMore() {
-                final Items item = new Items();
+                final ItemData item = new ItemData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -141,7 +142,7 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
                         for (int i = 0; i < 12; i++) {
                             item.add(new ItemVo());
                         }
-                        items.addAll(item);
+                        itemData.addAll(item);
                         tRecyclerView.loadMoreComplete(item, false);
 //                        tRecyclerView.setNoMore(20);
                     }
@@ -154,20 +155,20 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
     }
 
     private void initData() {
-        items.clear();
-        items.add(new BannerVo());
+        itemData.clear();
+        itemData.add(new BannerVo());
         for (int i = 0; i < 8; i++) {
-            items.add(new Item2Vo());
+            itemData.add(new Item2Vo());
         }
-        items.add(new Item1Vo("java"));
+        itemData.add(new Item1Vo("java"));
         for (int i = 0; i < 6; i++) {
-            items.add(new ItemVo());
+            itemData.add(new ItemVo("java" + i));
         }
-        items.add(new Item1Vo("android"));
+        itemData.add(new Item1Vo("android"));
         for (int i = 0; i < 6; i++) {
-            items.add(new ItemVo());
+            itemData.add(new ItemVo("android" + i));
         }
-        tRecyclerView.refreshComplete(items, false);
+        tRecyclerView.refreshComplete(itemData, false);
     }
 
     private SwipeRecyclerView.State isOffsetScroll = SwipeRecyclerView.State.EXPANDED;
@@ -185,16 +186,18 @@ public class SwipeAppBarLayoutMultiTypeActivity extends AppCompatActivity implem
 
     @Override
     public void onItemClick(View view, int position, Object o) {
-       if (o instanceof ItemVo){
-           ItemVo itemVo= (ItemVo) o;
-           Toast.makeText(this, ""+itemVo.type, Toast.LENGTH_SHORT).show();
+        if (o instanceof ItemVo) {
+            ItemVo itemVo = (ItemVo) o;
+            Toast.makeText(this, "" + itemVo.type, Toast.LENGTH_SHORT).show();
 
-       }else if (o instanceof Item1Vo){
-           Item1Vo  item1Vo= (Item1Vo) items.get(position);
-           item1Vo.type="刷新";
-           tRecyclerView.notifyItemRangeChanged(position,1);
+        } else if (o instanceof Item1Vo) {
+            Item1Vo item1Vo = (Item1Vo) itemData.get(position);
+            item1Vo.type = "刷新";
+            Toast.makeText(this, "" + item1Vo.type, Toast.LENGTH_SHORT).show();
 
-       }
+            tRecyclerView.notifyItemRangeChanged(position, 1);
 
-      }
+        }
+
+    }
 }

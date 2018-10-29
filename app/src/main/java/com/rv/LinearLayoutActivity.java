@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 
 import com.rv.headerview.RefreshHeader;
 import com.rv.itemView.ItemType;
@@ -13,15 +12,11 @@ import com.rv.itemView.banner;
 import com.rv.pojo.BannerVo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.TRecyclerView;
+import com.trecyclerview.adapter.ItemData;
 import com.trecyclerview.listener.OnRefreshListener;
-import com.trecyclerview.listener.OnTScrollListener;
-import com.trecyclerview.multitype.Items;
-import com.trecyclerview.multitype.MultiTypeAdapter;
-import com.trecyclerview.pojo.FootVo;
+import com.trecyclerview.adapter.DelegateAdapter;
 import com.trecyclerview.pojo.HeaderVo;
-import com.trecyclerview.progressindicator.ProgressStyle;
-import com.trecyclerview.view.FootViewHolder;
-import com.trecyclerview.view.HeaderViewHolder;
+import com.trecyclerview.headview.HeaderViewHolder;
 
 
 /**
@@ -29,21 +24,21 @@ import com.trecyclerview.view.HeaderViewHolder;
  */
 public class LinearLayoutActivity extends AppCompatActivity {
     private TRecyclerView tRecyclerView;
-    private Items items;
-    private MultiTypeAdapter adapter;
+    private ItemData itemData;
+    private DelegateAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_type);
         tRecyclerView = findViewById(R.id.recycler_view);
-        items = new Items();
-        adapter = new MultiTypeAdapter.Builder()
-//                .bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, LayoutInflater.from(this).inflate(R.layout.custom_header_view,null)))
+        itemData = new ItemData();
+        adapter = new DelegateAdapter.Builder()
+//                .save(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, LayoutInflater.from(this).inflate(R.layout.custom_header_view,null)))
                 .bind(HeaderVo.class, new HeaderViewHolder(LinearLayoutActivity.this, new RefreshHeader(this), new RefreshHeader(this).getOnTouchMoveListener()))
                 .bind(BannerVo.class, new banner(LinearLayoutActivity.this))
                 .bind(ItemVo.class, new ItemType(LinearLayoutActivity.this))
-//                .bind(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman))
+//                .save(FootVo.class, new FootViewHolder(LinearLayoutActivity.this, ProgressStyle.Pacman))
                 .build();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(LinearLayoutActivity.this);
@@ -61,12 +56,12 @@ public class LinearLayoutActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        items.clear();
-                        items.add(new BannerVo());
+                        itemData.clear();
+                        itemData.add(new BannerVo());
                         for (int i = 0; i < 10; i++) {
-                            items.add(new ItemVo());
+                            itemData.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete(items, false);
+                        tRecyclerView.refreshComplete(itemData, false);
                     }
 
                 }, 5000);
@@ -75,14 +70,14 @@ public class LinearLayoutActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                final Items l = new Items();
+                final ItemData l = new ItemData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 10; i++) {
                             l.add(new ItemVo());
                         }
-                        items.addAll(l);
+                        itemData.addAll(l);
                         tRecyclerView.loadMoreComplete(l, false);
 
                         //数据返回是空的  没有更多  tRecyclerView.loadMoreComplete(null, false);
@@ -96,12 +91,12 @@ public class LinearLayoutActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        items.clear();
-        items.add(new BannerVo());
+        itemData.clear();
+        itemData.add(new BannerVo());
         for (int i = 0; i < 10; i++) {
-            items.add(new ItemVo());
+            itemData.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items, true);
-//        tRecyclerView.setNoMore(items);
+        tRecyclerView.refreshComplete(itemData, true);
+//        tRecyclerView.setNoMore(itemData);
     }
 }

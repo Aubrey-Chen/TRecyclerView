@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import com.rv.R;
 import com.rv.pojo.ItemVo;
-import com.trecyclerview.holder.AbsViewHolder;
-import com.trecyclerview.holder.BaseHolder;
+import com.trecyclerview.holder.AbsItemHolder;
+import com.trecyclerview.holder.AbsHolder;
 
 import java.util.Random;
 
 /**
  * @author：tqzhang on 18/8/22 13:57
  */
-public class StageredItemType extends AbsViewHolder<ItemVo, StageredItemType.ViewHolder> {
+public class StageredItemType extends AbsItemHolder<ItemVo, StageredItemType.ViewHolder> {
     public StageredItemType(Context context) {
         super(context);
     }
@@ -39,7 +39,7 @@ public class StageredItemType extends AbsViewHolder<ItemVo, StageredItemType.Vie
    holder.tv_type.setText(item.type);
     }
 
-    static class ViewHolder extends BaseHolder {
+    static class ViewHolder extends AbsHolder {
 
         RelativeLayout rootView;
         TextView tv_type;

@@ -1,29 +1,17 @@
 package com.rv;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
-import com.rv.itemView.ItemType;
-import com.rv.itemView.banner;
 import com.rv.pojo.BannerVo;
 import com.rv.pojo.ItemVo;
-import com.trecyclerview.listener.OnRefreshListener;
-import com.trecyclerview.multitype.Items;
-import com.trecyclerview.multitype.MultiTypeAdapter;
-import com.trecyclerview.pojo.FootVo;
-import com.trecyclerview.pojo.HeaderVo;
-import com.trecyclerview.progressindicator.ProgressStyle;
-import com.trecyclerview.view.FootViewHolder;
-import com.trecyclerview.view.HeaderViewHolder;
+import com.trecyclerview.adapter.ItemData;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +22,7 @@ import java.util.List;
  */
 public class TestGridLayoutActivity extends AppCompatActivity {
     private RecyclerView tRecyclerView;
-    private Items items;
+    private ItemData itemData;
     private MyAdapter adapter;
 
     @Override
@@ -42,7 +30,7 @@ public class TestGridLayoutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         tRecyclerView = findViewById(R.id.recycler_view);
-        items = new Items();
+        itemData = new ItemData();
         GridLayoutManager layoutManager = new GridLayoutManager(TestGridLayoutActivity.this, 2);
         adapter = new MyAdapter();
         tRecyclerView.setAdapter(adapter);
@@ -86,12 +74,12 @@ public class TestGridLayoutActivity extends AppCompatActivity {
 
     }
     private void initData() {
-        items.clear();
-        items.add(new BannerVo());
+        itemData.clear();
+        itemData.add(new BannerVo());
         for (int i = 0; i < 80; i++) {
-            items.add(new ItemVo());
+            itemData.add(new ItemVo());
         }
-        adapter.setList(items);
+        adapter.setList(itemData);
         adapter.notifyDataSetChanged();
     }
 }

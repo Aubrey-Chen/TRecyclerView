@@ -12,16 +12,13 @@ import com.rv.itemView.banner;
 import com.rv.pojo.BannerVo;
 import com.rv.pojo.ItemVo;
 import com.trecyclerview.SwipeRecyclerView;
-import com.trecyclerview.TRecyclerView;
+import com.trecyclerview.adapter.ItemData;
 import com.trecyclerview.listener.OnLoadMoreListener;
-import com.trecyclerview.listener.OnRefreshListener;
-import com.trecyclerview.multitype.Items;
-import com.trecyclerview.multitype.MultiTypeAdapter;
+import com.trecyclerview.adapter.DelegateAdapter;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.pojo.HeaderVo;
 import com.trecyclerview.progressindicator.ProgressStyle;
-import com.trecyclerview.view.FootViewHolder;
-import com.trecyclerview.view.HeaderViewHolder;
+import com.trecyclerview.footview.FootViewHolder;
 
 
 /**
@@ -30,8 +27,8 @@ import com.trecyclerview.view.HeaderViewHolder;
 public class SwipeGridLayoutActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SwipeRecyclerView tRecyclerView;
-    private Items items;
-    private MultiTypeAdapter adapter;
+    private ItemData itemData;
+    private DelegateAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,8 +36,8 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_multi_type2);
         tRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        items = new Items();
-        adapter = new MultiTypeAdapter.Builder()
+        itemData = new ItemData();
+        adapter = new DelegateAdapter.Builder()
                 .bind(BannerVo.class, new banner(SwipeGridLayoutActivity.this))
                 .bind(ItemVo.class, new ItemType(SwipeGridLayoutActivity.this))
                 .bind(FootVo.class, new FootViewHolder(SwipeGridLayoutActivity.this, ProgressStyle.SysProgress,"努力加载","没有更多啦。。"))
@@ -49,9 +46,9 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                return (items.get(position) instanceof BannerVo
-                        || items.get(position) instanceof HeaderVo
-                        || items.get(position) instanceof FootVo) ? 2 : 1;
+                return (itemData.get(position) instanceof BannerVo
+                        || itemData.get(position) instanceof HeaderVo
+                        || itemData.get(position) instanceof FootVo) ? 2 : 1;
             }
         });
 
@@ -72,12 +69,12 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        items.clear();
-                        items.add(new BannerVo());
+                        itemData.clear();
+                        itemData.add(new BannerVo());
                         for (int i = 0; i < 10; i++) {
-                            items.add(new ItemVo());
+                            itemData.add(new ItemVo());
                         }
-                        tRecyclerView.refreshComplete(items, false);
+                        tRecyclerView.refreshComplete(itemData, false);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -91,14 +88,14 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
         tRecyclerView.addOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                final Items item = new Items();
+                final ItemData item = new ItemData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < 10; i++) {
                             item.add(new ItemVo());
                         }
-                        items.addAll(item);
+                        itemData.addAll(item);
                         tRecyclerView.loadMoreComplete(item, false);
 //                        tRecyclerView.setNoMore(20);
                     }
@@ -109,11 +106,11 @@ public class SwipeGridLayoutActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        items.clear();
-        items.add(new BannerVo());
+        itemData.clear();
+        itemData.add(new BannerVo());
         for (int i = 0; i < 10; i++) {
-            items.add(new ItemVo());
+            itemData.add(new ItemVo());
         }
-        tRecyclerView.refreshComplete(items, true);
+        tRecyclerView.refreshComplete(itemData, true);
     }
 }
