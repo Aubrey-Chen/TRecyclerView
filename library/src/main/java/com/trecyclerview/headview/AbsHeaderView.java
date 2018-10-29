@@ -1,4 +1,4 @@
-package com.trecyclerview.view;
+package com.trecyclerview.headview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 import com.trecyclerview.listener.OnTouchMoveListener;
 import com.trecyclerview.pojo.HeaderVo;
-import com.trecyclerview.multitype.AbsItemView;
+import com.trecyclerview.adapter.VHolder;
 
 /**
  * @author：tqzhang on 18/7/13 16:47
  */
-public abstract class AbsHeaderView extends AbsItemView<HeaderVo, AbsHeaderView.ViewHolder> {
+public abstract class AbsHeaderView extends VHolder<HeaderVo, AbsHeaderView.ViewHolder> {
 
     private ArrowRefreshHeader mRefreshHeader;
 

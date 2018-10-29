@@ -1,4 +1,4 @@
-package com.trecyclerview.view;
+package com.trecyclerview.headview;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,10 +1,11 @@
-package com.trecyclerview.view;
+package com.trecyclerview.headview;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -248,7 +249,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
             int destHeight = mMeasuredHeight;
             smoothScrollTo(destHeight);
         }
-
+        Log.e("MeasuredHeight", mMeasuredHeight + "");
         return isOnRefresh;
     }
 

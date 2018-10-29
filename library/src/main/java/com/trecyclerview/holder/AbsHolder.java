@@ -5,16 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 
+
 /**
  * @author：tqzhang on 18/8/15 15:05
  */
-public class BaseHolder extends RecyclerView.ViewHolder {
+public abstract class AbsHolder extends RecyclerView.ViewHolder {
 
     private final SparseArray<View> views;
 
     public View convertView;
 
-    public BaseHolder(final View view) {
+
+    public AbsHolder(final View view) {
         super(view);
         this.views = new SparseArray<>();
         this.convertView = view;
@@ -28,4 +30,5 @@ public class BaseHolder extends RecyclerView.ViewHolder {
         }
         return (T) view;
     }
+
 }

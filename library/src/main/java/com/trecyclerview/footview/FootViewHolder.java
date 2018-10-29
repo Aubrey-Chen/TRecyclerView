@@ -1,4 +1,4 @@
-package com.trecyclerview.view;
+package com.trecyclerview.footview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,8 +13,11 @@ import android.widget.RelativeLayout;
 import com.trecyclerview.R;
 import com.trecyclerview.pojo.FootVo;
 
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
+import java.util.logging.Handler;
+
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_LOADING;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_NOMORE;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_NO_NET_WORK;
 
 /**
  * @author：tqzhang on 18/6/20 13:41
@@ -33,7 +36,7 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
         this.mProgressStyle = progressStyle;
     }
 
-    public FootViewHolder(Context context, int progressStyle,String loadingHint,String loadFinishHint) {
+    public FootViewHolder(Context context, int progressStyle, String loadingHint, String loadFinishHint) {
         super(context);
         this.mProgressStyle = progressStyle;
         this.mLoadingHint = loadingHint;
@@ -48,7 +51,7 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
     }
 
     @Override
-    protected void onBindHolder(@NonNull ViewHolder holder, @NonNull FootVo mFootData) {
+    protected void onBindHolder(@NonNull final ViewHolder holder, @NonNull FootVo mFootData) {
 
         RecyclerView.LayoutParams clp = (RecyclerView.LayoutParams) holder.mRootView.getLayoutParams();
         if (clp instanceof StaggeredGridLayoutManager.LayoutParams) {
@@ -56,7 +59,7 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
         }
         holder.loadingProgressBar.setProgressStyle(mProgressStyle);
 
-        if (!TextUtils.isEmpty(mLoadingHint)){
+        if (!TextUtils.isEmpty(mLoadingHint)) {
             holder.loadingProgressBar.setLoadingHint(mLoadingHint);
         }
         if (!TextUtils.isEmpty(mLoadFinishHint)) {
@@ -66,8 +69,9 @@ public class FootViewHolder extends AbsFootView<FootVo, FootViewHolder.ViewHolde
             holder.loadingProgressBar.setState(STATE_NOMORE);
         } else if (mFootData.state == STATE_LOADING) {
             holder.loadingProgressBar.setState(STATE_LOADING);
+        } else if (mFootData.state == STATE_NO_NET_WORK) {
+            holder.loadingProgressBar.setState(STATE_NO_NET_WORK);
         }
-
 
     }
 

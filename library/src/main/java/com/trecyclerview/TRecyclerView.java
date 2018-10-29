@@ -6,31 +6,37 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
+import com.trecyclerview.footview.FootViewHolder;
+import com.trecyclerview.listener.OnNetWorkListener;
 import com.trecyclerview.listener.OnScrollStateListener;
 import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
-import com.trecyclerview.multitype.MultiTypeAdapter;
-import com.trecyclerview.multitype.TypePool;
+import com.trecyclerview.adapter.DelegateAdapter;
 import com.trecyclerview.pojo.FootVo;
 import com.trecyclerview.pojo.HeaderVo;
-import com.trecyclerview.view.AbsFootView;
-import com.trecyclerview.view.AbsHeaderView;
-import com.trecyclerview.view.ArrowRefreshHeader;
+import com.trecyclerview.footview.AbsFootView;
+import com.trecyclerview.headview.AbsHeaderView;
+import com.trecyclerview.headview.ArrowRefreshHeader;
+import com.trecyclerview.adapter.ViewTypes;
 
 import java.util.List;
 
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_NO_NET_WORK;
 import static com.trecyclerview.util.Preconditions.checkNotNull;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_LOADING;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_NOMORE;
 
 
 /**
  * @author：tqzhang on 18/6/22 16:03
  */
 public class TRecyclerView extends RecyclerView {
-    private MultiTypeAdapter mMultiTypeAdapter;
+
+    private DelegateAdapter mDelegateAdapter;
     /**
      * 是否开启加载更多
      */
@@ -44,12 +50,12 @@ public class TRecyclerView extends RecyclerView {
     /**
      * 加载更多
      */
-    protected boolean isLoadMore = true;
+    protected boolean isShowLoadMore = false;
 
     /**
      * 加载更多中
      */
-    protected boolean isLoading = true;
+    protected boolean isLoading = false;
 
     /**
      * 刷新中
@@ -60,6 +66,9 @@ public class TRecyclerView extends RecyclerView {
      * true 没有更多
      */
     private boolean isNoMore = false;
+
+
+    private boolean isLoadingMore = false;
 
     /**
      * 最后一个可见的item的位置
@@ -77,9 +86,15 @@ public class TRecyclerView extends RecyclerView {
 
     private OnScrollStateListener mOnScrollStateListener;
 
+    private OnNetWorkListener mOnNetWorkListener;
+
     private static final float DRAG_RATE = 2.0f;
 
     private ArrowRefreshHeader mRefreshHeader = null;
+
+    private ViewTypes mTypePool;
+
+    private boolean hsNetWork = true;
 
     public TRecyclerView(Context context) {
         this(context, null);
@@ -103,12 +118,9 @@ public class TRecyclerView extends RecyclerView {
         if (mRefreshHeader != null) {
             mRefreshHeader.refreshComplete();
         }
-        isLoadMore = false;
-        mRefreshing = false;
-        isNoMore = noMore;
         if (pullRefreshEnabled) {
             list.add(0, new HeaderVo());
-            if (loadingMoreEnabled){
+            if (loadingMoreEnabled) {
                 if (noMore) {
                     list.add(new FootVo(STATE_NOMORE));
                 } else {
@@ -117,48 +129,57 @@ public class TRecyclerView extends RecyclerView {
             }
 
         }
-        mMultiTypeAdapter.setItems(list);
-        mMultiTypeAdapter.notifyDataSetChanged();
+        mDelegateAdapter.setDatas(list);
+        mDelegateAdapter.notifyDataSetChanged();
+        //刷新完成
+        mRefreshing = false;
+        isNoMore = noMore;
+    }
+
+
+    /**
+     *
+     */
+    public void loadMoreComplete() {
+        loadMoreComplete(null, true);
     }
 
     /**
      * 加载更多完成
      *
      * @param list
-     * @param noMore
+     * @param noMore 是否有更多
      */
     public void loadMoreComplete(List<?> list, boolean noMore) {
-        if (mRefreshing) {
-            mRefreshing = false;
-        }
-        isNoMore = noMore;
         if (null == list) {
-            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1);
-            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
-            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - 1, mMultiTypeAdapter.getItems().size());
+            //没有更多
+            mDelegateAdapter.getItems().remove(mDelegateAdapter.getItems().size() - 1);
+            ((List) mDelegateAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            mDelegateAdapter.notifyItemRangeChanged(mDelegateAdapter.getItems().size() - 1, mDelegateAdapter.getItems().size());
 
         } else {
-            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
-            if (isNoMore) {
-                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            mDelegateAdapter.getItems().remove(mDelegateAdapter.getItems().size() - 1 - list.size());
+            if (noMore) {
+                ((List) mDelegateAdapter.getItems()).add(new FootVo(STATE_NOMORE));
             } else {
-                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
+                ((List) mDelegateAdapter.getItems()).add(new FootVo(STATE_LOADING));
             }
-            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
+            mDelegateAdapter.notifyItemRangeChanged(mDelegateAdapter.getItems().size() - list.size() - 1, mDelegateAdapter.getItems().size());
 
         }
-        isLoading = true;
-        isLoadMore = false;
+        isNoMore = noMore;
+        isLoading = false;
+        isShowLoadMore = false;
     }
 
 
     public void notifyItemRangeChanged(int positionStart, int itemCount) {
-        mMultiTypeAdapter.notifyItemRangeChanged(positionStart, itemCount);
+        mDelegateAdapter.notifyItemRangeChanged(positionStart, itemCount);
 
     }
 
     public void notifyItemChanged(int position) {
-        mMultiTypeAdapter.notifyItemChanged(position);
+        mDelegateAdapter.notifyItemChanged(position);
     }
 
     /**
@@ -167,14 +188,14 @@ public class TRecyclerView extends RecyclerView {
     @Override
     public void setAdapter(Adapter adapter) {
         checkNotNull(adapter);
-        this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
+        this.mDelegateAdapter = (DelegateAdapter) adapter;
         super.setAdapter(adapter);
-        TypePool mTypePool = mMultiTypeAdapter.getTypePool();
+        mTypePool = mDelegateAdapter.getTypes();
         for (int i = 0; i < mTypePool.size(); i++) {
-            if (mTypePool.getItemViewBinder(i) instanceof AbsFootView) {
+            if (mTypePool.getItemView(i) instanceof AbsFootView) {
                 setLoadingMoreEnabled(true);
-            } else if (mTypePool.getItemViewBinder(i) instanceof AbsHeaderView) {
-                AbsHeaderView mHeaderItemView = (AbsHeaderView) mTypePool.getItemViewBinder(i);
+            } else if (mTypePool.getItemView(i) instanceof AbsHeaderView) {
+                AbsHeaderView mHeaderItemView = (AbsHeaderView) mTypePool.getItemView(i);
                 mRefreshHeader = mHeaderItemView.getRefreshHeaderView();
                 pullRefreshEnabled = true;
             }
@@ -209,6 +230,7 @@ public class TRecyclerView extends RecyclerView {
                 if (isOnTop() && pullRefreshEnabled && !mRefreshing) {
                     if (mRefreshHeader.releaseAction()) {
                         if (mOnRefreshListener != null) {
+                            //刷新开始
                             mRefreshing = true;
                             mOnRefreshListener.onRefresh();
                         }
@@ -226,7 +248,7 @@ public class TRecyclerView extends RecyclerView {
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrolled(dx, dy);
         }
-        int mAdapterCount = mMultiTypeAdapter.getItemCount();
+        int mAdapterCount = mDelegateAdapter.getItemCount();
         RecyclerView.LayoutManager layoutManager = getLayoutManager();
         if (layoutManagerType == null) {
             if (layoutManager instanceof LinearLayoutManager) {
@@ -257,12 +279,8 @@ public class TRecyclerView extends RecyclerView {
         }
 
         isBottom = mAdapterCount == lastVisibleItemPosition;
-        if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
-            mRefreshing = false;
-            isLoading = false;
-            if (!isNoMore) {
-                isLoadMore = true;
-            }
+        if (mOnRefreshListener != null && loadingMoreEnabled && !mRefreshing && isBottom && !isLoading && !isNoMore) {
+            isShowLoadMore = true;
         }
 
     }
@@ -270,9 +288,23 @@ public class TRecyclerView extends RecyclerView {
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE && isBottom) {
+        if (isShowLoadMore && state == RecyclerView.SCROLL_STATE_IDLE && isBottom) {
             if (mOnRefreshListener != null) {
-                mOnRefreshListener.onLoadMore();
+                if (mOnNetWorkListener != null) {
+                    hsNetWork = mOnNetWorkListener.onNetWork();
+                    if (!hsNetWork) {
+                        refreshFootView(STATE_NO_NET_WORK);
+                    } else {
+                        //加载更多种
+                        isLoading = true;
+                        mOnRefreshListener.onLoadMore();
+                    }
+                }else {
+                    //加载更多种
+                    isLoading = true;
+                    mOnRefreshListener.onLoadMore();
+                }
+
             }
         }
         if (mOnScrollStateListener != null) {
@@ -280,6 +312,17 @@ public class TRecyclerView extends RecyclerView {
         }
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrollStateChanged(state);
+        }
+
+    }
+
+    public void refreshFootView(int state) {
+        if (mDelegateAdapter == null || mDelegateAdapter.getItems() == null) {
+            return;
+        }
+        if (mDelegateAdapter.getItems().get(mDelegateAdapter.getItems().size() - 1) instanceof FootVo) {
+            ((FootVo) mDelegateAdapter.getItems().get(mDelegateAdapter.getItems().size() - 1)).state = state;
+            notifyItemRangeChanged(mDelegateAdapter.getItems().size() - 1, mDelegateAdapter.getItems().size());
         }
     }
 
@@ -319,6 +362,10 @@ public class TRecyclerView extends RecyclerView {
 
     public void addOnTScrollListener(OnTScrollListener onScrollListener) {
         mOnScrollListener = onScrollListener;
+    }
+
+    public void setOnNetWorkListener(final OnNetWorkListener onNetWorkListener) {
+        mOnNetWorkListener = onNetWorkListener;
     }
 
 }

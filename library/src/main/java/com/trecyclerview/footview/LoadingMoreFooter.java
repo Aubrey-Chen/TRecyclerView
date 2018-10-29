@@ -1,9 +1,6 @@
-package com.trecyclerview.view;
+package com.trecyclerview.footview;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -16,6 +13,7 @@ import android.widget.TextView;
 import com.trecyclerview.progressindicator.ProgressStyle;
 import com.trecyclerview.R;
 import com.trecyclerview.progressindicator.AVLoadingIndicatorView;
+import com.trecyclerview.headview.SimpleViewSwitcher;
 
 public class LoadingMoreFooter extends LinearLayout {
 
@@ -23,10 +21,12 @@ public class LoadingMoreFooter extends LinearLayout {
     public final static int STATE_LOADING = 0;
     public final static int STATE_COMPLETE = 1;
     public final static int STATE_NOMORE = 2;
+    public final static int STATE_NO_NET_WORK = 3;
     private TextView mText;
     private String loadingHint;
     private String noMoreHint;
     private String loadingDoneHint;
+    private String noNetWorkHint;
 
     public LoadingMoreFooter(Context context) {
         super(context);
@@ -70,6 +70,7 @@ public class LoadingMoreFooter extends LinearLayout {
         loadingHint = (String) getContext().getText(R.string.listview_loading);
         noMoreHint = (String) getContext().getText(R.string.nomore_loading);
         loadingDoneHint = (String) getContext().getText(R.string.loading_done);
+        noNetWorkHint = (String) getContext().getText(R.string.no_network);
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins((int) getResources().getDimension(R.dimen.textandiconmargin), 0, 0, 0);
         mText.setLayoutParams(layoutParams);
@@ -102,6 +103,11 @@ public class LoadingMoreFooter extends LinearLayout {
                 break;
             case STATE_NOMORE:
                 mText.setText(noMoreHint);
+                progressCon.setVisibility(View.GONE);
+                this.setVisibility(View.VISIBLE);
+                break;
+            case STATE_NO_NET_WORK:
+                mText.setText(noNetWorkHint);
                 progressCon.setVisibility(View.GONE);
                 this.setVisibility(View.VISIBLE);
                 break;

@@ -13,26 +13,27 @@ import android.view.View;
 import android.view.ViewParent;
 
 import com.trecyclerview.listener.OnLoadMoreListener;
+import com.trecyclerview.listener.OnNetWorkListener;
 import com.trecyclerview.listener.OnScrollStateListener;
 import com.trecyclerview.listener.OnRefreshListener;
 import com.trecyclerview.listener.OnTScrollListener;
-import com.trecyclerview.multitype.MultiTypeAdapter;
-import com.trecyclerview.multitype.TypePool;
+import com.trecyclerview.adapter.DelegateAdapter;
 import com.trecyclerview.pojo.FootVo;
-import com.trecyclerview.view.AbsFootView;
+import com.trecyclerview.footview.AbsFootView;
+import com.trecyclerview.adapter.ViewTypes;
 
 import java.util.List;
 
-import static com.trecyclerview.util.Preconditions.checkNotNull;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_LOADING;
-import static com.trecyclerview.view.LoadingMoreFooter.STATE_NOMORE;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_LOADING;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_NOMORE;
+import static com.trecyclerview.footview.LoadingMoreFooter.STATE_NO_NET_WORK;
 
 /**
  * @author：tqzhang on 18/6/22 16:03
  */
 public class SwipeRecyclerView extends RecyclerView {
 
-    private MultiTypeAdapter mMultiTypeAdapter;
+    private DelegateAdapter mDelegateAdapter;
 
     private boolean loadingMoreEnabled = false;
 
@@ -44,9 +45,15 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private int lastVisibleItemPosition;
 
-    protected boolean isLoadMore = true;
 
-    protected boolean isLoading = true;
+    protected boolean isLoading = false;
+
+    /**
+     * 加载更多
+     */
+    protected boolean isShowLoadMore = false;
+
+    private boolean hsNetWork = true;
 
     private OnRefreshListener mOnRefreshListener;
 
@@ -55,6 +62,8 @@ public class SwipeRecyclerView extends RecyclerView {
     private OnScrollStateListener mOnScrollStateListener;
 
     private OnLoadMoreListener mOnLoadMoreListener;
+
+    private OnNetWorkListener mOnNetWorkListener;
 
     private State appbarState = State.EXPANDED;
 
@@ -79,9 +88,6 @@ public class SwipeRecyclerView extends RecyclerView {
         if (null == list || list.size() == 0) {
             return;
         }
-        mRefreshing = false;
-        isLoadMore = false;
-        isNoMore = noMore;
         if (loadingMoreEnabled) {
             if (noMore) {
                 list.add(new FootVo(STATE_NOMORE));
@@ -89,40 +95,48 @@ public class SwipeRecyclerView extends RecyclerView {
                 list.add(new FootVo(STATE_LOADING));
             }
         }
-        mMultiTypeAdapter.setItems(list);
-        mMultiTypeAdapter.notifyDataSetChanged();
+        mDelegateAdapter.setDatas(list);
+        mDelegateAdapter.notifyDataSetChanged();
+        //刷新完成
+        mRefreshing = false;
+        isNoMore = noMore;
+    }
+
+
+    /**
+     *
+     */
+    public void loadMoreComplete() {
+        loadMoreComplete(null, true);
     }
 
     public void loadMoreComplete(List<?> list, boolean noMore) {
-        if (mRefreshing) {
-            mRefreshing = false;
+        if (null == list) {
+            mDelegateAdapter.getItems().remove(mDelegateAdapter.getItems().size() - 1);
+            ((List) mDelegateAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            mDelegateAdapter.notifyItemRangeChanged(mDelegateAdapter.getItems().size() - 1, mDelegateAdapter.getItems().size());
+        } else {
+            mDelegateAdapter.getItems().remove(mDelegateAdapter.getItems().size() - 1 - list.size());
+            if (!isNoMore) {
+                ((List) mDelegateAdapter.getItems()).add(new FootVo(STATE_LOADING));
+            } else {
+                ((List) mDelegateAdapter.getItems()).add(new FootVo(STATE_NOMORE));
+            }
+            mDelegateAdapter.notifyItemRangeChanged(mDelegateAdapter.getItems().size() - list.size() - 1, mDelegateAdapter.getItems().size());
         }
         isNoMore = noMore;
-        if (null == list) {
-            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1);
-            ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
-            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - 1, mMultiTypeAdapter.getItems().size());
-        } else {
-            mMultiTypeAdapter.getItems().remove(mMultiTypeAdapter.getItems().size() - 1 - list.size());
-            if (!isNoMore) {
-                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_LOADING));
-            } else {
-                ((List) mMultiTypeAdapter.getItems()).add(new FootVo(STATE_NOMORE));
-            }
-            mMultiTypeAdapter.notifyItemRangeChanged(mMultiTypeAdapter.getItems().size() - list.size() - 1, mMultiTypeAdapter.getItems().size());
-        }
-        isLoading = true;
-        isLoadMore = false;
+        isLoading = false;
+        isShowLoadMore = false;
 
     }
 
     public void notifyItemRangeChanged(int positionStart, int itemCount) {
-        mMultiTypeAdapter.notifyItemRangeChanged(positionStart, itemCount);
+        mDelegateAdapter.notifyItemRangeChanged(positionStart, itemCount);
 
     }
 
     public void notifyItemChanged(int position) {
-        mMultiTypeAdapter.notifyItemChanged(position);
+        mDelegateAdapter.notifyItemChanged(position);
     }
 
 
@@ -132,11 +146,11 @@ public class SwipeRecyclerView extends RecyclerView {
 
     @Override
     public void setAdapter(Adapter adapter) {
-        this.mMultiTypeAdapter = (MultiTypeAdapter) adapter;
+        this.mDelegateAdapter = (DelegateAdapter) adapter;
         super.setAdapter(adapter);
-        TypePool mTypePool = mMultiTypeAdapter.getTypePool();
+        ViewTypes mTypePool = mDelegateAdapter.getTypes();
         for (int i = 0; i < mTypePool.size(); i++) {
-            if (mTypePool.getItemViewBinder(i) instanceof AbsFootView) {
+            if (mTypePool.getItemView(i) instanceof AbsFootView) {
                 setLoadingMoreEnabled(true);
             }
         }
@@ -152,7 +166,7 @@ public class SwipeRecyclerView extends RecyclerView {
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrolled(dx, dy);
         }
-        int mAdapterCount = mMultiTypeAdapter.getItemCount();
+        int mAdapterCount = mDelegateAdapter.getItemCount();
         LayoutManager layoutManager = getLayoutManager();
 
         if (layoutManagerType == null) {
@@ -183,21 +197,34 @@ public class SwipeRecyclerView extends RecyclerView {
                 break;
         }
         isBottom = mAdapterCount == lastVisibleItemPosition;
-        if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && isLoading) {
-            mRefreshing = false;
-            isLoading = false;
-            if (!isNoMore) {
-                isLoadMore = true;
-            }
+        if (mOnLoadMoreListener != null && loadingMoreEnabled && !mRefreshing && isBottom && !isLoading && !isNoMore) {
+            isShowLoadMore = true;
         }
+        Log.e("onScrollStateChanged","mRefreshing:"+mRefreshing+"-----"+"isLoading:"+isLoading+"-----");
     }
 
 
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (isLoadMore && state == RecyclerView.SCROLL_STATE_IDLE && isBottom) {
-            mOnLoadMoreListener.onLoadMore();
+        if (isShowLoadMore && state == RecyclerView.SCROLL_STATE_IDLE && isBottom) {
+            if (mOnLoadMoreListener != null) {
+                if (mOnNetWorkListener != null) {
+                    hsNetWork = mOnNetWorkListener.onNetWork();
+                    if (!hsNetWork) {
+                        refreshFootView(STATE_NO_NET_WORK);
+                    } else {
+                        //加载更多种
+                        isLoading = true;
+                        mOnLoadMoreListener.onLoadMore();
+                    }
+                }else {
+                    //加载更多种
+                    isLoading = true;
+                    mOnLoadMoreListener.onLoadMore();
+                }
+
+            }
         }
 
         if (mOnScrollStateListener != null) {
@@ -207,6 +234,18 @@ public class SwipeRecyclerView extends RecyclerView {
             mOnScrollListener.onScrollStateChanged(state);
         }
     }
+
+
+    public void refreshFootView(int state) {
+        if (mDelegateAdapter == null || mDelegateAdapter.getItems() == null) {
+            return;
+        }
+        if (mDelegateAdapter.getItems().get(mDelegateAdapter.getItems().size() - 1) instanceof FootVo) {
+            ((FootVo) mDelegateAdapter.getItems().get(mDelegateAdapter.getItems().size() - 1)).state = state;
+            notifyItemRangeChanged(mDelegateAdapter.getItems().size() - 1, mDelegateAdapter.getItems().size());
+        }
+    }
+
 
     private int findMax(int[] lastPositions) {
         int max = lastPositions[0];
@@ -339,5 +378,9 @@ public class SwipeRecyclerView extends RecyclerView {
          * @param state        State
          */
         void onChanged(AppBarLayout appBarLayout, State state);
+    }
+
+    public void setOnNetWorkListener(final OnNetWorkListener onNetWorkListener) {
+        mOnNetWorkListener = onNetWorkListener;
     }
 }

@@ -14,30 +14,26 @@
  * limitations under the License.
  */
 
-package com.trecyclerview.multitype;
+package com.trecyclerview.adapter;
 
 import android.support.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.Collection;
 
-public interface TypePool {
+public class ItemData extends ArrayList<Object> {
 
-    <T> void bind(
-            @NonNull Class<? extends T> clazz,
-            @NonNull AbsItemView<T, ?> binder);
 
-    <T> void bind(@NonNull Class<? extends T> var1, @NonNull AbsItemView<T, ?> var2, @NonNull Linker<T> var3);
+  public ItemData() {
+    super();
+  }
 
-    boolean unbind(@NonNull Class<?> clazz);
 
-    int size();
+  public ItemData(int initialCapacity) {
+    super(initialCapacity);
+  }
 
-    int firstIndexOf(@NonNull Class<?> clazz);
 
-    @NonNull
-    Class<?> getClass(int index);
-
-    @NonNull
-    AbsItemView<?, ?> getItemViewBinder(int index);
-
-    @NonNull
-    Linker<?> getLinker(int index);
+  public ItemData(@NonNull Collection<?> c) {
+    super(c);
+  }
 }

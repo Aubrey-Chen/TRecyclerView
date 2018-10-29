@@ -6,18 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.trecyclerview.listener.OnItemClickListener;
-import com.trecyclerview.multitype.AbsItemView;
+import com.trecyclerview.adapter.VHolder;
 
 /**
  * @author：tqzhang on 18/8/15 15:04
  */
-public abstract class AbsViewHolder<T, VH extends BaseHolder> extends AbsItemView<T, VH> {
+public abstract class AbsItemHolder<T, VH extends AbsHolder> extends VHolder<T, VH> {
 
     protected Context mContext;
 
-
-    public AbsViewHolder(Context context) {
+    public AbsItemHolder(Context context) {
         this.mContext = context;
     }
 

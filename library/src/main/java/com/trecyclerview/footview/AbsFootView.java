@@ -1,15 +1,15 @@
-package com.trecyclerview.view;
+package com.trecyclerview.footview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
-import com.trecyclerview.multitype.AbsItemView;
+import com.trecyclerview.adapter.VHolder;
 
 /**
  * @author：tqzhang on 18/7/13 16:47
  */
-public abstract class AbsFootView<T, VH extends RecyclerView.ViewHolder> extends AbsItemView {
+public abstract class AbsFootView<T, VH extends RecyclerView.ViewHolder> extends VHolder {
 
     protected Context mContext;
 
