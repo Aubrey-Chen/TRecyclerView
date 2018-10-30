@@ -32,13 +32,13 @@
 
  Step 2. 在你的model的build.gradle文件中增加TRecyclerView依赖<br/>
 
-     com.github.SelfZhangTQ:TRecyclerView:2.5.2
+     com.github.SelfZhangTQ:TRecyclerView:2.5.4
 
 
 
  Step 3. Item类型配置<br/>
 
-    MultiTypeAdapter adapter = new MultiTypeAdapter.Builder<>()
+    DelegateAdapter adapter = new DelegateAdapter.Builder<>()
             //设置刷新头 如果有刷新需求，此代码不配置，则不具有刷新功能，ProgressStyle.Pacman配置刷新样式
            .bind(HeaderVo.class, new HeaderViewHolder(this, ProgressStyle.Pacman));
             //设置item1，
@@ -47,6 +47,21 @@
            .bind(Bean2.class, new ItemView2(this))
            //加载更多，如果不需要加载更多，此代码可不配置
            .bind(FootVo.class, new FootViewHolder(this, ProgressStyle.Pacman))
+            //一对多
+          .bindArray(ItemData.class, new ItemHolder4(this), new ItemType5(this),new ItemHolder6(this))
+          .withClass(new OneToMany<ItemData>() {
+                  @Override
+                  public Class<? extends VHolder<ItemData, ?>> onItemView(int position, ItemData itemData) {
+                      if (itemData.type==1) {
+                          return ItemHolder4.class;
+                      }else if (itemData.type==2) {
+                          return ItemHolder5.class;
+                      }else if (itemData.type==3) {
+                          return ItemHolder6.class;
+                      }
+                      return ItemHolder4.class;
+                  }
+              })
            .build();
     
     //数据容器
@@ -113,51 +128,9 @@
 
   Step 7. 添加Item点击事件
 
-        adapter.setOnItemClickListener(this);//实现OnItemClickListener 接口
-
-        //在holder中设置监听事件
-        public class ItemType extends AbsViewHolder<ItemVo, ItemType1.ViewHolder> {
-            public ItemType1(Context context) {
-                super(context);
-            }
-
-            @Override
-            public int getLayoutResId() {
-                return R.layout.type_1;
-            }
-
-            @Override
-            public ViewHolder createViewHolder(View view) {
-                return new ViewHolder(view,mOnItemClickListener);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull ViewHolder holder, @NonNull ItemVo item) {
-                holder.tvType.setText(item.type);
-            }
-
-            static class ViewHolder extends BaseHolder {
-
-                TextView tvType;
-
-                ViewHolder(@NonNull final View itemView, final OnItemClickListener mOnItemClickListener) {
-                    super(itemView);
-                    tvType = getViewById(R.id.tv_type);
-                    itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (null!=mOnItemClickListener){
-                                mOnItemClickListener.onItemClick(v,getAdapterPosition(),itemView.getTag());
-                            }
-
-                        }
-                    });
-                }
-
-            }
-
-        }
-
+        adapter.setOnItemClickListener(this);//实现OnItemClickListener接口
+        或者通过DelegateAdapter.Builder().setOnItemClickListener(this)配置
+        
       项目实战使用可参考:<https://github.com/SelfZhangTQ/T-MVVM> <br/>
 
   Step 8.CoordinatorLayout+AppBarLayout+SwipeRecyclerView使用的问题<br/>

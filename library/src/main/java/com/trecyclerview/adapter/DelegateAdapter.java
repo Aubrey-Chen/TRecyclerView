@@ -224,4 +224,12 @@ public class DelegateAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
 
     }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.mOnItemLongClickListener = onItemLongClickListener;
+    }
 }
